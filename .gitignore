@@ -1,0 +1,21 @@
+# Binaries
+**/bin/
+bin-int/
+
+# Visual Studio Code folder
+.vscode
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# Makefile
+Makefile
+
+imgui.ini
+
+# GLFW out dir
+out/
