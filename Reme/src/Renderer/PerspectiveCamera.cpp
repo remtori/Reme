@@ -19,16 +19,6 @@ namespace Reme
     {
     }
 
-    glm::mat4 PerspectiveCamera::GetProjectionMatrix() const
-    {
-        return glm::perspective(glm::radians(FOV), aspectRatio, 0.1f, 100.0f);
-    }
-
-    glm::mat4 PerspectiveCamera::GetViewMatrix() const
-    {
-        return glm::lookAt(Position, Position + Front, Up);
-    }
-
     void PerspectiveCamera::ReCalc()
     {
         glm::vec3 front;
@@ -40,5 +30,8 @@ namespace Reme
         // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Right = glm::normalize(glm::cross(Front, WorldUp));
         Up = glm::normalize(glm::cross(Right, Front));
+
+        m_viewMatrix = glm::lookAt(Position, Position + Front, Up);
+        m_projectionMatrix = glm::perspective(glm::radians(FOV), aspectRatio, 0.1f, 100.0f);
     }
 }

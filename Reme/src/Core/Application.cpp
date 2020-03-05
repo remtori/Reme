@@ -55,15 +55,15 @@ namespace Reme
 				switch (action)
 				{
 					case GLFW_PRESS:
-						data->App->OnKeyboard(key, KeyState::DOWN);
+						data->App->OnKeyboard((KeyCode) key, KeyState::DOWN);
 						break;
 
 					case GLFW_RELEASE:
-						data->App->OnKeyboard(key, KeyState::UP);
+						data->App->OnKeyboard((KeyCode) key, KeyState::UP);
 						break;
 
 					case GLFW_REPEAT:
-						data->App->OnKeyboard(key, KeyState::REPEAT);
+						data->App->OnKeyboard((KeyCode) key, KeyState::REPEAT);
 						break;
 				}
 		});
@@ -81,10 +81,10 @@ namespace Reme
 				switch (action)
 				{
 					case GLFW_PRESS:
-						data->App->OnMouseButton(button, KeyState::DOWN);
+						data->App->OnMouseButton((MouseCode) button, KeyState::DOWN);
 						break;
 					case GLFW_RELEASE:
-						data->App->OnMouseButton(button, KeyState::UP);
+						data->App->OnMouseButton((MouseCode) button, KeyState::UP);
 				}
 		});
 
@@ -137,7 +137,6 @@ namespace Reme
 		double lastTime = 0;
 		double elapsedTime;
 		glfwSetTime(lastTime);
-		glfwMaximizeWindow(m_Window);
 
 		while (!glfwWindowShouldClose(m_Window))
 		{
@@ -171,15 +170,15 @@ namespace Reme
 		glViewport(0, 0, width, height);
 	}
 
-	bool Application::IsKeyPressed(int key)
+	bool Application::IsKeyPressed(KeyCode key)
 	{
-		int state = glfwGetKey(m_Window, key);
+		int state = glfwGetKey(m_Window, (int) key);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool Application::IsMouseButtonPressed(int btn)
+	bool Application::IsMouseButtonPressed(MouseCode btn)
 	{
-		int state = glfwGetMouseButton(m_Window, btn);
+		int state = glfwGetMouseButton(m_Window, (int) btn);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
@@ -199,36 +198,45 @@ namespace Reme
 		};
 	}
 
+	glm::vec2 Application::ConvertScale(const glm::vec2& scale)
+	{
+		return {
+			scale.x / m_WinInfo.Width,
+			scale.y / m_WinInfo.Height
+		};
+	}
+
 	// Renderer2D Utility Method
 	void Application::DrawRect(glm::vec4 color, glm::vec2 position, glm::vec2 scale)
 	{
 		glm::vec2 p = ConvertCoord(position);
-		glm::vec2 s = ConvertCoord(scale);
 
 		// Renderer2D Draw implementation will convert
 		// (Texture*) 1 to a white texture
 		Renderer2D::Draw(
 			(Texture*) 1,
 			{ 0.0f, 0.0f }, { 0.0f, 0.0f },
-			{ p.x, p.y, zIndex }, s,
+			{ p.x, p.y, zIndex }, ConvertScale(scale),
 			color
 		);
 	}
 
 	void Application::DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale)
 	{
-		glm::vec2 p = ConvertCoord(destPos);
-		glm::vec2 s =
-			(destScale.x == 0.0f && destScale.y == 0.0f)
-			? glm::vec2{ texture->GetWidth(), texture->GetHeight() }
-			: ConvertCoord(destScale);
+		if (destScale.x == 0.0f && destScale.y == 0.0f)
+			destScale = glm::vec2{ texture->GetWidth(), texture->GetHeight() };
 
-		NoScaleDrawTexture(texture, { 0.0f, 0.0f }, { 1.0f, 1.0f }, p, s);
+		NoScaleDrawTexture(
+			texture, 
+			{ 0.0f, 0.0f }, { 0.0f, 0.0f }, 
+			ConvertCoord(destPos),
+			ConvertScale(destScale)
+		);
 	}
 
 	void Application::DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
 	{
-		NoScaleDrawTexture(texture, ConvertCoord(srcPos), ConvertCoord(srcScale), ConvertCoord(destPos), ConvertCoord(destScale));
+		NoScaleDrawTexture(texture, ConvertCoord(srcPos), ConvertScale(srcScale), ConvertCoord(destPos), ConvertScale(destScale));
 	}
 
 	void Application::NoScaleDrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)

@@ -4,7 +4,7 @@
 
 namespace Reme
 {
-	class PerspectiveCamera : Camera
+	class PerspectiveCamera : public Camera
 	{
 	public:
 		glm::vec3 Position;
@@ -29,8 +29,12 @@ namespace Reme
 		);
 		~PerspectiveCamera();
 
-		glm::mat4 GetViewMatrix() const override;
-		glm::mat4 GetProjectionMatrix() const override;
-		void ReCalc();
+		glm::mat4 GetViewMatrix() const override { return m_viewMatrix; };
+		glm::mat4 GetProjectionMatrix() const override { return m_projectionMatrix; };
+
+		void ReCalc() override;
+	private:
+		glm::mat4 m_viewMatrix;
+		glm::mat4 m_projectionMatrix;
 	};
 }

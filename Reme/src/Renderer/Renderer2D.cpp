@@ -114,13 +114,16 @@ namespace Reme
 								// Position                                            // UV
 			destPos.x              , destPos.y              , destPos.z,    srcPos.x             , srcPos.y,
 			destPos.x + destScale.x, destPos.y              , destPos.z,    srcPos.x + srcScale.x, srcPos.y,
+			destPos.x + destScale.x, destPos.y + destScale.y, destPos.z,    srcPos.x + srcScale.x, srcPos.y + srcScale.y,
+
+			destPos.x              , destPos.y              , destPos.z,    srcPos.x             , srcPos.y,
 			destPos.x              , destPos.y + destScale.y, destPos.z,    srcPos.x             , srcPos.y + srcScale.y,
 			destPos.x + destScale.x, destPos.y + destScale.y, destPos.z,    srcPos.x + srcScale.x, srcPos.y + srcScale.y,
 		};
 
 		texture->Bind();
 		m_Data->flatShader->SetFloat4("Color", tintColor);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(float) * 5, data);
-		glDrawArrays(GL_TRIANGLES, 0, 4);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, 6 * sizeof(float) * 5, data);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 }

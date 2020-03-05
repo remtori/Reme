@@ -1,19 +1,18 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "Core/KeyCodes.h"
+#include "Core/MouseCodes.h"
 #include "Renderer/Texture.h"
+
+#include <glm/glm.hpp>
 
 typedef struct GLFWwindow GLFWwindow;
 
 namespace Reme
 {
-	enum KeyState {
-		UP, DOWN, REPEAT
-	};
-
 	class Application {
 	public:
-		Application(const char* title = "Reme Engine", float screenWidth = 640, float screenHeight = 360);
+		Application(const char* title = "Reme Engine", float screenWidth = 640, float screenHeight = 480);
 		virtual ~Application();
 
 		void Run();
@@ -24,16 +23,17 @@ namespace Reme
 
 		virtual void OnResize(int width, int height);
 
-		virtual void OnKeyboard(int keyCode, int keyState) {};
+		virtual void OnKeyboard(KeyCode keyCode, KeyState keyState) {};
 
 		virtual void OnMouseMove(float x, float y) {};
-		virtual void OnMouseButton(int btn, int keyState) {};
+		virtual void OnMouseButton(MouseCode btn, KeyState keyState) {};
 
-		bool IsKeyPressed(int key);
-		bool IsMouseButtonPressed(int button);
+		bool IsKeyPressed(KeyCode key);
+		bool IsMouseButtonPressed(MouseCode button);
 		std::pair<float, float> GetMousePos();
 
 		glm::vec2 ConvertCoord(const glm::vec2& pos);
+		glm::vec2 ConvertScale(const glm::vec2& scale);
 	protected:
 		double deltaTime = 1000.0 / 60;
 		GLFWwindow* m_Window;

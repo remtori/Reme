@@ -1,6 +1,6 @@
 workspace "Reme"
 	architecture "x86_64"
-	startproject "Test2D"
+	startproject "Sandbox2D"
 
 	configurations
 	{
@@ -117,8 +117,8 @@ project "Reme"
 		runtime "Release"
 		optimize "on"
 
-project "Test2D"
-	location "Test2D"
+project "Sandbox2D"
+	location "Sandbox2D"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
