@@ -42,7 +42,7 @@ project "Reme"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "pch.h"
-	pchsource "Reme/src/hzpch.cpp"
+	pchsource "Reme/src/pch.cpp"
 
 	defines
 	{
