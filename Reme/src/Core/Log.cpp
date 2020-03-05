@@ -11,7 +11,7 @@ namespace Reme
 	void Log::Init()
 	{
 		spdlog::set_pattern("%^[%T] %n: %v%$");
-		s_Logger = spdlog::stdout_color_mt("OurPaint3D");
+		s_Logger = spdlog::stdout_color_mt("Reme Engine");
 		s_Logger->set_level(spdlog::level::trace);
 	}
 }

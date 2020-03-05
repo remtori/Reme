@@ -89,7 +89,7 @@ project "Reme"
 			"opengl32.lib",
 		}
 
-	filter "system:not windows"
+	filter "system:linux"
 		links
 		{
 			"X11",
@@ -101,6 +101,8 @@ project "Reme"
 			"Xext",
 			"Xfixes",
 		}
+
+
 
 	filter "configurations:Debug"
 		defines "_DEBUG"
@@ -148,6 +150,23 @@ project "Sandbox2D"
 
 	filter "system:windows"
 		systemversion "latest"
+
+	-- On Linux the dependencies of the static library are not bundle together
+	filter "system:linux"
+		links
+		{
+			"GLFW",
+			"glad",
+			"imgui",
+			"X11",
+			"GL",
+			"dl",
+			"pthread",
+			"m",
+			"z",
+			"Xext",
+			"Xfixes",
+		}
 
 	filter "configurations:Debug"
 		defines "_DEBUG"

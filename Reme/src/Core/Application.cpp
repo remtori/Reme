@@ -224,11 +224,11 @@ namespace Reme
 	void Application::DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale)
 	{
 		if (destScale.x == 0.0f && destScale.y == 0.0f)
-			destScale = glm::vec2{ texture->GetWidth(), texture->GetHeight() };
+			destScale = { texture->GetWidth(), texture->GetHeight() };
 
 		NoScaleDrawTexture(
-			texture, 
-			{ 0.0f, 0.0f }, { 0.0f, 0.0f }, 
+			texture,
+			{ 0.0f, 0.0f }, { 1.0f, 1.0f },
 			ConvertCoord(destPos),
 			ConvertScale(destScale)
 		);
@@ -236,7 +236,12 @@ namespace Reme
 
 	void Application::DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
 	{
-		NoScaleDrawTexture(texture, ConvertCoord(srcPos), ConvertScale(srcScale), ConvertCoord(destPos), ConvertScale(destScale));
+		srcPos.x /= texture->GetWidth();
+		srcPos.y /= texture->GetHeight();
+		srcScale.x /= texture->GetWidth();
+		srcScale.y /= texture->GetHeight();
+
+		NoScaleDrawTexture(texture, srcPos, srcScale, ConvertCoord(destPos), ConvertScale(destScale));
 	}
 
 	void Application::NoScaleDrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
