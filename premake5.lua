@@ -81,8 +81,7 @@ project "Reme"
 	{
 		"GLFW",
 		"glad",
-		"imgui",
-		"lua53:static",
+		"imgui",		
 	}
 
 	defines
@@ -95,6 +94,7 @@ project "Reme"
 		links
 		{
 			"opengl32.lib",
+			"lua53",
 		}
 
 	filter "system:linux"
@@ -108,6 +108,7 @@ project "Reme"
 			"z",
 			"Xext",
 			"Xfixes",
+			"lua53:static",
 		}
 
 	filter "configurations:Debug"
@@ -149,14 +150,23 @@ project "Sandbox2D"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.lua}",
 	}
+	
+	libdirs
+	{
+		"Reme/vendor/lua/"
+	}
 
 	links
 	{
-		"Reme"
+		"Reme",
 	}
 
 	filter "system:windows"
 		systemversion "latest"
+		links
+		{
+			"lua53",
+		}
 
 	-- On Linux the dependencies of the static library are not bundle together
 	filter "system:linux"
