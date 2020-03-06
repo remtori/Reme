@@ -27,6 +27,7 @@ namespace Reme
     }
 
     Texture::Texture(const std::string& path)
+        : m_Width(64), m_Height(64)
     {
         int width, height, channels;
         //stbi_set_flip_vertically_on_load(1);
@@ -57,7 +58,10 @@ namespace Reme
         m_InternalFormat = internalFormat;
         m_DataFormat = dataFormat;
 
-        ASSERT(internalFormat & dataFormat, "Format not supported!");
+        if (internalFormat & dataFormat ==  false)
+        {
+            LOG_ERROR("Format not supported!");
+        }
 
         glGenTextures(1, &m_TextureID);
         glBindTexture(GL_TEXTURE_2D, m_TextureID);

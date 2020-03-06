@@ -48,13 +48,9 @@ public:
 	{
 		Reme::Renderer2D::Begin(cam);
 		DrawRect({ 1.0f, 0.0f, 0.0f, 1.0f }, { 320.0f, 240.0f }, { 200.0f, 200.0f });
+		DrawTexture(nullptr, { 100.0f, 100.0f });
 		DrawTexture(img, { 0.0f, 0.0f });
 		Reme::Renderer2D::End();
-	}
-
-	void OnResize(int width, int height) override
-	{
-		Application::OnResize(width, height);
 	}
 private:
 	Reme::OrthographicCamera* cam;

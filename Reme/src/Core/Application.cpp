@@ -45,6 +45,7 @@ namespace Reme
 				data->Width = width;
 				data->Height = height;
 
+				glViewport(0, 0, width, height);
 				data->App->OnResize(width, height);
 		});
 
@@ -165,11 +166,6 @@ namespace Reme
 		}
 	}
 
-	void Application::OnResize(int width, int height)
-	{
-		glViewport(0, 0, width, height);
-	}
-
 	bool Application::IsKeyPressed(KeyCode key)
 	{
 		int state = glfwGetKey(m_Window, (int) key);
@@ -224,7 +220,11 @@ namespace Reme
 	void Application::DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale)
 	{
 		if (destScale.x == 0.0f && destScale.y == 0.0f)
-			destScale = { texture->GetWidth(), texture->GetHeight() };
+		{
+			destScale = texture == nullptr
+				? glm::vec2{ 64.0f, 64.0f }
+				: glm::vec2{ texture->GetWidth(), texture->GetHeight() };
+		}
 
 		NoScaleDrawTexture(
 			texture,
