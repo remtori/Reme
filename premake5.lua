@@ -23,6 +23,7 @@ IncludeDir["glad"] = "Reme/vendor/glad/include"
 IncludeDir["imgui"] = "Reme/vendor/imgui"
 IncludeDir["glm"] = "Reme/vendor/glm"
 IncludeDir["stb_image"] = "Reme/vendor/stb_image"
+IncludeDir["lua"] = "Reme/vendor/lua/include"
 
 group "Dependencies"
 	include "Reme/vendor/GLFW"
@@ -68,6 +69,12 @@ project "Reme"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.lua}",
+	}
+
+	libdirs
+	{
+		"Reme/vendor/lua/"
 	}
 
 	links
@@ -75,6 +82,7 @@ project "Reme"
 		"GLFW",
 		"glad",
 		"imgui",
+		"lua53:static",
 	}
 
 	defines
@@ -101,8 +109,6 @@ project "Reme"
 			"Xext",
 			"Xfixes",
 		}
-
-
 
 	filter "configurations:Debug"
 		defines "_DEBUG"
@@ -140,7 +146,8 @@ project "Sandbox2D"
 		"Reme/vendor/spdlog/include",
 		"Reme/src",
 		"Reme/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.lua}",
 	}
 
 	links
@@ -153,6 +160,11 @@ project "Sandbox2D"
 
 	-- On Linux the dependencies of the static library are not bundle together
 	filter "system:linux"
+		libdirs
+		{
+			"Reme/vendor/lua/"
+		}
+
 		links
 		{
 			"GLFW",
@@ -166,6 +178,7 @@ project "Sandbox2D"
 			"z",
 			"Xext",
 			"Xfixes",
+			"lua53:static",
 		}
 
 	filter "configurations:Debug"

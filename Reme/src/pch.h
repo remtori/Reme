@@ -16,4 +16,5 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Core/Log.h"
 #include "Core/Core.h"
