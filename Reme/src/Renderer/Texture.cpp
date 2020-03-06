@@ -58,7 +58,7 @@ namespace Reme
         m_InternalFormat = internalFormat;
         m_DataFormat = dataFormat;
 
-        if (internalFormat & dataFormat ==  false)
+        if ((internalFormat & dataFormat) == 0)
         {
             LOG_ERROR("Format not supported!");
         }
@@ -81,6 +81,7 @@ namespace Reme
         }
 
         stbi_image_free(data);
+        LOG_INFO("Texture loaded from path: {}", path);
     }
 
     Texture::~Texture()

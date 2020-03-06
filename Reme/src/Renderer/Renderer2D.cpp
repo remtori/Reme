@@ -93,11 +93,11 @@ namespace Reme
 
 	void Renderer2D::End()
 	{
-		//GLenum err;
-		//while ((err = glGetError()) != GL_NO_ERROR)
-		//{
-		//	LOG_ERROR("OpenGL Error: {}", err);
-		//}
+		GLenum err;
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			LOG_ERROR("OpenGL Error: {}", err);
+		}
 	}
 
 	void Renderer2D::Draw(
