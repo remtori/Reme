@@ -141,11 +141,10 @@ project "Sandbox2D"
 	{
 		"Reme/vendor/spdlog/include",
 		"Reme/src",
-		"Reme/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.lua}",
 	}
-
+	
 	links
 	{
 		"Reme",
@@ -167,6 +166,7 @@ project "Sandbox2D"
 			"GLFW",
 			"glad",
 			"imgui",
+			"lua53",
 			"X11",
 			"GL",
 			"dl",

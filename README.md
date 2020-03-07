@@ -41,6 +41,6 @@ vendor/premake5 gmake2
 
 - _REME_DISABLE_ASSERT : disable `assert`
 
-- _REME_DISABLE_LOG : disable logging
+- _REME_DISABLE_LOGGING : disable logging
 
 - _REME_DISABLE_LUA : disable lua scripting
