@@ -141,6 +141,7 @@ project "Sandbox2D"
 	{
 		"Reme/vendor/spdlog/include",
 		"Reme/src",
+		"Reme/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.lua}",
 	}
@@ -156,17 +157,12 @@ project "Sandbox2D"
 
 	-- On Linux the dependencies of the static library are not bundle together
 	filter "system:linux"
-		libdirs
-		{
-			"Reme/vendor/lua/"
-		}
 
 		links
 		{
 			"GLFW",
 			"glad",
 			"imgui",
-			"lua53",
 			"X11",
 			"GL",
 			"dl",

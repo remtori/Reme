@@ -1,5 +1,6 @@
 #include <Reme.h>
 #include <Core/EntryPoint.h>
+#include <imgui/imgui.h>
 
 extern "C"
 {
@@ -13,13 +14,11 @@ class Tank2D : public Reme::Application
 public:
 	Tank2D() : Application("Tank2D", 640, 640)
 	{
-		float aspectRatio = 640.0f / 640.0f;
-		cam = new Reme::OrthographicCamera(-aspectRatio, aspectRatio, 1.0f, -1.0f);
+		cam = new Reme::OrthographicCamera(0.0f, 640.f, 640.0f, 0.0f);
 		imgs[0] = Reme::Texture::Create("assets/miku-cutie.jpg");
 		imgs[1] = Reme::Texture::Create("assets/rem-bb.png");
 		imgs[2] = Reme::Texture::Create("assets/rem-sleeping-rose.png");
-		imgs[3] = Reme::Texture::Create("assets/you2.jpg");
-		imgs[4] = Reme::Texture::Create("assets/you-waifu-material.jpg");
+		imgs[3] = Reme::Texture::Create("assets/you-waifu-material.jpg");
 
 		lua_State *L = luaL_newstate();
 		int r = luaL_dostring(L, "a = 7 + 12");
@@ -47,7 +46,7 @@ public:
 
 	void OnUpdate(double deltaTime) override
 	{
-		float speed = 0.01;
+		float speed = 5;
 		glm::vec3 v = { 0.0f, 0.0f, 0.0f };
 		if (IsKeyPressed(Reme::KeyCode::W))
 			v.y -= speed;
@@ -67,29 +66,56 @@ public:
 	void OnRender() override
 	{
 		Reme::Renderer2D::Begin(cam);
-		DrawRect({ 1.0f, 0.0f, 0.0f, 1.0f }, { 320.0f, 240.0f }, { 200.0f, 200.0f });
-		DrawTexture(nullptr, { 100.0f, 100.0f });
 
-		float x = 0.0f;
 		float y = 0.0f;
-		for (int i = 0; i < imgs.size(); i++)
+		do {
+			for (int i = 0; i < imgs.size(); i++)
+			{
+				float ratio = (float)imgs[i]->GetWidth() / (float)imgs[i]->GetHeight();
+				float dHeight = imgWidth / ratio;
+
+				for (int j = 0; j < m_WinInfo.Width / imgWidth; j++)
+				{
+					DrawTexture(imgs[i], { imgWidth * j, y }, { imgWidth, dHeight });
+				}
+
+				y += dHeight;
+			}
+		} while (y < m_WinInfo.Height);
+
+		for (float x = 0.0f; x < m_WinInfo.Width; x += rectSize)
 		{
-			DrawTexture(imgs[i], { 200.0f, y });
-			y += 400.0f;
+			for (float y = 0.0f; y < m_WinInfo.Height; y += rectSize)
+			{
+				DrawRect({ x / m_WinInfo.Width, y / m_WinInfo.Height, 1.0f, 1.0f }, { x, y }, { rectSize - 4.0f, rectSize - 4.0f });
+			}
 		}
+
+		DrawRect({ 1.0f, 0.0f, 0.0f, 1.0f }, { 100.0f, 0.0f }, { 50.0f, 50.0f });
+		DrawTexture(nullptr, { 100.0f, 100.0f });
 
 		Reme::Renderer2D::End();
 	}
 
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Menu");
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::DragFloat("Img Width", &imgWidth, 1.0f, 1.0f, 1000.0f);
+		ImGui::DragFloat("Rect Size", &rectSize, 1.0f, 5.0f, 1000.0f);
+		ImGui::End();
+	}
+
 	void OnResize(int width, int height) override
 	{
-		float ratio = (float) width / (float) height;
-		cam->SetProjection(-ratio, ratio, 1.0f, -1.0f);
+		cam->SetProjection(0.0f, width, height, 0.0f);		
 		LOG_INFO("Screen resized, new resolution: {}x{}", width, height);
 	}
 private:
+	float imgWidth = 50.0f;
+	float rectSize = 10.0f;
 	Reme::OrthographicCamera* cam;
-	std::array<Reme::Texture*, 5> imgs;
+	std::array<Reme::Texture*, 4> imgs;
 };
 
 Reme::Application* Reme::CreateApplication()

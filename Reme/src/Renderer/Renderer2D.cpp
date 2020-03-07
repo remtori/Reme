@@ -69,10 +69,6 @@ namespace Reme
 
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
-
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void Renderer2D::Shutdown()
@@ -82,8 +78,11 @@ namespace Reme
 
 	void Renderer2D::Begin(Camera* cam)
 	{
+		glDepthFunc(GL_NEVER);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(m_Data->VAO);
 		m_Data->flatShader->Bind();
@@ -114,16 +113,13 @@ namespace Reme
 								// Position                                            // UV
 			destPos.x              , destPos.y              , destPos.z,    srcPos.x             , srcPos.y,
 			destPos.x + destScale.x, destPos.y              , destPos.z,    srcPos.x + srcScale.x, srcPos.y,
-			destPos.x + destScale.x, destPos.y + destScale.y, destPos.z,    srcPos.x + srcScale.x, srcPos.y + srcScale.y,
-
-			destPos.x              , destPos.y              , destPos.z,    srcPos.x             , srcPos.y,
 			destPos.x              , destPos.y + destScale.y, destPos.z,    srcPos.x             , srcPos.y + srcScale.y,
 			destPos.x + destScale.x, destPos.y + destScale.y, destPos.z,    srcPos.x + srcScale.x, srcPos.y + srcScale.y,
 		};
 
 		texture->Bind();
 		m_Data->flatShader->SetFloat4("Color", tintColor);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, 6 * sizeof(float) * 5, data);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(data), data);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
 }

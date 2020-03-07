@@ -39,9 +39,6 @@ namespace Reme
 		bool IsKeyPressed(KeyCode key);
 		bool IsMouseButtonPressed(MouseCode button);
 		std::pair<float, float> GetMousePos();
-
-		glm::vec2 ConvertCoord(const glm::vec2& pos);
-		glm::vec2 ConvertScale(const glm::vec2& scale);
 	protected:
 		GLFWwindow* m_Window;
 
@@ -57,8 +54,6 @@ namespace Reme
 		void DrawRect(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
 		void DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale = { 0.0f, 0.0f });
 		void DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale);
-	private:
-		void NoScaleDrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale);
 	};
 
 	// To be defined in CLIENT
