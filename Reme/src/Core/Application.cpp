@@ -101,7 +101,7 @@ namespace Reme
 		LOG_INFO("GLSL Version: {0}", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		LOG_INFO("Renderer: {0}", glGetString(GL_RENDERER));
 
-		glfwSwapInterval(1);
+		//glfwSwapInterval(1);
 		glViewport(0, 0, screenWidth, screenHeight);
 
 		// ImGui Init

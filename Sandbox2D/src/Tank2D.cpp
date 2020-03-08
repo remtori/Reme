@@ -9,6 +9,10 @@ extern "C"
 #include <lua/lualib.h>
 }
 
+#include <fstream>
+#include <numeric>
+#include <algorithm>
+
 class Tank2D : public Reme::Application
 {
 public:
@@ -19,6 +23,8 @@ public:
 		imgs[1] = Reme::Texture::Create("assets/rem-bb.png");
 		imgs[2] = Reme::Texture::Create("assets/rem-sleeping-rose.png");
 		imgs[3] = Reme::Texture::Create("assets/you-waifu-material.jpg");
+		avgFps.fill(0.0f);
+		benchmarkName.fill('\0');
 
 		lua_State *L = luaL_newstate();
 		int r = luaL_dostring(L, "a = 7 + 12");
@@ -103,6 +109,44 @@ public:
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::DragFloat("Img Width", &imgWidth, 1.0f, 1.0f, 1000.0f);
 		ImGui::DragFloat("Rect Size", &rectSize, 1.0f, 5.0f, 1000.0f);
+
+		ImGui::InputText("Benchmark name", benchmarkName.data(), sizeof(benchmarkName));
+		if (ImGui::Button("Start Benchmark"))
+		{
+			benchMarkStarted = true;
+			avgFps.fill(0.0f);
+
+			if (!std::equal(benchmarkName.begin(), benchmarkName.end(), createdFileName.begin()))
+			{
+				if (fOut.is_open()) fOut.close();
+				fOut = std::ofstream(benchmarkName.data(), std::ios::out);
+				std::copy(benchmarkName.begin(), benchmarkName.end(), createdFileName.begin());
+			}
+		}
+
+		if (benchMarkStarted)
+		{
+			ImGui::Text("Benchmarking ...");
+			std::rotate(avgFps.begin(), avgFps.begin() + 1, avgFps.end());
+			avgFps[avgFps.size() - 1] = ImGui::GetIO().Framerate;			
+
+			if (avgFps[0] > 0.0f)
+			{
+				auto mmFps = std::minmax_element(avgFps.begin(), avgFps.end());
+				fOut << "Testing with:" << std::endl
+					<< "\tScreen res: " << m_WinInfo.Width << "x" << m_WinInfo.Height << std::endl
+					<< "\tImg Width: " << imgWidth << std::endl
+					<< "\tRect Size: " << rectSize << std::endl
+					<< "FPS: " << std::endl
+					<< "\tMIN: " << *mmFps.first << std::endl
+					<< "\tAVG: " << std::accumulate(avgFps.begin(), avgFps.end(), 0.0f) / (float)avgFps.size() << std::endl
+					<< "\tMAX: " << *mmFps.second << std::endl;
+				benchMarkStarted = false;
+			}
+		}
+
+		ImGui::PlotHistogram("FPS", avgFps.data(), avgFps.size(), 0, nullptr, 0.0f, 400.0f, ImVec2(0.0f, 250.0f));
+
 		ImGui::End();
 	}
 
@@ -112,10 +156,15 @@ public:
 		LOG_INFO("Screen resized, new resolution: {}x{}", width, height);
 	}
 private:
+	std::ofstream fOut;
+	std::array<char, 100> benchmarkName;
+	std::array<char, 100> createdFileName;
+	bool benchMarkStarted = false;
 	float imgWidth = 50.0f;
-	float rectSize = 10.0f;
+	float rectSize = 50.0f;
 	Reme::OrthographicCamera* cam;
 	std::array<Reme::Texture*, 4> imgs;
+	std::array<float, 250> avgFps;
 };
 
 Reme::Application* Reme::CreateApplication()
