@@ -50,9 +50,9 @@ public:
 
 	}
 
-	void OnUpdate(double deltaTime) override
+	void OnUpdate(double ellapsedTime) override
 	{
-		float speed = 5;
+		float speed = 300 * ellapsedTime;
 		glm::vec3 v = { 0.0f, 0.0f, 0.0f };
 		if (IsKeyPressed(Reme::KeyCode::W))
 			v.y -= speed;
@@ -93,11 +93,20 @@ public:
 		{
 			for (float y = 0.0f; y < m_WinInfo.Height; y += rectSize)
 			{
-				DrawRect({ x / m_WinInfo.Width, y / m_WinInfo.Height, 1.0f, 1.0f }, { x, y }, { rectSize - 4.0f, rectSize - 4.0f });
+				DrawRect(
+					{ 
+						static_cast<uint8_t>((x / m_WinInfo.Width) * 255), 
+						static_cast<uint8_t>((y / m_WinInfo.Height) * 255),
+						255, 
+						255 
+					}, 
+					{ x, y }, 
+					{ rectSize - 4.0f, rectSize - 4.0f }
+				);
 			}
 		}
 
-		DrawRect({ 1.0f, 0.0f, 0.0f, 1.0f }, { 100.0f, 0.0f }, { 50.0f, 50.0f });
+		DrawRect(Reme::Color::Red, { 100.0f, 0.0f }, { 50.0f, 50.0f });
 		DrawTexture(nullptr, { 100.0f, 100.0f });
 
 		Reme::Renderer2D::End();

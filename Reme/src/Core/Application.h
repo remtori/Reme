@@ -2,6 +2,7 @@
 
 #include "Core/KeyCodes.h"
 #include "Core/MouseCodes.h"
+#include "Renderer/Color.h"
 #include "Renderer/Texture.h"
 
 #include <glm/glm.hpp>
@@ -13,7 +14,6 @@ namespace Reme
 	class Application {
 	protected:
 		double deltaTime = 1000.0 / 60;
-		float zIndex = 0.0f;
 	public:
 		Application(const char* title = "Reme Engine", float screenWidth = 640, float screenHeight = 480);
 		virtual ~Application();
@@ -28,7 +28,7 @@ namespace Reme
 		/**
 		 * OnUpdate is guarantee to run every "deltaTime", which default to 1/60 of a second
 		 */
-		virtual void OnUpdate(double deltaTime) {};
+		virtual void OnUpdate(double ellapsedTime) {};
 		virtual void OnImGuiRender() {};
 
 		virtual void OnResize(int width, int height) {};
@@ -51,7 +51,7 @@ namespace Reme
 		WindowData m_WinInfo;
 	// Renderer2D Utility Method
 	protected:
-		void DrawRect(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
+		void DrawRect(Color color, glm::vec2 position, glm::vec2 scale);
 		void DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale = { 0.0f, 0.0f });
 		void DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale);
 	};
