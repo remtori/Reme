@@ -10,23 +10,21 @@
 #include "Renderer/Buffers.h"
 #include "Renderer/VertexArray.h"
 
-#define MAX_VERTEX_SIZE 65535
-#define FLOAT_PER_VERTEX 8
-#define VERTEX_PER_DRAWABLE 6
-
 namespace Reme
 {
+	const uint32_t MAX_VERTEX_BUFFER_SIZE = 4000000;
+	const uint32_t FLOAT_PER_VERTEX = 8;
+	const uint32_t VERTEX_PER_DRAWABLE = 6;
+	const uint32_t MAX_DRAWABLE_PER_BATCH = (MAX_VERTEX_BUFFER_SIZE / (VERTEX_PER_DRAWABLE * FLOAT_PER_VERTEX * sizeof(float)));
+
 	struct Vertex 
 	{
-		union 
-		{
-			struct { float x, y, U, V, color[4]; };
-			float __data[FLOAT_PER_VERTEX];
-		};
+		float x, y, U, V;
 	};
 
 	struct Drawable
 	{		
+		Color color;
 		Texture* texture;
 		Vertex vertexArray[VERTEX_PER_DRAWABLE];
 	};
@@ -38,9 +36,8 @@ namespace Reme
 		Texture* rgbTexture;
 		// OpenGL Stuff
 		VertexArray* VAO;
-		VertexBuffer* vertexBuffer;
-		std::vector<Drawable> elements;
-		float* buffer;
+		VertexBuffer* VBO;
+		std::vector<Drawable> drawables;
 	};
 
 	class Renderer2D
