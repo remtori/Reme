@@ -56,12 +56,16 @@ namespace Reme
 		for (const auto& element : layout)
 		{
 			glEnableVertexAttribArray(m_VertexBufferIndex);
-			glVertexAttribPointer(m_VertexBufferIndex,
+			glVertexAttribPointer(
+				m_VertexBufferIndex,
 				element.GetComponentCount(),
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
-				(const void*) element.Offset);
+				(const void*) element.Offset
+			);
+			glVertexAttribDivisor(m_VertexBufferIndex, element.Divisor);
+
 			m_VertexBufferIndex++;
 		}
 		m_VertexBuffers.push_back(buf);

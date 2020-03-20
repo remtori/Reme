@@ -35,9 +35,10 @@ namespace Reme
 		uint32_t Size;
 		uint32_t Offset;
 		bool Normalized;
+		uint32_t Divisor;
 
-		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-			: Type(type), Name(name), Normalized(normalized), Offset(0), Size(ShaderDataTypeSize(type))
+		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false, uint32_t divisor = 0)
+			: Type(type), Name(name), Normalized(normalized), Divisor(divisor), Offset(0), Size(ShaderDataTypeSize(type))
 		{
 		}
 
