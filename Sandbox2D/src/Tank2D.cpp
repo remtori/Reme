@@ -96,7 +96,7 @@ public:
 				DrawRect(
 					Reme::Color(x % 255, y % 255, 255), 
 					{ x, y }, 
-					{ rectSize - 4.0f, rectSize - 4.0f }
+					{ rectSize - 2.0f, rectSize - 2.0f }
 				);
 			}
 		}
@@ -113,8 +113,8 @@ public:
 	{
 		ImGui::Begin("Menu");
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::DragFloat("Img Width", &imgWidth, 1.0f, 1.0f, 1000.0f);
-		ImGui::DragFloat("Rect Size", &rectSize, 1.0f, 5.0f, 1000.0f);
+		ImGui::DragFloat("Img Width", &imgWidth, 1.0f, 10.0f, 1000.0f);
+		ImGui::DragFloat("Rect Size", &rectSize, 1.0f, 10.0f, 1000.0f);
 
 		ImGui::InputText("Benchmark name", benchmarkName.data(), sizeof(benchmarkName));
 		if (ImGui::Button("Start Benchmark"))
