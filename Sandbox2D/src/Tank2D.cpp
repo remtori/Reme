@@ -16,9 +16,9 @@ extern "C"
 class Tank2D : public Reme::Application
 {
 public:
-	Tank2D() : Application("Tank2D", 640, 640)
+	Tank2D() : Application("Tank2D", 1280, 640)
 	{
-		cam = new Reme::OrthographicCamera(0.0f, 640.f, 640.0f, 0.0f);
+		cam = new Reme::OrthographicCamera(0.0f, 1280.f, 640.0f, 0.0f);
 		imgs[0] = Reme::Texture::Create("assets/miku-cutie.jpg");
 		imgs[1] = Reme::Texture::Create("assets/rem-bb.png");
 		imgs[2] = Reme::Texture::Create("assets/rem-sleeping-rose.png");
@@ -89,25 +89,22 @@ public:
 			}
 		} while (y < m_WinInfo.Height);
 
-		for (float x = 0.0f; x < m_WinInfo.Width; x += rectSize)
+		for (int x = 0.0f; x < m_WinInfo.Width; x += rectSize)
 		{
-			for (float y = 0.0f; y < m_WinInfo.Height; y += rectSize)
+			for (int y = 0.0f; y < m_WinInfo.Height; y += rectSize)
 			{
 				DrawRect(
-					{ 
-						static_cast<uint8_t>((x / m_WinInfo.Width) * 255), 
-						static_cast<uint8_t>((y / m_WinInfo.Height) * 255),
-						255, 
-						255 
-					}, 
+					Reme::Color(x % 255, y % 255, 255), 
 					{ x, y }, 
 					{ rectSize - 4.0f, rectSize - 4.0f }
 				);
 			}
 		}
 
-		DrawRect(Reme::Color::Red, { 100.0f, 0.0f }, { 50.0f, 50.0f });
-		DrawTexture(nullptr, { 100.0f, 100.0f });
+		DrawRect(Reme::Color::Green, {   0.0f, 100.0f }, { 50.0f, 50.0f });
+		DrawRect(Reme::Color::Red  , { 100.0f, 100.0f }, { 50.0f, 50.0f });
+		DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
+		DrawTexture(nullptr, { 0.0f, 0.0f });
 
 		Reme::Renderer2D::End();
 	}
