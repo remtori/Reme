@@ -1,0 +1,24 @@
+Testing with:
+	Screen res: 1366x705
+	Img Width: 50
+	Rect Size: 50
+FPS: 
+	MIN: 199.291
+	AVG: 207.549
+	MAX: 227.234
+Testing with:
+	Screen res: 1366x705
+	Img Width: 100
+	Rect Size: 10
+FPS: 
+	MIN: 65.0766
+	AVG: 67.5084
+	MAX: 80.4611
+Testing with:
+	Screen res: 1366x705
+	Img Width: 100
+	Rect Size: 100
+FPS: 
+	MIN: 179.438
+	AVG: 182.393
+	MAX: 185.111

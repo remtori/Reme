@@ -44,7 +44,7 @@ namespace Reme
 				WindowData* data = (WindowData*) glfwGetWindowUserPointer(window);
 				data->Width = width;
 				data->Height = height;
-
+				
 				glViewport(0, 0, width, height);
 				data->App->OnResize(width, height);
 		});
@@ -97,11 +97,19 @@ namespace Reme
 			exit(EXIT_FAILURE);
 		}
 
-		LOG_INFO("OpenGL Version: {0}", glGetString(GL_VERSION));
-		LOG_INFO("GLSL Version: {0}", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		LOG_INFO("Renderer: {0}", glGetString(GL_RENDERER));
+		GLint temp;
+		LOG_INFO("OpenGL Version: {}", glGetString(GL_VERSION));
+		LOG_INFO("GLSL Version  : {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		LOG_INFO("Renderer      : {}", glGetString(GL_RENDERER));
 
-		glfwSwapInterval(1);
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &temp);
+		LOG_INFO("Max Texture Units: {}", temp);
+
+		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
+		LOG_INFO("Max Texture Size : {0}x{0}", temp);
+
+		//glfwSwapInterval(1);
+		glViewport(0, 0, screenWidth, screenHeight);
 
 		// ImGui Init
 		IMGUI_CHECKVERSION();
@@ -186,33 +194,15 @@ namespace Reme
 		return { (float) xpos, (float) ypos };
 	}
 
-	glm::vec2 Application::ConvertCoord(const glm::vec2& pos)
-	{
-		return {
-			(2.0 * pos.x + 1.0) / m_WinInfo.Width - 1.0,
-			(2.0 * pos.y + 1.0) / m_WinInfo.Height - 1.0
-		};
-	}
-
-	glm::vec2 Application::ConvertScale(const glm::vec2& scale)
-	{
-		return {
-			scale.x / m_WinInfo.Width,
-			scale.y / m_WinInfo.Height
-		};
-	}
-
 	// Renderer2D Utility Method
-	void Application::DrawRect(glm::vec4 color, glm::vec2 position, glm::vec2 scale)
+	void Application::DrawRect(Color color, glm::vec2 position, glm::vec2 scale)
 	{
-		glm::vec2 p = ConvertCoord(position);
-
 		// Renderer2D Draw implementation will convert
 		// (Texture*) 1 to a white texture
 		Renderer2D::Draw(
 			(Texture*) 1,
 			{ 0.0f, 0.0f }, { 0.0f, 0.0f },
-			{ p.x, p.y, zIndex }, ConvertScale(scale),
+			position, scale,
 			color
 		);
 	}
@@ -226,12 +216,7 @@ namespace Reme
 				: glm::vec2{ texture->GetWidth(), texture->GetHeight() };
 		}
 
-		NoScaleDrawTexture(
-			texture,
-			{ 0.0f, 0.0f }, { 1.0f, 1.0f },
-			ConvertCoord(destPos),
-			ConvertScale(destScale)
-		);
+		Renderer2D::Draw(texture, { 0.0f, 0.0f }, { 1.0f, 1.0f }, destPos, destScale);
 	}
 
 	void Application::DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
@@ -241,11 +226,6 @@ namespace Reme
 		srcScale.x /= texture->GetWidth();
 		srcScale.y /= texture->GetHeight();
 
-		NoScaleDrawTexture(texture, srcPos, srcScale, ConvertCoord(destPos), ConvertScale(destScale));
-	}
-
-	void Application::NoScaleDrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
-	{
-		Renderer2D::Draw(texture, srcPos, srcScale, { destPos.x, destPos.y, zIndex }, destScale);
+		Renderer2D::Draw(texture, srcPos, srcScale, destPos, destScale);
 	}
 }

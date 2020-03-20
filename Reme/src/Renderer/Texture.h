@@ -15,9 +15,10 @@ namespace Reme
         {
             return new Texture(path);
         }
-    public:
+    private:
         Texture(uint32_t width, uint32_t height);
         Texture(const std::string& path);
+    public:
         ~Texture();
 
         inline uint32_t GetWidth() const { return m_Width;  }

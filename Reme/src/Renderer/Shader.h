@@ -19,9 +19,10 @@ namespace Reme
         {
             return new Shader(name, vertexShader, fragmentShader);
         }
-    public:
+    private:
         Shader(const std::string& filePath);
         Shader(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
+    public:
         ~Shader();
 
         void Bind() const;
