@@ -16,6 +16,7 @@ namespace Reme
 	public:
 		~VertexBuffer();
 		void Bind();
+		void Unbind();
 		void SetData(float* data, uint32_t eleOffset, uint32_t eleCount);
 
 		const BufferLayout& GetLayout() const { return m_Layout; }
@@ -38,6 +39,7 @@ namespace Reme
 	public:
 		~IndexBuffer();
 		void Bind();
+		void Unbind();
 		void SetData(uint32_t* data, uint32_t eleOffset, uint32_t eleCount);
 	private:
 		uint32_t m_InternalID;
