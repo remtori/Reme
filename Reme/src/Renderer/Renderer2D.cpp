@@ -121,7 +121,7 @@ namespace Reme
 			if (currTex != d.texture)
 			{
 				currTex->Bind();
-				m_Data->vertexBuffer->SetData(m_Data->buffer, offset * FLOAT_PER_VERTEX, 0);
+				m_Data->vertexBuffer->SetData(m_Data->buffer, 0, offset * FLOAT_PER_VERTEX);
 				glDrawArrays(GL_TRIANGLES, 0, offset);
 
 				offset = 0;
@@ -133,7 +133,7 @@ namespace Reme
 		}
 
 		currTex->Bind();
-		m_Data->vertexBuffer->SetData(m_Data->buffer, offset * FLOAT_PER_VERTEX, 0);
+		m_Data->vertexBuffer->SetData(m_Data->buffer, 0, offset * FLOAT_PER_VERTEX);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, offset);
 
 		m_Data->elements.clear();

@@ -23,9 +23,9 @@ namespace Reme
 		glBindBuffer(GL_ARRAY_BUFFER, m_InternalID);
 	}
 
-	void VertexBuffer::SetData(float* data, uint32_t eleSize, uint32_t eleOffset)
+	void VertexBuffer::SetData(float* data, uint32_t eleOffset, uint32_t eleCount)
 	{
-		glBufferSubData(GL_ARRAY_BUFFER, eleOffset * sizeof(float), eleSize * sizeof(float), data);
+		glBufferSubData(GL_ARRAY_BUFFER, eleOffset * sizeof(float), eleCount * sizeof(float), data);
 	}
 
 	// INDEX BUFFER
@@ -46,8 +46,8 @@ namespace Reme
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_InternalID);
 	}
 
-	void IndexBuffer::SetData(uint32_t* data, uint32_t eleSize, uint32_t eleOffset)
+	void IndexBuffer::SetData(uint32_t* data, uint32_t eleOffset, uint32_t eleCount)
 	{
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, eleOffset * sizeof(uint32_t), eleSize * sizeof(uint32_t), data);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, eleOffset * sizeof(uint32_t), eleCount * sizeof(uint32_t), data);
 	}
 }
