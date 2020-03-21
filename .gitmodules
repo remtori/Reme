@@ -1,0 +1,3 @@
+[submodule "Reme/vendor/lua"]
+	path = Reme/vendor/lua
+	url = https://github.com/remtori/premake5-lua
