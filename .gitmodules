@@ -10,3 +10,6 @@
 [submodule "Reme/vendor/imgui"]
 	path = Reme/vendor/imgui
 	url = https://github.com/remtori/premake5-imgui
+[submodule "Reme/vendor/glm"]
+	path = Reme/vendor/glm
+	url = https://github.com/g-truc/glm.git
