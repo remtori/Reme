@@ -4,3 +4,6 @@
 [submodule "Reme/vendor/spdlog"]
 	path = Reme/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Reme/vendor/GLFW"]
+	path = Reme/vendor/GLFW
+	url = https://github.com/remtori/premake5-glfw
