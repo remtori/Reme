@@ -1,3 +1,6 @@
 [submodule "Reme/vendor/lua"]
 	path = Reme/vendor/lua
 	url = https://github.com/remtori/premake5-lua
+[submodule "Reme/vendor/spdlog"]
+	path = Reme/vendor/spdlog
+	url = https://github.com/gabime/spdlog
