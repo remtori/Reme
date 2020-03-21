@@ -7,3 +7,6 @@
 [submodule "Reme/vendor/GLFW"]
 	path = Reme/vendor/GLFW
 	url = https://github.com/remtori/premake5-glfw
+[submodule "Reme/vendor/imgui"]
+	path = Reme/vendor/imgui
+	url = https://github.com/remtori/premake5-imgui
