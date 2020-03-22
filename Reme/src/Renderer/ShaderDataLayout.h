@@ -4,7 +4,7 @@ namespace Reme
 {
 	enum class ShaderDataType
 	{
-		Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
+		Float, Float2, Float3, Float4, Mat2, Mat3, Mat4, Int, Int2, Int3, Int4
 	};
 
 	static uint32_t ShaderDataTypeSize(ShaderDataType type)
@@ -14,14 +14,20 @@ namespace Reme
 		case ShaderDataType::Float:    return 4;
 		case ShaderDataType::Float2:   return 4 * 2;
 		case ShaderDataType::Float3:   return 4 * 3;
-		case ShaderDataType::Float4:   return 4 * 4;
-		case ShaderDataType::Mat3:     return 4 * 3 * 3;
-		case ShaderDataType::Mat4:     return 4 * 4 * 4;
+		case ShaderDataType::Float4:   return 4 * 4;		
 		case ShaderDataType::Int:      return 4;
 		case ShaderDataType::Int2:     return 4 * 2;
 		case ShaderDataType::Int3:     return 4 * 3;
 		case ShaderDataType::Int4:     return 4 * 4;
-		case ShaderDataType::Bool:     return 1;
+		
+		// Matrix type get handle specially in VertexArray impl
+		// Under the hood Matrix type in attribute
+		// is the same as Float2[2] for Mat2, Float3[3] for Mat3, ...
+		// the fn ExpandDataType will duplicate those as needed
+		// we just need to trick it the same as Float2, Float3, ... in this function
+		case ShaderDataType::Mat2:     return 4 * 2.;
+		case ShaderDataType::Mat3:     return 4 * 3;
+		case ShaderDataType::Mat4:     return 4 * 4;
 		}
 
 		ASSERT(false, "Unknown ShaderDataType!");
@@ -50,13 +56,16 @@ namespace Reme
 			case ShaderDataType::Float2:  return 2;
 			case ShaderDataType::Float3:  return 3;
 			case ShaderDataType::Float4:  return 4;
-			case ShaderDataType::Mat3:    return 3 * 3;
-			case ShaderDataType::Mat4:    return 4 * 4;
-			case ShaderDataType::Int:     return 1;
-			case ShaderDataType::Int2:    return 2;
-			case ShaderDataType::Int3:    return 3;
-			case ShaderDataType::Int4:    return 4;
-			case ShaderDataType::Bool:    return 1;
+
+			// These won't get called, ever
+			// case ShaderDataType::Mat2:    return 2;
+			// case ShaderDataType::Mat3:    return 3;
+			// case ShaderDataType::Mat4:    return 4;
+
+			case ShaderDataType::Int:      return 1;
+			case ShaderDataType::Int2:     return 2;
+			case ShaderDataType::Int3:     return 3;
+			case ShaderDataType::Int4:     return 4;
 			}
 
 			ASSERT(false, "Unknown ShaderDataType!");
@@ -72,6 +81,7 @@ namespace Reme
 		BufferLayout(const std::initializer_list<BufferElement>& elements)
 			: m_Elements(elements)
 		{
+			ExpandDataType();
 			CalculateOffsetsAndStride();
 		}
 
@@ -83,9 +93,46 @@ namespace Reme
 		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
 		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
 	private:
+		void ExpandDataType()
+		{
+			std::vector<BufferElement> newElements;
+			ShaderDataType type;
+			uint8_t loop, i;
+			for (auto& element : m_Elements)
+			{				
+				switch (element.Type)
+				{
+					case ShaderDataType::Mat2: 
+						loop = 2;
+						type = ShaderDataType::Float2; 
+						break;
+					case ShaderDataType::Mat3: 
+						loop = 3;
+						type = ShaderDataType::Float3; 
+						break;
+					case ShaderDataType::Mat4: 
+						loop = 4;
+						type = ShaderDataType::Float4; 
+						break;
+					default:
+						newElements.push_back(element);
+						continue;
+				}
+
+				for (i = 0; i < loop; i++)
+				{
+					newElements.push_back({
+						type, element.Name, element.Normalized, element.Divisor
+					});
+				}
+			}
+
+			m_Elements = newElements;
+		}
+
 		void CalculateOffsetsAndStride()
 		{
-			size_t offset = 0;
+			uint32_t offset = 0;
 			m_Stride = 0;
 			for (auto& element : m_Elements)
 			{
