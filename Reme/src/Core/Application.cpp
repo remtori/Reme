@@ -44,7 +44,7 @@ namespace Reme
 				WindowData* data = (WindowData*) glfwGetWindowUserPointer(window);
 				data->Width = width;
 				data->Height = height;
-				
+
 				glViewport(0, 0, width, height);
 				data->App->OnResize(width, height);
 		});
@@ -108,7 +108,7 @@ namespace Reme
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
 		LOG_INFO("Max Texture Size : {0}x{0}", temp);
 
-		//glfwSwapInterval(1);
+		glfwSwapInterval(0);
 		glViewport(0, 0, screenWidth, screenHeight);
 
 		// ImGui Init
