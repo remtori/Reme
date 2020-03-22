@@ -25,7 +25,7 @@ namespace Reme
 		// is the same as Float2[2] for Mat2, Float3[3] for Mat3, ...
 		// the fn ExpandDataType will duplicate those as needed
 		// we just need to trick it the same as Float2, Float3, ... in this function
-		case ShaderDataType::Mat2:     return 4 * 2.;
+		case ShaderDataType::Mat2:     return 4 * 2;
 		case ShaderDataType::Mat3:     return 4 * 3;
 		case ShaderDataType::Mat4:     return 4 * 4;
 		}
