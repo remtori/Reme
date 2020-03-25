@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Core/KeyCodes.h"
+#include "Reme/Events/Event.h"
+#include "Reme/Core/KeyCodes.h"
 
 namespace Reme
 {

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Core/Core.h"
+#include "Reme/Core/Core.h"
 
-#include "Core/Log.h"
-#include "Core/KeyCodes.h"
-#include "Core/MouseCodes.h"
-#include "Core/Application.h"
+#include "Reme/Core/Log.h"
+#include "Reme/Core/KeyCodes.h"
+#include "Reme/Core/MouseCodes.h"
+#include "Reme/Core/Application.h"
 
 // Renderer
-#include "Renderer/Renderer2D.h"
+#include "Reme/Renderer/Renderer2D.h"
 
-#include "Renderer/PerspectiveCamera.h"
-#include "Renderer/OrthographicCamera.h"
+#include "Reme/Renderer/PerspectiveCamera.h"
+#include "Reme/Renderer/OrthographicCamera.h"

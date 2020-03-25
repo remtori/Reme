@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Core/MouseCodes.h"
+#include "Reme/Events/Event.h"
+#include "Reme/Core/MouseCodes.h"
 
 namespace Reme
 {

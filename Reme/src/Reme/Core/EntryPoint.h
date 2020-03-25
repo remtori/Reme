@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Log.h"
-#include "Core/Application.h"
+#include "Reme/Core/Log.h"
+#include "Reme/Core/Application.h"
 
 extern Reme::Application* Reme::CreateApplication();
 

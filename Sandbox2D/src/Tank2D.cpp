@@ -1,5 +1,5 @@
 #include <Reme.h>
-#include <Core/EntryPoint.h>
+#include <Reme/Core/EntryPoint.h>
 #include <imgui/imgui.h>
 
 extern "C"
