@@ -22,7 +22,7 @@ namespace Reme
 		case ShaderDataType::Int4:     return GL_INT;
 		}
 
-		ASSERT(false, "Unknown ShaderDataType!");
+		REME_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 

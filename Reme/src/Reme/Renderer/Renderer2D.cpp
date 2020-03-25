@@ -103,7 +103,7 @@ namespace Reme
 		GLenum err;
 		while ((err = glGetError()) != GL_NO_ERROR)
 		{
-			LOG_ERROR("OpenGL Error: {}", err);
+			CORE_LOG_ERROR("OpenGL Error: {}", err);
 		}
 	}
 

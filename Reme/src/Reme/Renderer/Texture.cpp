@@ -35,7 +35,7 @@ namespace Reme
 
         if (data == nullptr)
         {
-            LOG_ERROR("Failed to load image \"{}\"", path);
+            CORE_LOG_ERROR("Failed to load image \"{}\"", path);
             return;
         }
 
@@ -60,7 +60,7 @@ namespace Reme
 
         if ((internalFormat & dataFormat) == 0)
         {
-            LOG_ERROR("Format not supported!");
+            CORE_LOG_ERROR("Format not supported!");
         }
 
         glGenTextures(1, &m_TextureID);
@@ -81,7 +81,7 @@ namespace Reme
         }
 
         stbi_image_free(data);
-        LOG_INFO("Texture loaded from path: {}", path);
+        CORE_LOG_INFO("Texture loaded from path: {}", path);
     }
 
     Texture::~Texture()
@@ -92,7 +92,7 @@ namespace Reme
     void Texture::SetData(void* data, uint32_t size)
     {
         uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
-        ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
+        REME_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
 
         glBindTexture(GL_TEXTURE_2D, m_TextureID);
         glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, data);

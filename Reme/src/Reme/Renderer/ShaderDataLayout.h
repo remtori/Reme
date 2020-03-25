@@ -30,7 +30,7 @@ namespace Reme
 		case ShaderDataType::Mat4:     return 4 * 4;
 		}
 
-		ASSERT(false, "Unknown ShaderDataType!");
+		REME_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -68,7 +68,7 @@ namespace Reme
 			case ShaderDataType::Int4:     return 4;
 			}
 
-			ASSERT(false, "Unknown ShaderDataType!");
+			REME_ASSERT(false, "Unknown ShaderDataType!");
 			return 0;
 		}
 	};

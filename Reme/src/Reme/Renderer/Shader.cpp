@@ -67,8 +67,8 @@ namespace Reme
 
                 glDeleteShader(shader);
 
-                LOG_ERROR("{0}", infoLog.data());
-                ASSERT(false, "Shader compilation failure!");
+                CORE_LOG_ERROR("{0}", infoLog.data());
+                REME_ASSERT(false, "Shader compilation failure!");
                 break;
             }
 
@@ -94,8 +94,8 @@ namespace Reme
             for (auto id : glShaderIDs)
                 glDeleteShader(id);
 
-            LOG_ERROR("{0}", infoLog.data());
-            ASSERT(false, "Shader link failure!");
+            CORE_LOG_ERROR("{0}", infoLog.data());
+            REME_ASSERT(false, "Shader link failure!");
             return;
         }
 
@@ -124,7 +124,7 @@ namespace Reme
         if (it == m_UniformLocation.cend())
         {
             location = glGetUniformLocation(m_ProgramID, name.c_str());
-            LOG_TRACE("Uniform Location '{}' = {}", name, location);
+            CORE_LOG_TRACE("Uniform Location '{}' = {}", name, location);
             m_UniformLocation.insert({ name, location });
         }
         else
