@@ -61,6 +61,8 @@
 	#endif
 
 	#define REME_ASSERT(x, ...) if(!(x)) { CORE_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); DEBUG_BREAK; }
+#else
+	#define REME_ASSERT(x, ...)
 #endif
 
 #define BIT(x) (1 << x)
