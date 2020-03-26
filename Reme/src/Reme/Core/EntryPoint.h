@@ -5,7 +5,7 @@
 
 extern Reme::Application* Reme::CreateApplication();
 
-int main()
+int main(int argc, char** argv)
 {
 	Reme::Log::Init();
 	auto app = Reme::CreateApplication();

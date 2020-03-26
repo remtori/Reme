@@ -13,12 +13,16 @@ extern "C"
 #include <numeric>
 #include <algorithm>
 
-class Tank2D : public Reme::Application
+class Tank2D : public Reme::Layer
 {
 public:
-	Tank2D() : Application("Tank2D", 1280, 640)
+	void OnAttach() override
 	{
-		cam = new Reme::OrthographicCamera(0.0f, 1280.f, 640.0f, 0.0f);
+		m_LayerName = "Tank2D";
+		auto Width = Reme::Application::Get().GetWindow().GetWidth();
+		auto Height = Reme::Application::Get().GetWindow().GetHeight();
+
+		cam = new Reme::OrthographicCamera(0.0f, Width, Height, 0.0f);
 		imgs[0] = Reme::Texture::Create("assets/miku-cutie.jpg");
 		imgs[1] = Reme::Texture::Create("assets/rem-bb.png");
 		imgs[2] = Reme::Texture::Create("assets/rem-sleeping-rose.png");
@@ -45,7 +49,7 @@ public:
 		lua_close(L);
 	}
 
-	~Tank2D()
+	void OnDetach() override
 	{
 
 	}
@@ -54,13 +58,13 @@ public:
 	{
 		float speed = 300 * ellapsedTime;
 		glm::vec3 v = { 0.0f, 0.0f, 0.0f };
-		if (IsKeyPressed(Reme::KeyCode::W))
+		if (Reme::Input::IsKeyPressed(Reme::KeyCode::W))
 			v.y -= speed;
-		if (IsKeyPressed(Reme::KeyCode::A))
+		if (Reme::Input::IsKeyPressed(Reme::KeyCode::A))
 			v.x -= speed;
-		if (IsKeyPressed(Reme::KeyCode::S))
+		if (Reme::Input::IsKeyPressed(Reme::KeyCode::S))
 			v.y += speed;
-		if (IsKeyPressed(Reme::KeyCode::D))
+		if (Reme::Input::IsKeyPressed(Reme::KeyCode::D))
 			v.x += speed;
 
 		if (v.x != 0.0f || v.y != 0.0f || v.z != 0.0f)
@@ -71,6 +75,9 @@ public:
 
 	void OnRender() override
 	{
+		auto Width = Reme::Application::Get().GetWindow().GetWidth();
+		auto Height = Reme::Application::Get().GetWindow().GetHeight();
+
 		Reme::Renderer2D::Begin(cam);
 
 		float y = 0.0f;
@@ -80,20 +87,20 @@ public:
 				float ratio = (float)imgs[i]->GetWidth() / (float)imgs[i]->GetHeight();
 				float dHeight = imgWidth / ratio;
 
-				for (int j = 0; j < m_WinInfo.Width / imgWidth; j++)
+				for (int j = 0; j < Width / imgWidth; j++)
 				{
-					DrawTexture(imgs[i], { imgWidth * j, y }, { imgWidth, dHeight });
+					Reme::Renderer2D::DrawTexture(imgs[i], { imgWidth * j, y }, { imgWidth, dHeight });
 				}
 
 				y += dHeight;
 			}
-		} while (y < m_WinInfo.Height);
+		} while (y < Height);
 
-		for (int x = 0.0f; x < m_WinInfo.Width; x += rectSize)
+		for (int x = 0.0f; x < Width; x += rectSize)
 		{
-			for (int y = 0.0f; y < m_WinInfo.Height; y += rectSize)
+			for (int y = 0.0f; y < Height; y += rectSize)
 			{
-				DrawRect(
+				Reme::Renderer2D::DrawRect(
 					Reme::Color(x % 255, y % 255, 255), 
 					{ x, y }, 
 					{ rectSize - 2.0f, rectSize - 2.0f }
@@ -101,16 +108,19 @@ public:
 			}
 		}
 
-		DrawRect(Reme::Color::Green, {   0.0f, 100.0f }, { 50.0f, 50.0f });
-		DrawRect(Reme::Color::Red  , { 100.0f, 100.0f }, { 50.0f, 50.0f });
-		DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
-		DrawTexture(nullptr, { 0.0f, 0.0f });
+		Reme::Renderer2D::DrawRect(Reme::Color::Green, {   0.0f, 100.0f }, { 50.0f, 50.0f });
+		Reme::Renderer2D::DrawRect(Reme::Color::Red  , { 100.0f, 100.0f }, { 50.0f, 50.0f });
+		Reme::Renderer2D::DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
+		Reme::Renderer2D::DrawTexture(nullptr, { 0.0f, 0.0f });
 
 		Reme::Renderer2D::End();
 	}
 
 	void OnImGuiRender() override
 	{
+		auto Width = Reme::Application::Get().GetWindow().GetWidth();
+		auto Height = Reme::Application::Get().GetWindow().GetHeight();
+
 		ImGui::Begin("Menu");
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::DragFloat("Img Width", &imgWidth, 1.0f, 10.0f, 1000.0f);
@@ -140,7 +150,7 @@ public:
 			{
 				auto mmFps = std::minmax_element(avgFps.begin(), avgFps.end());
 				fOut << "Testing with:" << std::endl
-					<< "\tScreen res: " << m_WinInfo.Width << "x" << m_WinInfo.Height << std::endl
+					<< "\tScreen res: " << Width << "x" << Height << std::endl
 					<< "\tImg Width: " << imgWidth << std::endl
 					<< "\tRect Size: " << rectSize << std::endl
 					<< "FPS: " << std::endl
@@ -156,10 +166,17 @@ public:
 		ImGui::End();
 	}
 
-	void OnResize(int width, int height) override
+	void OnEvent(Reme::Event& e) override
 	{
-		cam->SetProjection(0.0f, width, height, 0.0f);		
-		LOG_INFO("Screen resized, new resolution: {}x{}", width, height);
+		Reme::EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<Reme::WindowResizeEvent>(REME_BIND_EVENT_FN(Tank2D::OnResize));
+	}
+
+	bool OnResize(Reme::WindowResizeEvent e)
+	{
+		cam->SetProjection(0.0f, e.GetWidth(), e.GetHeight(), 0.0f);		
+		LOG_INFO("Screen resized, new resolution: {}x{}", e.GetWidth(), e.GetHeight());
+		return true;
 	}
 private:
 	std::ofstream fOut;
@@ -173,7 +190,16 @@ private:
 	std::array<float, 250> avgFps;
 };
 
+class Game : public Reme::Application
+{
+public:
+	Game()
+	{
+		GetScreen().PushLayer(new Tank2D());
+	}
+};
+
 Reme::Application* Reme::CreateApplication()
 {
-	return new Tank2D();
+	return new Game();
 }

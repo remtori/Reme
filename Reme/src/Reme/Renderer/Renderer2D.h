@@ -54,6 +54,9 @@ namespace Reme
 			glm::vec2 destPos, glm::vec2 destScale,
 			Color color = Color::White
 		);
+		static void DrawRect(Color color, glm::vec2 position, glm::vec2 scale);
+		static void DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale = { 0.0f, 0.0f });
+		static void DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale);
 	public:
 		static Renderer2DData* m_Data;
 	};

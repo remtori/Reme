@@ -177,4 +177,38 @@ namespace Reme
 		m_Data->drawables.push_back(r);
 		if (m_Data->drawables.size() > MAX_DRAWABLE_PER_BATCH) Flush();
 	}
+	
+	void Renderer2D::DrawRect(Color color, glm::vec2 position, glm::vec2 scale)
+	{
+		// Renderer2D Draw implementation will convert
+		// (Texture*) 1 to a white texture
+		Renderer2D::Draw(
+			(Texture*) 1,
+			{ 0.0f, 0.0f }, { 0.0f, 0.0f },
+			position, scale,
+			color
+		);
+	}
+
+	void Renderer2D::DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale)
+	{
+		if (destScale.x == 0.0f && destScale.y == 0.0f)
+		{
+			destScale = texture == nullptr
+				? glm::vec2{ 64.0f, 64.0f }
+				: glm::vec2{ texture->GetWidth(), texture->GetHeight() };
+		}
+
+		Renderer2D::Draw(texture, { 0.0f, 0.0f }, { 1.0f, 1.0f }, destPos, destScale);
+	}
+
+	void Renderer2D::DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
+	{
+		srcPos.x /= texture->GetWidth();
+		srcPos.y /= texture->GetHeight();
+		srcScale.x /= texture->GetWidth();
+		srcScale.y /= texture->GetHeight();
+
+		Renderer2D::Draw(texture, srcPos, srcScale, destPos, destScale);
+	}
 }

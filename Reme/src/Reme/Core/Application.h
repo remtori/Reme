@@ -1,59 +1,41 @@
 #pragma once
 
-#include "Reme/Core/KeyCodes.h"
-#include "Reme/Core/MouseCodes.h"
-#include "Reme/Renderer/Color.h"
-#include "Reme/Renderer/Texture.h"
+#include "Reme/Core/Input.h"
+#include "Reme/Core/Window.h"
+#include "Reme/Events/ApplicationEvent.h"
+#include "Reme/Screen/Screen.h"
 
-#include <glm/glm.hpp>
-
-typedef struct GLFWwindow GLFWwindow;
+int main(int argc, char** argv);
 
 namespace Reme
 {
 	class Application {
-	protected:
-		double deltaTime = 1000.0 / 60;
 	public:
-		Application(const char* title = "Reme Engine", float screenWidth = 640, float screenHeight = 480);
-		virtual ~Application();
+		// Maximum ellapsed time allow between update (in seconds)
+		double DeltaTime = 1.0 / 60;
+	public:
+		Application(const WindowProps& props = { "Reme Engine", 1280, 720 });
+		virtual ~Application();				
 
+		inline Screen& GetScreen() { return *m_Screen; }
+		void SetScreen(Screen* screen) { m_Screen = screen; }
+
+		void OnEvent(Event& event);
+
+		inline Window& GetWindow() { return *m_Window; }
+		static inline Application& Get() { return *s_Instance; }
+	private:
 		void Run();
-	protected:
-		/**
-		 * OnRender function only being called when we draw a new frame
-		 */
-		virtual void OnRender() = 0;
-
-		/**
-		 * OnUpdate is guarantee to run every "deltaTime", which default to 1/60 of a second
-		 */
-		virtual void OnUpdate(double ellapsedTime) {};
-		virtual void OnImGuiRender() {};
-
-		virtual void OnResize(int width, int height) {};
-		virtual void OnKeyboard(KeyCode keyCode, KeyState keyState) {};
-		virtual void OnMouseMove(float x, float y) {};
-		virtual void OnMouseButton(MouseCode btn, KeyState keyState) {};
-
-		bool IsKeyPressed(KeyCode key);
-		bool IsMouseButtonPressed(MouseCode button);
-		std::pair<float, float> GetMousePos();
-	protected:
-		GLFWwindow* m_Window;
-
-		struct WindowData
-		{
-			Application* App;
-			const char* Title;
-			float Width, Height;
-		};
-		WindowData m_WinInfo;
-	// Renderer2D Utility Method
-	protected:
-		void DrawRect(Color color, glm::vec2 position, glm::vec2 scale);
-		void DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale = { 0.0f, 0.0f });
-		void DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale);
+		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
+	private:
+		Window* m_Window;
+		Screen* m_Screen;
+		bool m_Running = true;
+		bool m_Minimized = false;
+	private:
+		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	// To be defined in CLIENT
