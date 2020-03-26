@@ -7,22 +7,11 @@ namespace Reme
 	class VertexArray
 	{
 	public:
-		static VertexArray* Create()
-		{
-			return new VertexArray();
-		}
-	private:
-		VertexArray();
+		static VertexArray* Create();
 	public:
-		~VertexArray();
-		void Bind();
-		void Unbind();
-		void AddVertexBuffer(VertexBuffer* vertexBuf);
-		void SetIndexBuffer(IndexBuffer* indexBuf);
-	private:
-		uint32_t m_InternalID;
-		uint32_t m_VertexBufferIndex;
-		std::vector<VertexBuffer*> m_VertexBuffers;
-		IndexBuffer* m_IndexBuffer;
+		virtual void Bind() = 0;
+		virtual void Unbind() = 0;
+		virtual void AddVertexBuffer(VertexBuffer* vertexBuf) = 0;
+		virtual void SetIndexBuffer(IndexBuffer* indexBuf) = 0;
 	};
 }

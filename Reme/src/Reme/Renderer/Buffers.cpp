@@ -1,65 +1,32 @@
 #include "pch.h"
 #include "Reme/Renderer/Buffers.h"
+#include "Reme/Renderer/RendererAPI.h"
 
-#include <glad/glad.h>
+#include "Impl/OpenGL/OpenGL_Buffers.h"
 
 namespace Reme
 {
-	// VERTEX BUFFER
-	VertexBuffer::VertexBuffer(uint32_t eleCount, bool isStatic)
+	VertexBuffer* VertexBuffer::Create(uint32_t eleCount, bool isStatic)
 	{
-		glGenBuffers(1, &m_InternalID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_InternalID);
-		glBufferData(GL_ARRAY_BUFFER, eleCount * sizeof(float), nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+		switch (RendererAPI::GetAPI())
+		{
+			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::OpenGL: return new OpenGL_VertexBuffer(eleCount, isStatic);
+		}
+
+		REME_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
 	}
 
-	VertexBuffer::~VertexBuffer()
+	IndexBuffer* IndexBuffer::Create(uint32_t eleCount, bool isStatic)
 	{
-		glDeleteBuffers(1, &m_InternalID);
-	}
+		switch (RendererAPI::GetAPI())
+		{
+			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::OpenGL: return new OpenGL_IndexBuffer(eleCount, isStatic);
+		}
 
-	void VertexBuffer::Bind()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_InternalID);
-	}
-
-	void VertexBuffer::Unbind()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-	void VertexBuffer::SetData(float* data, uint32_t eleOffset, uint32_t eleCount)
-	{
-		Bind();
-		glBufferSubData(GL_ARRAY_BUFFER, eleOffset * sizeof(float), eleCount * sizeof(float), data);
-	}
-
-	// INDEX BUFFER
-	IndexBuffer::IndexBuffer(uint32_t eleCount, bool isStatic)
-	{
-		glGenBuffers(1, &m_InternalID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_InternalID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, eleCount * sizeof(uint32_t), nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-	}
-
-	IndexBuffer::~IndexBuffer()
-	{
-		glDeleteBuffers(1, &m_InternalID);
-	}
-
-	void IndexBuffer::Bind()
-	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_InternalID);
-	}
-
-	void IndexBuffer::Unbind()
-	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
-	void IndexBuffer::SetData(uint32_t* data, uint32_t eleOffset, uint32_t eleCount)
-	{
-		Bind();
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, eleOffset * sizeof(uint32_t), eleCount * sizeof(uint32_t), data);
+		REME_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
 	}
 }
