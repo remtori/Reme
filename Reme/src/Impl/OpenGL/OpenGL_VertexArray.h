@@ -11,8 +11,12 @@ namespace Reme
 		~OpenGL_VertexArray();
 		void Bind() override;
 		void Unbind() override;
+
 		void AddVertexBuffer(VertexBuffer* vertexBuf) override;
 		void SetIndexBuffer(IndexBuffer* indexBuf) override;
+
+		const std::vector<VertexBuffer*>& GetVertexBuffers() const override { return m_VertexBuffers; }
+		const IndexBuffer* GetIndexBuffer() const override { return m_IndexBuffer; }
 	private:
 		uint32_t m_InternalID;
 		uint32_t m_VertexBufferIndex;

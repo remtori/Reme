@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "Reme/Renderer/Renderer.h"
 #include "Reme/Renderer/Renderer2D.h"
-
-#include <glad/glad.h>
+#include "Reme/Renderer/RendererAPI.h"
 
 namespace Reme
 {
     void Renderer::Init()
     {
+        RenderCommand::Init();
         Renderer2D::Init();
     }
 
@@ -18,6 +18,6 @@ namespace Reme
 
     void Renderer::OnWindowResize(float width, float height)
     {
-        glViewport(0, 0, width, height);
+        RenderCommand::SetViewport(0, 0, width, height);
     }
 }

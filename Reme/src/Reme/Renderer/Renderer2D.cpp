@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Reme/Renderer/Renderer2D.h"
+#include "Reme/Renderer/RendererAPI.h"
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -69,11 +69,7 @@ namespace Reme
 
 		m_Data->VAO = VertexArray::Create();
 		m_Data->VAO->AddVertexBuffer(m_Data->VBO);
-
-		glDisable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		RenderCommand::SetClearColor(Color(0xffffff));
 	}
 
 	void Renderer2D::Shutdown()
@@ -88,7 +84,7 @@ namespace Reme
 
 	void Renderer2D::Begin(Camera* cam)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		RenderCommand::Clear();
 		m_Data->flatShader->Bind();
 		m_Data->flatShader->SetMat4("viewMat", cam->GetViewMatrix());
 		m_Data->flatShader->SetMat4("projMat", cam->GetProjectionMatrix());
@@ -100,11 +96,6 @@ namespace Reme
 	{
 		Flush();		
 		m_Data->VAO->Unbind();
-		GLenum err;
-		while ((err = glGetError()) != GL_NO_ERROR)
-		{
-			CORE_LOG_ERROR("OpenGL Error: {}", err);
-		}
 	}
 
 	void Renderer2D::Flush()
@@ -119,7 +110,7 @@ namespace Reme
 		auto draw = [&]() {
 			currentTexture->Bind();
 			m_Data->VBO->SetData(buffer, 0, vertexCount * FLOAT_PER_VERTEX);
-			glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+			RenderCommand::DrawArrays(vertexCount, 0);
 			vertexCount = 0;
 		};
 
