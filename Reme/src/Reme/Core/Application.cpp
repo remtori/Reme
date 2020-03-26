@@ -43,14 +43,14 @@ namespace Reme
 		typedef std::chrono::time_point<std::chrono::steady_clock> TimeStamp;
 
 		TimeStamp currTime;
-		TimeStamp lastTime = std::chrono::steady_clock::now();
+		TimeStamp lastTime = std::chrono::high_resolution_clock::now();
 		double ellapsedTime;
 
 		while (m_Running)
 		{
 			m_Window->PollEvent();
 
-			currTime = std::chrono::steady_clock::now();
+			currTime = std::chrono::high_resolution_clock::now();
 			ellapsedTime = std::chrono::duration<double>(currTime - lastTime).count();
 			while (ellapsedTime > DeltaTime)
 			{				
