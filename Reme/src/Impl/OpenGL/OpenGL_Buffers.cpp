@@ -6,11 +6,11 @@
 namespace Reme
 {
 	// VERTEX BUFFER
-	OpenGL_VertexBuffer::OpenGL_VertexBuffer(uint32_t eleCount, bool isStatic)
+	OpenGL_VertexBuffer::OpenGL_VertexBuffer(uint32_t byteCount, bool isStatic)
 	{
 		glGenBuffers(1, &m_InternalID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_InternalID);
-		glBufferData(GL_ARRAY_BUFFER, eleCount * sizeof(float), nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, byteCount, nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 	}
 
 	OpenGL_VertexBuffer::~OpenGL_VertexBuffer()
@@ -28,18 +28,18 @@ namespace Reme
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGL_VertexBuffer::SetData(float* data, uint32_t eleOffset, uint32_t eleCount)
+	void OpenGL_VertexBuffer::SetData(float* data, uint32_t byteOffset, uint32_t byteCount)
 	{
 		Bind();
-		glBufferSubData(GL_ARRAY_BUFFER, eleOffset * sizeof(float), eleCount * sizeof(float), data);
+		glBufferSubData(GL_ARRAY_BUFFER, byteOffset, byteCount, data);
 	}
 
 	// INDEX BUFFER
-	OpenGL_IndexBuffer::OpenGL_IndexBuffer(uint32_t eleCount, bool isStatic)
+	OpenGL_IndexBuffer::OpenGL_IndexBuffer(uint32_t byteCount, bool isStatic)
 	{
 		glGenBuffers(1, &m_InternalID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_InternalID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, eleCount * sizeof(uint32_t), nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteCount * sizeof(uint32_t), nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 	}
 
 	OpenGL_IndexBuffer::~OpenGL_IndexBuffer()
@@ -57,9 +57,9 @@ namespace Reme
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGL_IndexBuffer::SetData(uint32_t* data, uint32_t eleOffset, uint32_t eleCount)
+	void OpenGL_IndexBuffer::SetData(uint32_t* data, uint32_t byteOffset, uint32_t byteCount)
 	{
 		Bind();
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, eleOffset * sizeof(uint32_t), eleCount * sizeof(uint32_t), data);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, byteOffset, byteCount, data);
 	}
 }

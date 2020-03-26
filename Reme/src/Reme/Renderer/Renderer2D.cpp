@@ -6,22 +6,47 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Reme
-{
-	Renderer2DData* Renderer2D::m_Data;
+{	
+	struct Vertex
+	{
+		glm::vec2 Position;
+		glm::vec2 UV;
+		glm::vec4 Color;
+	};
+
+	struct Renderer2DData
+	{
+		Shader* flatShader;
+		Texture* whiteTexture;
+		Texture* rgbTexture;
+		VertexArray* VAO;
+		VertexBuffer* VBO;
+
+		// Data for Batch Rendering
+		Vertex* buffer;
+		uint32_t vertexCount;
+		Texture* currentTexture;
+	};
+
+	static const uint32_t MAX_QUAD_COUNT = 10000;
+	static const uint32_t MAX_VERTEX_BUFFER_SIZE = MAX_QUAD_COUNT * 4 * sizeof(Vertex);
+	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);	
+
+	static Renderer2DData s_Data;
 
 	void Renderer2D::Init()
 	{
-		m_Data = new Renderer2DData();
+		s_Data.buffer = new Vertex[MAX_QUAD_COUNT * 4];
 
-		m_Data->whiteTexture = Texture::Create(1, 1);
+		s_Data.whiteTexture = Texture::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		m_Data->whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+		s_Data.whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
-		m_Data->rgbTexture = Texture::Create(2, 2);
+		s_Data.rgbTexture = Texture::Create(2, 2);
 		uint32_t rgbTextureData[] = { 0xff0000ff, 0xff00ff00, 0xffff0000, 0xffffffff };
-		m_Data->rgbTexture->SetData(&rgbTextureData, sizeof(rgbTextureData));		
+		s_Data.rgbTexture->SetData(&rgbTextureData, sizeof(rgbTextureData));		
 
-		m_Data->flatShader = Shader::Create("Flat Shader",
+		s_Data.flatShader = Shader::Create("Flat Shader",
 			// Vertex shader
 			"#version 330 core\n"
 
@@ -57,88 +82,79 @@ namespace Reme
 			"}\n"
 		);
 
-		m_Data->flatShader->Bind();
-		m_Data->flatShader->SetInt("Texture", 0);
-	
-		m_Data->VBO = VertexBuffer::Create(MAX_VERTEX_BUFFER_SIZE, false);
-		m_Data->VBO->SetLayout({
+		s_Data.flatShader->Bind();
+		s_Data.flatShader->SetInt("Texture", 0);
+
+		s_Data.VAO = VertexArray::Create();	
+
+		s_Data.VBO = VertexBuffer::Create(MAX_VERTEX_BUFFER_SIZE, false);
+		s_Data.VBO->SetLayout({
 			{ ShaderDataType::Float2, "Position" },
 			{ ShaderDataType::Float2, "UV" },			
 			{ ShaderDataType::Float4, "Color" },
 		});		
+		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
 
-		m_Data->VAO = VertexArray::Create();
-		m_Data->VAO->AddVertexBuffer(m_Data->VBO);
-		RenderCommand::SetClearColor(Color(0xffffff));
+		IndexBuffer* IBO = IndexBuffer::Create(MAX_INDEX_BUFFER_SIZE);
+		uint32_t* indexes = new uint32_t[MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t)];
+		uint32_t offset = 0;
+
+		for (int i = 0; i < MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t); i += 6)
+		{
+			indexes[i + 0] = offset + 0;
+			indexes[i + 1] = offset + 1;
+			indexes[i + 2] = offset + 2;
+			indexes[i + 3] = offset + 1;
+			indexes[i + 4] = offset + 2;
+			indexes[i + 5] = offset + 3;
+			offset += 4;
+		}
+
+		IBO->SetData(indexes, 0, MAX_INDEX_BUFFER_SIZE);
+		s_Data.VAO->SetIndexBuffer(IBO);
+		delete[] indexes;
+
+		RenderCommand::SetClearColor(Color(0x696969ff));
 	}
 
 	void Renderer2D::Shutdown()
 	{		
-		delete m_Data->flatShader;
-		delete m_Data->whiteTexture;
-		delete m_Data->rgbTexture;
-		delete m_Data->VBO;
-		delete m_Data->VAO;
-		delete m_Data;
+		delete s_Data.flatShader;
+		delete s_Data.whiteTexture;
+		delete s_Data.rgbTexture;
+		delete s_Data.VBO;
+		delete s_Data.VAO;
 	}
 
 	void Renderer2D::Begin(Camera* cam)
 	{
 		RenderCommand::Clear();
-		m_Data->flatShader->Bind();
-		m_Data->flatShader->SetMat4("viewMat", cam->GetViewMatrix());
-		m_Data->flatShader->SetMat4("projMat", cam->GetProjectionMatrix());
-		m_Data->drawables.clear();
-		m_Data->VAO->Bind();
+		s_Data.flatShader->Bind();
+		s_Data.flatShader->SetMat4("viewMat", cam->GetViewMatrix());
+		s_Data.flatShader->SetMat4("projMat", cam->GetProjectionMatrix());
+
+		s_Data.VAO->Bind();
+
+		s_Data.vertexCount = 0;
+		s_Data.currentTexture = nullptr;
 	}
 
 	void Renderer2D::End()
 	{
 		Flush();		
-		m_Data->VAO->Unbind();
+		s_Data.VAO->Unbind();
 	}
 
 	void Renderer2D::Flush()
 	{
-		static float* buffer = new float[MAX_VERTEX_BUFFER_SIZE];
+		if (s_Data.vertexCount == 0) return;
 
-		if (m_Data->drawables.empty()) return;
+		s_Data.currentTexture->Bind();
+		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexCount * sizeof(Vertex));
+		RenderCommand::DrawIndexed(s_Data.vertexCount / 4 * 6);
 
-		uint32_t vertexCount = 0;
-		Texture* currentTexture = m_Data->drawables[0].texture;
-
-		auto draw = [&]() {
-			currentTexture->Bind();
-			m_Data->VBO->SetData(buffer, 0, vertexCount * FLOAT_PER_VERTEX);
-			RenderCommand::DrawArrays(vertexCount, 0);
-			vertexCount = 0;
-		};
-
-		uint8_t i;
-		for (Drawable& d : m_Data->drawables)
-		{
-			if (currentTexture != d.texture)
-			{
-				draw();
-				currentTexture = d.texture;
-			}
-
-			for (i = 0; i < VERTEX_PER_DRAWABLE; i++)
-			{
-				// Fill first 4 float: X, Y, U, V
-				memcpy(&buffer[vertexCount * FLOAT_PER_VERTEX], &d.vertexArray[i], sizeof(Vertex));
-
-				// Fill the color attrib
-				buffer[vertexCount * FLOAT_PER_VERTEX + 4] = d.color.r / 255.0f;
-				buffer[vertexCount * FLOAT_PER_VERTEX + 5] = d.color.g / 255.0f;
-				buffer[vertexCount * FLOAT_PER_VERTEX + 6] = d.color.b / 255.0f;
-				buffer[vertexCount * FLOAT_PER_VERTEX + 7] = d.color.a / 255.0f;
-
-				vertexCount++;
-			}
-		}		
-
-		draw();
+		s_Data.vertexCount = 0;
+		s_Data.currentTexture = nullptr;
 	}
 
 	void Renderer2D::Draw(
@@ -148,25 +164,39 @@ namespace Reme
 		Color color
 	)
 	{
-		if (texture == 0) texture = m_Data->rgbTexture;
-		else if (texture == (void*) 1) texture = m_Data->whiteTexture;
+		if (texture == 0) texture = s_Data.rgbTexture;
+		else if (texture == (void*) 1) texture = s_Data.whiteTexture;
 
-		float c[4] = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f };
-		Drawable r = {
-				color,
-				texture,
-				{
-					{ dP.x       , dP.y       , sP.x       , sP.y        },
-					{ dP.x + dS.x, dP.y       , sP.x + sS.x, sP.y        },
-					{ dP.x       , dP.y + dS.y, sP.x       , sP.y + sS.y },
-					{ dP.x + dS.x, dP.y       , sP.x + sS.x, sP.y        },
-					{ dP.x       , dP.y + dS.y, sP.x       , sP.y + sS.y },
-					{ dP.x + dS.x, dP.y + dS.y, sP.x + sS.x, sP.y + sS.y },
-				}
-		};
+		if (
+			(s_Data.currentTexture != nullptr && texture != s_Data.currentTexture) || 
+			s_Data.vertexCount > MAX_QUAD_COUNT
+		) 
+		{
+			Flush();		
+		}
 
-		m_Data->drawables.push_back(r);
-		if (m_Data->drawables.size() > MAX_DRAWABLE_PER_BATCH) Flush();
+		s_Data.currentTexture = texture;		
+		glm::vec4 c = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f };
+
+		s_Data.buffer[s_Data.vertexCount].Position = { dP.x       , dP.y        };
+		s_Data.buffer[s_Data.vertexCount].UV       = { sP.x       , sP.y        };
+		s_Data.buffer[s_Data.vertexCount].Color    = c;
+		s_Data.vertexCount++;
+
+		s_Data.buffer[s_Data.vertexCount].Position = { dP.x + dS.x, dP.y        };
+		s_Data.buffer[s_Data.vertexCount].UV       = { sP.x + sS.x, sP.y        };
+		s_Data.buffer[s_Data.vertexCount].Color    = c;
+		s_Data.vertexCount++;
+
+		s_Data.buffer[s_Data.vertexCount].Position = { dP.x       , dP.y + dS.y };
+		s_Data.buffer[s_Data.vertexCount].UV       = { sP.x       , sP.y + sS.y };
+		s_Data.buffer[s_Data.vertexCount].Color    = c;
+		s_Data.vertexCount++;
+
+		s_Data.buffer[s_Data.vertexCount].Position = { dP.x + dS.x, dP.y + dS.y };
+		s_Data.buffer[s_Data.vertexCount].UV       = { sP.x + sS.x, sP.y + sS.y };
+		s_Data.buffer[s_Data.vertexCount].Color    = c;
+		s_Data.vertexCount++;
 	}
 	
 	void Renderer2D::DrawRect(Color color, glm::vec2 position, glm::vec2 scale)
