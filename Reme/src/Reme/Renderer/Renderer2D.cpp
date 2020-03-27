@@ -3,7 +3,7 @@
 #include "Reme/Renderer/RendererAPI.h"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/matrix_transform_2d.hpp>
 
 namespace Reme
 {
@@ -160,8 +160,8 @@ namespace Reme
 
 	void Renderer2D::Draw(
 		Texture* texture,
-		glm::vec2 sP, glm::vec2 sS,
-		glm::vec2 dP, glm::vec2 dS,
+		glm::vec2 sP, glm::vec2 sS, float sR,
+		glm::vec2 dP, glm::vec2 dS, float dR,
 		Color color
 	)
 	{
@@ -198,6 +198,42 @@ namespace Reme
 		s_Data.buffer[s_Data.vertexCount].UV       = { sP.x + sS.x, sP.y + sS.y };
 		s_Data.buffer[s_Data.vertexCount].Color    = c;
 		s_Data.vertexCount++;
+
+		if (sR != 0.0f)
+		{
+			const glm::vec2 centre = { sP.x + sS.x / 2.0f, sP.y + sS.y / 2.0f };
+			glm::mat3 rotMat = glm::mat3(1.0f);
+			rotMat = glm::translate(rotMat, centre);
+			rotMat = glm::rotate(rotMat, sR);
+			rotMat = glm::translate(rotMat, -centre);
+
+			for (int i = 1; i <= 4; i++)
+			{
+				Vertex& v = s_Data.buffer[s_Data.vertexCount - i];
+				glm::vec3 p = { v.UV.x, v.UV.y, 0.0f };
+				p = p * rotMat;
+				v.UV.x = p.x;
+				v.UV.y = p.y;
+			}
+		}
+
+		if (dR != 0.0f)
+		{
+			const glm::vec2 centre = { dP.x + dS.x / 2.0f, dP.y + dS.y / 2.0f };
+			glm::mat3 rotMat = glm::mat3(1.0f);
+			rotMat = glm::translate(rotMat, centre);
+			rotMat = glm::rotate(rotMat, dR);
+			rotMat = glm::translate(rotMat, -centre);
+
+			for (int i = 1; i <= 4; i++)
+			{
+				Vertex& v = s_Data.buffer[s_Data.vertexCount - i];
+				glm::vec3 p = { v.Position.x, v.Position.y, 1.0f };
+				p = rotMat * p;
+				v.Position.x = p.x;
+				v.Position.y = p.y;
+			}
+		}
 	}
 
 	void Renderer2D::DrawRect(Color color, glm::vec2 position, glm::vec2 scale)
@@ -206,8 +242,8 @@ namespace Reme
 		// (Texture*) 1 to a white texture
 		Renderer2D::Draw(
 			(Texture*) 1,
-			{ 0.0f, 0.0f }, { 0.0f, 0.0f },
-			position, scale,
+			{ 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f,
+			position, scale, 0.0f,
 			color
 		);
 	}
@@ -221,7 +257,11 @@ namespace Reme
 				: glm::vec2{ texture->GetWidth(), texture->GetHeight() };
 		}
 
-		Renderer2D::Draw(texture, { 0.0f, 0.0f }, { 1.0f, 1.0f }, destPos, destScale);
+		Renderer2D::Draw(
+			texture, 
+			{ 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 
+			destPos, destScale, 0.0f
+		);
 	}
 
 	void Renderer2D::DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
@@ -231,6 +271,10 @@ namespace Reme
 		srcScale.x /= texture->GetWidth();
 		srcScale.y /= texture->GetHeight();
 
-		Renderer2D::Draw(texture, srcPos, srcScale, destPos, destScale);
+		Renderer2D::Draw(
+			texture, 
+			srcPos, srcScale, 0.0f,
+			destPos, destScale, 0.0f
+		);
 	}
 }

@@ -96,22 +96,26 @@ public:
 			}
 		} while (y < Height);
 
-		for (int x = 0.0f; x < Width; x += rectSize)
-		{
-			for (int y = 0.0f; y < Height; y += rectSize)
-			{
-				Reme::Renderer2D::DrawRect(
-					Reme::Color(x % 255, y % 255, 255),
-					{ x, y },
-					{ rectSize - 2.0f, rectSize - 2.0f }
-				);
-			}
-		}
+		// for (int x = 0.0f; x < Width; x += rectSize)
+		// {
+		// 	for (int y = 0.0f; y < Height; y += rectSize)
+		// 	{
+		// 		Reme::Renderer2D::DrawRect(
+		// 			Reme::Color(x % 255, y % 255, 255),
+		// 			{ x, y },
+		// 			{ rectSize - 2.0f, rectSize - 2.0f }
+		// 		);
+		// 	}
+		// }
 
 		Reme::Renderer2D::DrawRect(Reme::Color::Green, {   0.0f, 100.0f }, { 50.0f, 50.0f });
 		Reme::Renderer2D::DrawRect(Reme::Color::Red  , { 100.0f, 100.0f }, { 50.0f, 50.0f });
 		Reme::Renderer2D::DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
-		Reme::Renderer2D::DrawTexture(nullptr, { 0.0f, 0.0f });
+		Reme::Renderer2D::Draw(
+			nullptr, 
+			{ 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 
+			{ 200.0f, 200.0f }, { 50.0f, 50.0f }, glm::radians(rot)
+		);
 
 		Reme::Renderer2D::End();
 	}
@@ -120,6 +124,10 @@ public:
 	{
 		auto Width = Reme::Application::Get().GetWindow().GetWidth();
 		auto Height = Reme::Application::Get().GetWindow().GetHeight();
+
+		ImGui::Begin("Values");
+		ImGui::DragFloat("Rotation", &rot, 1.0f, -180.0f, 180.0f);
+		ImGui::End();
 
 		ImGui::Begin("Menu");
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -179,6 +187,7 @@ public:
 		return true;
 	}
 private:
+	float rot = 45.0f;
 	std::ofstream fOut;
 	std::array<char, 100> benchmarkName;
 	std::array<char, 100> createdFileName;
