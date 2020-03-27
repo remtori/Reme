@@ -1,4 +1,4 @@
-#pragma once
+#ifdef REME_ENTRY_POINT
 
 #include "Reme/Core/Log.h"
 #include "Reme/Core/Application.h"
@@ -12,3 +12,4 @@ int main(int argc, char** argv)
 	app->Run();
 	delete app;
 }
+#endif

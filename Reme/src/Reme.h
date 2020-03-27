@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Reme/Core/Core.h"
+#include "Reme/Core/EntryPoint.h"
 
 #include "Reme/Core/Log.h"
 #include "Reme/Core/Input.h"

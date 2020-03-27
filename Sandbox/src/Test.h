@@ -1,5 +1,5 @@
 #include <Reme.h>
-#include <Reme/Core/EntryPoint.h>
+
 #include <imgui/imgui.h>
 
 extern "C"
@@ -13,7 +13,7 @@ extern "C"
 #include <numeric>
 #include <algorithm>
 
-class Tank2D : public Reme::Layer
+class Test : public Reme::Layer
 {
 public:
 	void OnAttach() override
@@ -169,7 +169,7 @@ public:
 	void OnEvent(Reme::Event& e) override
 	{
 		Reme::EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<Reme::WindowResizeEvent>(REME_BIND_EVENT_FN(Tank2D::OnResize));
+		dispatcher.Dispatch<Reme::WindowResizeEvent>(REME_BIND_EVENT_FN(Test::OnResize));
 	}
 
 	bool OnResize(Reme::WindowResizeEvent e)
@@ -189,17 +189,3 @@ private:
 	std::array<Reme::Texture*, 4> imgs;
 	std::array<float, 250> avgFps;
 };
-
-class Game : public Reme::Application
-{
-public:
-	Game()
-	{
-		GetScreen().PushLayer(new Tank2D());
-	}
-};
-
-Reme::Application* Reme::CreateApplication()
-{
-	return new Game();
-}
