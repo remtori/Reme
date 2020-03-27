@@ -4,7 +4,6 @@
 #include "Reme/Events/KeyEvent.h"
 #include "Reme/Events/MouseEvent.h"
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Reme
@@ -141,23 +140,6 @@ namespace Reme
 		});
 
 		MakeContextCurrent();
-        
-		if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-		{
-			CORE_LOG_ERROR("Failed to initialize GLAD");
-			exit(EXIT_FAILURE);
-		}
-
-		GLint temp;
-		CORE_LOG_INFO("OpenGL Version: {}", glGetString(GL_VERSION));
-		CORE_LOG_INFO("GLSL Version  : {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		CORE_LOG_INFO("Renderer      : {}", glGetString(GL_RENDERER));
-
-		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &temp);
-		CORE_LOG_INFO("Max Texture Units: {}", temp);
-
-		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
-		CORE_LOG_INFO("Max Texture Size : {0}x{0}", temp);
     }
 
     GLFW_Window::~GLFW_Window()

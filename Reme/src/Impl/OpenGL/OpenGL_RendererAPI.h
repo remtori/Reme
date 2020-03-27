@@ -15,5 +15,7 @@ namespace Reme
 
         void DrawIndexed(uint32_t count, uint32_t offset) override;
         void DrawArrays(uint32_t count, uint32_t offset) override;
+    private:
+        bool m_UsePollError = true;
     };
 }

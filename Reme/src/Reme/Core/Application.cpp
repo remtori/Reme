@@ -20,8 +20,8 @@ namespace Reme
 
 		m_Screen = new Screen();
 
-		ImGuiCommand::Init();
 		Renderer::Init();
+		ImGuiCommand::Init();
 	}
 
 	Application::~Application()

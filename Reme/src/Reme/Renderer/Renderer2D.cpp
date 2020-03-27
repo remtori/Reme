@@ -143,6 +143,7 @@ namespace Reme
 	{
 		Flush();		
 		s_Data.VAO->Unbind();
+		RenderCommand::PollError();
 	}
 
 	void Renderer2D::Flush()
