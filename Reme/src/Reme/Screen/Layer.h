@@ -6,7 +6,7 @@ namespace Reme
 {
     class Layer
     {
-    public:    
+    public:
 		Layer(const std::string& name = "Layer");
 		virtual ~Layer() = default;
 

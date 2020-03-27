@@ -14,12 +14,12 @@ namespace Reme
 		case ShaderDataType::Float:    return 4;
 		case ShaderDataType::Float2:   return 4 * 2;
 		case ShaderDataType::Float3:   return 4 * 3;
-		case ShaderDataType::Float4:   return 4 * 4;		
+		case ShaderDataType::Float4:   return 4 * 4;
 		case ShaderDataType::Int:      return 4;
 		case ShaderDataType::Int2:     return 4 * 2;
 		case ShaderDataType::Int3:     return 4 * 3;
 		case ShaderDataType::Int4:     return 4 * 4;
-		
+
 		// Matrix type get handle specially in VertexArray impl
 		// Under the hood Matrix type in attribute
 		// is the same as Float2[2] for Mat2, Float3[3] for Mat3, ...
@@ -99,20 +99,20 @@ namespace Reme
 			ShaderDataType type;
 			uint8_t loop, i;
 			for (auto& element : m_Elements)
-			{				
+			{
 				switch (element.Type)
 				{
-					case ShaderDataType::Mat2: 
+					case ShaderDataType::Mat2:
 						loop = 2;
-						type = ShaderDataType::Float2; 
+						type = ShaderDataType::Float2;
 						break;
-					case ShaderDataType::Mat3: 
+					case ShaderDataType::Mat3:
 						loop = 3;
-						type = ShaderDataType::Float3; 
+						type = ShaderDataType::Float3;
 						break;
-					case ShaderDataType::Mat4: 
+					case ShaderDataType::Mat4:
 						loop = 4;
-						type = ShaderDataType::Float4; 
+						type = ShaderDataType::Float4;
 						break;
 					default:
 						newElements.push_back(element);

@@ -17,7 +17,7 @@ namespace Reme
     )
     {
         // ignore non-significant error/warning codes
-        if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return; 
+        if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
         std::stringstream ss;
 
@@ -36,13 +36,13 @@ namespace Reme
         {
             case GL_DEBUG_TYPE_ERROR_ARB:               ss << "Type: Error"; break;
             case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB: ss << "Type: Deprecated Behaviour"; break;
-            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB:  ss << "Type: Undefined Behaviour"; break; 
+            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB:  ss << "Type: Undefined Behaviour"; break;
             case GL_DEBUG_TYPE_PORTABILITY_ARB:         ss << "Type: Portability"; break;
             case GL_DEBUG_TYPE_PERFORMANCE_ARB:         ss << "Type: Performance"; break;
             case GL_DEBUG_TYPE_OTHER_ARB:               ss << "Type: Other"; break;
         }
         ss << ", ";
-        
+
         switch (severity)
         {
             case GL_DEBUG_SEVERITY_HIGH_ARB:   ss << "Severity: high"; break;
@@ -54,7 +54,7 @@ namespace Reme
     }
 
     void OpenGL_RendererAPI::Init()
-    {   
+    {
 		if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
 		{
 			CORE_LOG_ERROR("Failed to initialize GLAD");

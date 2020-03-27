@@ -101,8 +101,8 @@ public:
 			for (int y = 0.0f; y < Height; y += rectSize)
 			{
 				Reme::Renderer2D::DrawRect(
-					Reme::Color(x % 255, y % 255, 255), 
-					{ x, y }, 
+					Reme::Color(x % 255, y % 255, 255),
+					{ x, y },
 					{ rectSize - 2.0f, rectSize - 2.0f }
 				);
 			}
@@ -144,7 +144,7 @@ public:
 		{
 			ImGui::Text("Benchmarking ...");
 			std::rotate(avgFps.begin(), avgFps.begin() + 1, avgFps.end());
-			avgFps[avgFps.size() - 1] = ImGui::GetIO().Framerate;			
+			avgFps[avgFps.size() - 1] = ImGui::GetIO().Framerate;
 
 			if (avgFps[0] > 0.0f)
 			{
@@ -174,7 +174,7 @@ public:
 
 	bool OnResize(Reme::WindowResizeEvent e)
 	{
-		cam->SetProjection(0.0f, e.GetWidth(), e.GetHeight(), 0.0f);		
+		cam->SetProjection(0.0f, e.GetWidth(), e.GetHeight(), 0.0f);
 		LOG_INFO("Screen resized, new resolution: {}x{}", e.GetWidth(), e.GetHeight());
 		return true;
 	}

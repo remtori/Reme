@@ -34,16 +34,16 @@ namespace Reme
 
 #else
 
-#define LOG_TRACE(...)    
-#define LOG_INFO(...)     
-#define LOG_WARN(...)     
-#define LOG_ERROR(...)    
-#define LOG_CRITICAL(...) 
+#define LOG_TRACE(...)
+#define LOG_INFO(...)
+#define LOG_WARN(...)
+#define LOG_ERROR(...)
+#define LOG_CRITICAL(...)
 
-#define CORE_LOG_TRACE(...)    
-#define CORE_LOG_INFO(...)     
-#define CORE_LOG_WARN(...)     
-#define CORE_LOG_ERROR(...)    
-#define CORE_LOG_CRITICAL(...) 
+#define CORE_LOG_TRACE(...)
+#define CORE_LOG_INFO(...)
+#define CORE_LOG_WARN(...)
+#define CORE_LOG_ERROR(...)
+#define CORE_LOG_CRITICAL(...)
 
 #endif

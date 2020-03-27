@@ -7,7 +7,7 @@ namespace Reme
 {
 	enum class EventType
 	{
-		None = 0, 
+		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMove,
 		AppTick, AppUpdate, AppRender,
 		KeyDown, KeyUp, KeyPress,

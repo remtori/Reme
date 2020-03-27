@@ -15,7 +15,7 @@ namespace Reme
 		double DeltaTime = 1.0 / 60;
 	public:
 		Application(const WindowProps& props = { "Reme Engine", 1280, 720 });
-		virtual ~Application();				
+		~Application();
 
 		inline Screen& GetScreen() { return *m_Screen; }
 		void SetScreen(Screen* screen) { m_Screen = screen; }

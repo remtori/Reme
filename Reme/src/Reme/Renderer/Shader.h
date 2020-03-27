@@ -12,7 +12,7 @@ namespace Reme
     public:
         static Shader* Create(const std::string& filePath);
         static Shader* Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
-    public:        
+    public:
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;

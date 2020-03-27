@@ -13,12 +13,12 @@ namespace Reme
 	const Color Color::Cyan(0, 255, 255);
 	const Color Color::Transparent(0, 0, 0, 0);
 
-	Color::Color() : 
+	Color::Color() :
 		r(0), g(0), b(0), a(255)
 	{
 	}
 
-	Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) : 
+	Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) :
 		r(red), g(green), b(blue), a(alpha)
 	{
 	}

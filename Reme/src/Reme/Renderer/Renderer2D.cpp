@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Reme
-{	
+{
 	struct Vertex
 	{
 		glm::vec2 Position;
@@ -30,7 +30,7 @@ namespace Reme
 
 	static const uint32_t MAX_QUAD_COUNT = 10000;
 	static const uint32_t MAX_VERTEX_BUFFER_SIZE = MAX_QUAD_COUNT * 4 * sizeof(Vertex);
-	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);	
+	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);
 
 	static Renderer2DData s_Data;
 
@@ -44,7 +44,7 @@ namespace Reme
 
 		s_Data.rgbTexture = Texture::Create(2, 2);
 		uint32_t rgbTextureData[] = { 0xff0000ff, 0xff00ff00, 0xffff0000, 0xffffffff };
-		s_Data.rgbTexture->SetData(&rgbTextureData, sizeof(rgbTextureData));		
+		s_Data.rgbTexture->SetData(&rgbTextureData, sizeof(rgbTextureData));
 
 		s_Data.flatShader = Shader::Create("Flat Shader",
 			// Vertex shader
@@ -85,14 +85,14 @@ namespace Reme
 		s_Data.flatShader->Bind();
 		s_Data.flatShader->SetInt("Texture", 0);
 
-		s_Data.VAO = VertexArray::Create();	
+		s_Data.VAO = VertexArray::Create();
 
 		s_Data.VBO = VertexBuffer::Create(MAX_VERTEX_BUFFER_SIZE, false);
 		s_Data.VBO->SetLayout({
 			{ ShaderDataType::Float2, "Position" },
-			{ ShaderDataType::Float2, "UV" },			
+			{ ShaderDataType::Float2, "UV" },
 			{ ShaderDataType::Float4, "Color" },
-		});		
+		});
 		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
 
 		IndexBuffer* IBO = IndexBuffer::Create(MAX_INDEX_BUFFER_SIZE);
@@ -118,7 +118,7 @@ namespace Reme
 	}
 
 	void Renderer2D::Shutdown()
-	{		
+	{
 		delete s_Data.flatShader;
 		delete s_Data.whiteTexture;
 		delete s_Data.rgbTexture;
@@ -141,7 +141,7 @@ namespace Reme
 
 	void Renderer2D::End()
 	{
-		Flush();		
+		Flush();
 		s_Data.VAO->Unbind();
 		RenderCommand::PollError();
 	}
@@ -169,14 +169,14 @@ namespace Reme
 		else if (texture == (void*) 1) texture = s_Data.whiteTexture;
 
 		if (
-			(s_Data.currentTexture != nullptr && texture != s_Data.currentTexture) || 
+			(s_Data.currentTexture != nullptr && texture != s_Data.currentTexture) ||
 			s_Data.vertexCount > MAX_QUAD_COUNT
-		) 
+		)
 		{
-			Flush();		
+			Flush();
 		}
 
-		s_Data.currentTexture = texture;		
+		s_Data.currentTexture = texture;
 		glm::vec4 c = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f };
 
 		s_Data.buffer[s_Data.vertexCount].Position = { dP.x       , dP.y        };
@@ -199,7 +199,7 @@ namespace Reme
 		s_Data.buffer[s_Data.vertexCount].Color    = c;
 		s_Data.vertexCount++;
 	}
-	
+
 	void Renderer2D::DrawRect(Color color, glm::vec2 position, glm::vec2 scale)
 	{
 		// Renderer2D Draw implementation will convert

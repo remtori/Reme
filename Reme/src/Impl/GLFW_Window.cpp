@@ -15,7 +15,7 @@ namespace Reme
 		CORE_LOG_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-    GLFW_Window::GLFW_Window(const WindowProps& props)        
+    GLFW_Window::GLFW_Window(const WindowProps& props)
     {
         m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
@@ -28,13 +28,13 @@ namespace Reme
 			int success = glfwInit();
 			REME_ASSERT(success, "Could not intialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
-		}        
+		}
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        
-#ifdef _DEBUG        
+
+#ifdef _DEBUG
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 #endif
 
@@ -47,7 +47,7 @@ namespace Reme
 			CORE_LOG_ERROR("Failed to create GLFW window!");
 			exit(EXIT_FAILURE);
 		}
-        
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 
 		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -212,7 +212,7 @@ namespace Reme
         }
     }
 
-    bool GLFW_Window::IsVSync() const 
+    bool GLFW_Window::IsVSync() const
     {
         return m_Data.IsVSync;
     }

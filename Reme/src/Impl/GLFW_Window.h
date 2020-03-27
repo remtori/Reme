@@ -31,7 +31,7 @@ namespace Reme
     private:
         GLFWwindow* m_Window;
 
-        struct WindowData 
+        struct WindowData
         {
             bool IsVSync;
             uint32_t Width, Height;

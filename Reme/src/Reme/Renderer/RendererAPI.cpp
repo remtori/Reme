@@ -6,7 +6,7 @@
 namespace Reme
 {
     RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
-    RendererAPI* RenderCommand::s_RendererAPI = RendererAPI::Create();    
+    RendererAPI* RenderCommand::s_RendererAPI = RendererAPI::Create();
 
     RendererAPI* RendererAPI::Create()
     {

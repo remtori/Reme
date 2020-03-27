@@ -53,7 +53,7 @@ namespace Reme
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{            
+		{
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 			app.GetWindow().MakeContextCurrent();
@@ -64,8 +64,8 @@ namespace Reme
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		return (
-			(event.IsInCategory(EventCategoryMouse) && io.WantCaptureMouse) || 
+			(event.IsInCategory(EventCategoryMouse) && io.WantCaptureMouse) ||
 			(event.IsInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard)
-		);		
+		);
 	}
 }

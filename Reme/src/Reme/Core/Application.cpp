@@ -12,8 +12,8 @@ namespace Reme
 
 	Application::Application(const WindowProps& props)
 	{
-		REME_ASSERT(!s_Instance, "Application already exist!");		
-		s_Instance = this;		
+		REME_ASSERT(!s_Instance, "Application already exist!");
+		s_Instance = this;
 
 		m_Window = Window::Create(props);
 		m_Window->SetEventCallback(REME_BIND_EVENT_FN(Application::OnEvent));
@@ -54,7 +54,7 @@ namespace Reme
 			currTime = std::chrono::high_resolution_clock::now();
 			ellapsedTime = std::chrono::duration<double>(currTime - lastTime).count();
 			while (ellapsedTime > DeltaTime)
-			{				
+			{
 				m_Screen->OnUpdate(DeltaTime);
 				ellapsedTime -= DeltaTime;
 			}
@@ -64,7 +64,7 @@ namespace Reme
 			if (!m_Minimized)
 			{
 				m_Screen->OnRender();
-				
+
 				ImGuiCommand::Begin();
 				m_Screen->OnImGuiRender();
 				ImGuiCommand::End();
@@ -72,7 +72,7 @@ namespace Reme
 
 			m_Window->SwapBuffers();
 		}
-	}	
+	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
@@ -92,5 +92,5 @@ namespace Reme
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 
 		return false;
-	}	
+	}
 }

@@ -28,7 +28,7 @@ namespace Reme
 
         virtual void SetTitle(const char* title) = 0;
         virtual const std::string& GetTitle() const = 0;
-                
+
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
 

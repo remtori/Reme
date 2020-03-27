@@ -4,7 +4,7 @@
 #include "Reme/Renderer/RendererAPI.h"
 
 namespace Reme
-{    
+{
     void Renderer::Init()
     {
         RenderCommand::Init();

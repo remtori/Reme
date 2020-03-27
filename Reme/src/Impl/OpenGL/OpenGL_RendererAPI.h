@@ -4,7 +4,7 @@
 
 namespace Reme
 {
-    class OpenGL_RendererAPI : public RendererAPI 
+    class OpenGL_RendererAPI : public RendererAPI
     {
     public:
         void Init() override;
