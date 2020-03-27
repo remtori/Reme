@@ -5,7 +5,7 @@
 
 namespace Reme
 {
-    PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+    PerspectiveCamera::PerspectiveCamera(const glm::vec3& position, const glm::vec3& up, float yaw, float pitch)
         : m_Front(glm::vec3(0.0f, 0.0f, -1.0f)), m_AspectRatio(1.0), m_FOV(45.0f),
         m_Position(position), m_WorldUp(up), m_Yaw(yaw), m_Pitch(pitch)
     {

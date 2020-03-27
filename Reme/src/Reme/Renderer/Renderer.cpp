@@ -9,6 +9,7 @@ namespace Reme
     {
         RenderCommand::Init();
         Renderer2D::Init();
+        Texture::Init();
     }
 
     void Renderer::Shutdown()

@@ -16,16 +16,14 @@ namespace Reme
 
 	struct Renderer2DData
 	{
-		Shader* flatShader;
-		Texture* whiteTexture;
-		Texture* rgbTexture;
-		VertexArray* VAO;
-		VertexBuffer* VBO;
+		Ref<Shader> flatShader;
+		Ref<VertexArray> VAO;
+		Ref<VertexBuffer> VBO;
 
 		// Data for Batch Rendering
 		Vertex* buffer;
 		uint32_t vertexCount;
-		Texture* currentTexture;
+		Ref<Texture> currentTexture;
 	};
 
 	static const uint32_t MAX_QUAD_COUNT = 10000;
@@ -37,14 +35,6 @@ namespace Reme
 	void Renderer2D::Init()
 	{
 		s_Data.buffer = new Vertex[MAX_QUAD_COUNT * 4];
-
-		s_Data.whiteTexture = Texture::Create(1, 1);
-		uint32_t whiteTextureData = 0xffffffff;
-		s_Data.whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-
-		s_Data.rgbTexture = Texture::Create(2, 2);
-		uint32_t rgbTextureData[] = { 0xff0000ff, 0xff00ff00, 0xffff0000, 0xffffffff };
-		s_Data.rgbTexture->SetData(&rgbTextureData, sizeof(rgbTextureData));
 
 		s_Data.flatShader = Shader::Create("Flat Shader",
 			// Vertex shader
@@ -95,7 +85,7 @@ namespace Reme
 		});
 		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
 
-		IndexBuffer* IBO = IndexBuffer::Create(MAX_INDEX_BUFFER_SIZE);
+		auto IBO = IndexBuffer::Create(MAX_INDEX_BUFFER_SIZE);
 		uint32_t* indexes = new uint32_t[MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t)];
 		uint32_t offset = 0;
 
@@ -119,14 +109,10 @@ namespace Reme
 
 	void Renderer2D::Shutdown()
 	{
-		delete s_Data.flatShader;
-		delete s_Data.whiteTexture;
-		delete s_Data.rgbTexture;
-		delete s_Data.VBO;
-		delete s_Data.VAO;
+		delete s_Data.buffer;
 	}
 
-	void Renderer2D::Begin(Camera* cam)
+	void Renderer2D::Begin(const Ref<Camera>& cam)
 	{
 		RenderCommand::Clear();
 		s_Data.flatShader->Bind();
@@ -159,14 +145,13 @@ namespace Reme
 	}
 
 	void Renderer2D::Draw(
-		Texture* texture,
-		glm::vec2 sP, glm::vec2 sS, float sR,
-		glm::vec2 dP, glm::vec2 dS, float dR,
-		Color color
+		const Ref<Texture>& tex,
+		const glm::vec2& sP, const glm::vec2& sS, float sR,
+		const glm::vec2& dP, const glm::vec2& dS, float dR,
+		const Color& color
 	)
 	{
-		if (texture == 0) texture = s_Data.rgbTexture;
-		else if (texture == (void*) 1) texture = s_Data.whiteTexture;
+		Ref<Texture> texture = tex == nullptr ? Texture::Default : tex;
 
 		if (
 			(s_Data.currentTexture != nullptr && texture != s_Data.currentTexture) ||
@@ -236,23 +221,22 @@ namespace Reme
 		}
 	}
 
-	void Renderer2D::DrawRect(Color color, glm::vec2 position, glm::vec2 scale)
+	void Renderer2D::DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale)
 	{
-		// Renderer2D Draw implementation will convert
-		// (Texture*) 1 to a white texture
 		Renderer2D::Draw(
-			(Texture*) 1,
+			Texture::White,
 			{ 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f,
 			position, scale, 0.0f,
 			color
 		);
 	}
 
-	void Renderer2D::DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale)
+	void Renderer2D::DrawTexture(const Ref<Texture>& texture, const glm::vec2& destPos, const glm::vec2& destScale)
 	{
+		glm::vec2 dS = destScale;
 		if (destScale.x == 0.0f && destScale.y == 0.0f)
 		{
-			destScale = texture == nullptr
+			dS = texture == nullptr
 				? glm::vec2{ 64.0f, 64.0f }
 				: glm::vec2{ texture->GetWidth(), texture->GetHeight() };
 		}
@@ -260,20 +244,21 @@ namespace Reme
 		Renderer2D::Draw(
 			texture, 
 			{ 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 
-			destPos, destScale, 0.0f
+			destPos, dS, 0.0f
 		);
 	}
 
-	void Renderer2D::DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale)
+	void Renderer2D::DrawTexture(const Ref<Texture>& texture, const glm::vec2& srcPos, const glm::vec2& srcScale, const glm::vec2& destPos, const glm::vec2& destScale)
 	{
-		srcPos.x /= texture->GetWidth();
-		srcPos.y /= texture->GetHeight();
-		srcScale.x /= texture->GetWidth();
-		srcScale.y /= texture->GetHeight();
+		glm::vec2 sP, sS;
+		sP.x = srcPos.x / texture->GetWidth();
+		sP.y = srcPos.y / texture->GetHeight();
+		sS.x = srcScale.x / texture->GetWidth();
+		sS.y = srcScale.y / texture->GetHeight();
 
 		Renderer2D::Draw(
 			texture, 
-			srcPos, srcScale, 0.0f,
+			sP, sS, 0.0f,
 			destPos, destScale, 0.0f
 		);
 	}

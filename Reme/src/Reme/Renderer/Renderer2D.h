@@ -17,17 +17,17 @@ namespace Reme
 		static void Init();
 		static void Shutdown();
 
-		static void Begin(Camera* cam);
+		static void Begin(const Ref<Camera>& cam);
 		static void End();
 		static void Flush();
 		static void Draw(
-			Texture* texture,
-			glm::vec2 srcPos, glm::vec2 srcScale, float srcRototationRadian,
-			glm::vec2 destPos, glm::vec2 destScale, float destRotationRadian,
-			Color color = Color::White
+			const Ref<Texture>& texture,
+			const glm::vec2& srcPos, const glm::vec2& srcScale, float srcRototationRadian,
+			const glm::vec2& destPos, const glm::vec2& destScale, float destRotationRadian,
+			const Color& color = Color::White
 		);
-		static void DrawRect(Color color, glm::vec2 position, glm::vec2 scale);
-		static void DrawTexture(Texture* texture, glm::vec2 destPos, glm::vec2 destScale = { 0.0f, 0.0f });
-		static void DrawTexture(Texture* texture, glm::vec2 srcPos, glm::vec2 srcScale, glm::vec2 destPos, glm::vec2 destScale);
+		static void DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale);
+		static void DrawTexture(const Ref<Texture>& texture, const glm::vec2& destPos, const glm::vec2& destScale = { 0.0f, 0.0f });
+		static void DrawTexture(const Ref<Texture>& texture, const glm::vec2& srcPos, const glm::vec2& srcScale, const glm::vec2& destPos, const glm::vec2& destScale);
 	};
 }

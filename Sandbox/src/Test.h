@@ -22,9 +22,9 @@ public:
 		auto Width = Reme::Application::Get().GetWindow().GetWidth();
 		auto Height = Reme::Application::Get().GetWindow().GetHeight();
 
-		cam = new Reme::OrthographicCamera(0.0f, Width, Height, 0.0f);
+		cam = Reme::CreateRef<Reme::OrthographicCamera>(0.0f, Width, Height, 0.0f);
 		imgs[0] = Reme::Texture::Create("assets/miku-cutie.jpg");
-		imgs[1] = Reme::Texture::Create("assets/rem-bb.png");
+		imgs[1] = Reme::Texture::Create("assets/rem-bb.png_");
 		imgs[2] = Reme::Texture::Create("assets/rem-sleeping-rose.png");
 		imgs[3] = Reme::Texture::Create("assets/you-waifu-material.jpg");
 		avgFps.fill(0.0f);
@@ -194,7 +194,7 @@ private:
 	bool benchMarkStarted = false;
 	float imgWidth = 50.0f;
 	float rectSize = 50.0f;
-	Reme::OrthographicCamera* cam;
-	std::array<Reme::Texture*, 4> imgs;
+	Reme::Ref<Reme::OrthographicCamera> cam;
+	std::array<Reme::Ref<Reme::Texture>, 4> imgs;
 	std::array<float, 250> avgFps;
 };

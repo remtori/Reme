@@ -191,10 +191,10 @@ namespace Reme
         return m_Data.Title;
     }
 
-    void GLFW_Window::SetTitle(const char* title)
+    void GLFW_Window::SetTitle(const std::string& title)
     {
         m_Data.Title = title;
-        glfwSetWindowTitle(m_Window, title);
+        glfwSetWindowTitle(m_Window, title.c_str());
     }
 
 

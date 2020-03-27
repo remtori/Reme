@@ -6,12 +6,12 @@
 
 namespace Reme
 {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return new OpenGL_VertexArray();
+			case RendererAPI::OpenGL: return CreateRef<OpenGL_VertexArray>();
 		}
 
 		REME_ASSERT(false, "Unknown RendererAPI!");

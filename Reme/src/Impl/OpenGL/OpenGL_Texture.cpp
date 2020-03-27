@@ -36,7 +36,7 @@ namespace Reme
         if (data == nullptr)
         {
             CORE_LOG_ERROR("Failed to load image \"{}\"", path);
-            return;
+            throw 1;
         }
 
         m_Width = width;
@@ -81,7 +81,7 @@ namespace Reme
         }
 
         stbi_image_free(data);
-        CORE_LOG_INFO("Texture loaded from path: {}", path);
+        LOG_INFO("Texture loaded from path: {}", path);
     }
 
     OpenGL_Texture::~OpenGL_Texture()

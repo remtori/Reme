@@ -20,7 +20,7 @@ namespace Reme
 		virtual uint32_t GetHeight() const override;
         virtual void SetSize(const uint32_t& width, const uint32_t& height) override;
 
-        virtual void SetTitle(const char* title) override;
+        virtual void SetTitle(const std::string& title) override;
         virtual const std::string& GetTitle() const override;
 
 		virtual void SetVSync(bool enabled) override;

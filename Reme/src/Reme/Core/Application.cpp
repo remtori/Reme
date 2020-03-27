@@ -18,7 +18,7 @@ namespace Reme
 		m_Window = Window::Create(props);
 		m_Window->SetEventCallback(REME_BIND_EVENT_FN(Application::OnEvent));
 
-		m_Screen = new Screen();
+		m_Screen = CreateRef<Screen>();
 
 		Renderer::Init();
 		ImGuiCommand::Init();

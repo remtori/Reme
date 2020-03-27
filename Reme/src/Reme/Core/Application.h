@@ -18,7 +18,7 @@ namespace Reme
 		~Application();
 
 		inline Screen& GetScreen() { return *m_Screen; }
-		void SetScreen(Screen* screen) { m_Screen = screen; }
+		void SetScreen(const Ref<Screen>& screen) { m_Screen = screen; }
 
 		void OnEvent(Event& event);
 
@@ -29,8 +29,8 @@ namespace Reme
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		Window* m_Window;
-		Screen* m_Screen;
+		Ref<Window> m_Window;
+		Ref<Screen> m_Screen;
 		bool m_Running = true;
 		bool m_Minimized = false;
 	private:

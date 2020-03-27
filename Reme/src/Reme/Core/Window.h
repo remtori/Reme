@@ -26,7 +26,7 @@ namespace Reme
 		virtual uint32_t GetHeight() const = 0;
         virtual void SetSize(const uint32_t& width, const uint32_t& height) = 0;
 
-        virtual void SetTitle(const char* title) = 0;
+        virtual void SetTitle(const std::string& title) = 0;
         virtual const std::string& GetTitle() const = 0;
 
 		virtual void SetVSync(bool enabled) = 0;
@@ -35,6 +35,6 @@ namespace Reme
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void* GetNativeWindow() const = 0;
 
-		static Window* Create(const WindowProps& props);
+		static Ref<Window> Create(const WindowProps& props);
     };
 }

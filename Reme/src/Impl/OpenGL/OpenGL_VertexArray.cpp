@@ -47,7 +47,7 @@ namespace Reme
 		glBindVertexArray(0);
 	}
 
-	void OpenGL_VertexArray::AddVertexBuffer(VertexBuffer* buf)
+	void OpenGL_VertexArray::AddVertexBuffer(Ref<VertexBuffer> buf)
 	{
 		Bind();
 		buf->Bind();
@@ -71,7 +71,7 @@ namespace Reme
 		Unbind();
 	}
 
-	void OpenGL_VertexArray::SetIndexBuffer(IndexBuffer* buf)
+	void OpenGL_VertexArray::SetIndexBuffer(Ref<IndexBuffer> buf)
 	{
 		Bind();
 		buf->Bind();
