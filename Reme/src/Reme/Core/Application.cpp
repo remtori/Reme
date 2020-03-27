@@ -35,7 +35,8 @@ namespace Reme
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(REME_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(REME_BIND_EVENT_FN(Application::OnWindowResize));
-		m_Screen->OnEvent(event);
+
+		if (!ImGuiCommand::ShouldSwallowEvent(event)) m_Screen->OnEvent(event);
 	}
 
 	void Application::Run()

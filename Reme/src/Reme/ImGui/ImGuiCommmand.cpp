@@ -16,7 +16,7 @@ namespace Reme
     {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
@@ -59,4 +59,13 @@ namespace Reme
 			app.GetWindow().MakeContextCurrent();
 		}
     }
+
+	bool ImGuiCommand::ShouldSwallowEvent(Event& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		return (
+			(event.IsInCategory(EventCategoryMouse) && io.WantCaptureMouse) || 
+			(event.IsInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard)
+		);		
+	}
 }

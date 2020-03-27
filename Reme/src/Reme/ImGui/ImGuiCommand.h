@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Reme/Events/Event.h"
+
 namespace Reme
 {
     class ImGuiCommand
@@ -10,5 +12,7 @@ namespace Reme
 
         static void Begin();
         static void End();
+
+        static bool ShouldSwallowEvent(Event& event);
     };
 }

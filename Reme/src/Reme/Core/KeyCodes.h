@@ -2,10 +2,6 @@
 
 namespace Reme
 {
-	typedef enum class KeyState : uint8_t {
-		UP, DOWN, REPEAT
-	};
-
 	typedef enum class KeyCode : uint16_t
 	{
 		// From glfw3.h

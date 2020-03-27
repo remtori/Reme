@@ -56,7 +56,7 @@ namespace Reme
 	public:
 		inline MouseCode GetMouseButton() const { return m_Button; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+		EVENT_CLASS_CATEGORY(EventCategoryMouseButton | EventCategoryMouse | EventCategoryInput)
 	protected:
 		MouseButtonEvent(MouseCode button)
 			: m_Button(button) {}
