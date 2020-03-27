@@ -21,7 +21,7 @@ namespace Reme
 		/**
 		 * OnUpdate is guarantee to run every "DeltaTime", which default to 1/60 of a second
 		 */
-		virtual void OnUpdate(double ellapsedTime) {}
+		virtual void OnUpdate(float ellapsedTime) {}
 
 		virtual void OnImGuiRender() {}
 

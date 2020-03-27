@@ -221,12 +221,12 @@ namespace Reme
 		}
 	}
 
-	void Renderer2D::DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale)
+	void Renderer2D::DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale, float rot)
 	{
 		Renderer2D::Draw(
 			Texture::White,
 			{ 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f,
-			position, scale, 0.0f,
+			position, scale, rot,
 			color
 		);
 	}

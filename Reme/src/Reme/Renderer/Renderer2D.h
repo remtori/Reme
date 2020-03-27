@@ -26,7 +26,7 @@ namespace Reme
 			const glm::vec2& destPos, const glm::vec2& destScale, float destRotationRadian,
 			const Color& color = Color::White
 		);
-		static void DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale);
+		static void DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale, float rot = 0.0f);
 		static void DrawTexture(const Ref<Texture>& texture, const glm::vec2& destPos, const glm::vec2& destScale = { 0.0f, 0.0f });
 		static void DrawTexture(const Ref<Texture>& texture, const glm::vec2& srcPos, const glm::vec2& srcScale, const glm::vec2& destPos, const glm::vec2& destScale);
 	};

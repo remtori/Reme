@@ -8,7 +8,7 @@ namespace Reme
     {
     public:
         void OnEvent(Event& event);
-        void OnUpdate(double ellapsedTime);
+        void OnUpdate(float ellapsedTime);
         void OnRender();
         void OnImGuiRender();
 

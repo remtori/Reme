@@ -49,14 +49,14 @@ namespace Reme
 
 		TimeStamp currTime;
 		TimeStamp lastTime = std::chrono::high_resolution_clock::now();
-		double ellapsedTime;
+		float ellapsedTime;
 
 		while (m_Running)
 		{
 			m_Window->PollEvent();
 
 			currTime = std::chrono::high_resolution_clock::now();
-			ellapsedTime = std::chrono::duration<double>(currTime - lastTime).count();
+			ellapsedTime = std::chrono::duration<float>(currTime - lastTime).count();
 			while (ellapsedTime > DeltaTime)
 			{
 				m_Screen->OnUpdate(DeltaTime);
