@@ -12,7 +12,7 @@ namespace Reme
 		}
 	}
 
-	void Screen::OnUpdate(double ellapsedTime)
+	void Screen::OnUpdate(float ellapsedTime)
 	{
 		for (Layer* layer : m_LayerStack)
 		{
