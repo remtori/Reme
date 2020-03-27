@@ -54,7 +54,7 @@ public:
 
 	}
 
-	void OnUpdate(double ellapsedTime) override
+	void OnUpdate(float ellapsedTime) override
 	{
 		float speed = 300 * ellapsedTime;
 		glm::vec3 v = { 0.0f, 0.0f, 0.0f };
