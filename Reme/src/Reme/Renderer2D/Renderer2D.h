@@ -1,7 +1,11 @@
 #pragma once
 
+#include "Reme/Core/Core.h"
 #include "Reme/Renderer/Color.h"
 #include "Reme/Renderer/Texture.h"
+#include "Reme/Renderer/Camera.h"
+
+#include <glm/glm.hpp>
 
 namespace Reme
 {

@@ -17,6 +17,7 @@ namespace Reme
 
 		m_Window = Window::Create(props);
 		m_Window->SetEventCallback(REME_BIND_EVENT_FN(Application::OnEvent));
+		m_Window->SetVSync(true);
 
 		m_Screen = CreateRef<Screen>();
 
@@ -36,7 +37,7 @@ namespace Reme
 		dispatcher.Dispatch<WindowCloseEvent>(REME_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(REME_BIND_EVENT_FN(Application::OnWindowResize));
 
-		if (!ImGuiCommand::ShouldSwallowEvent(event)) 
+		if (!ImGuiCommand::ShouldSwallowEvent(event))
 		{
 			Input::OnEvent(event);
 			m_Screen->OnEvent(event);
@@ -45,7 +46,7 @@ namespace Reme
 
 	void Application::Run()
 	{
-		typedef std::chrono::time_point<std::chrono::steady_clock> TimeStamp;
+		typedef std::chrono::time_point<std::chrono::high_resolution_clock> TimeStamp;
 
 		TimeStamp currTime;
 		TimeStamp lastTime = std::chrono::high_resolution_clock::now();

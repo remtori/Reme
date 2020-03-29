@@ -113,12 +113,11 @@ public:
 		Reme::Renderer2D::DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
 
 		Reme::Renderer2D::PushState();
-		Reme::Renderer2D::Scale({ 2.0f, 2.0f });
 		Reme::Renderer2D::Translate({ 200.0f, 200.0f });
 		Reme::Renderer2D::Rotate(glm::radians(rot));
 		Reme::Renderer2D::Translate({ -200.0f, -200.0f });
 		Reme::Renderer2D::Draw(
-			nullptr, 
+			nullptr,
 			{ 0.0f, 0.0f }, { 1.0f, 1.0f },
 			{ 200.0f, 200.0f }, { 50.0f, 50.0f }
 		);
