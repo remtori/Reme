@@ -112,13 +112,30 @@ namespace Reme
 		}
     }
 
-    void OpenGL_RendererAPI::DrawIndexed(uint32_t count, uint32_t offset)
+    GLenum GetDrawMode(const DrawMode& mode)
     {
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*) offset);
+        switch (mode)
+        {
+            case DrawMode::LINE_LOOP: return GL_LINE_LOOP;
+            case DrawMode::LINE_STRIP: return GL_LINE_STRIP;
+            case DrawMode::LINES: return GL_LINES;
+            case DrawMode::POINTS: return GL_POINTS;
+            case DrawMode::TRIANGLE_FAN: return GL_TRIANGLE_FAN;
+            case DrawMode::TRIANGLE_STRIP: return GL_TRIANGLE_STRIP;
+            case DrawMode::TRIANGLES: return GL_TRIANGLES;
+            default:
+                REME_ASSERT(false, "Unknown draw mode!");
+                return 0;
+        }
     }
 
-    void OpenGL_RendererAPI::DrawArrays(uint32_t count, uint32_t offset)
+    void OpenGL_RendererAPI::DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset)
     {
-        glDrawArrays(GL_TRIANGLES, offset, count);
+        glDrawElements(GetDrawMode(mode), count, GL_UNSIGNED_INT, (void*) offset);
+    }
+
+    void OpenGL_RendererAPI::DrawArrays(DrawMode mode, uint32_t count, uint32_t offset)
+    {
+        glDrawArrays(GetDrawMode(mode), offset, count);
     }
 }

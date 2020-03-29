@@ -5,6 +5,11 @@
 
 namespace Reme
 {
+    enum class DrawMode
+    {
+        POINTS, LINE_STRIP, LINE_LOOP, LINES, TRIANGLE_STRIP, TRIANGLE_FAN, TRIANGLES
+    };
+
     class RendererAPI
     {
     public:
@@ -19,8 +24,8 @@ namespace Reme
         virtual void Clear() = 0;
         virtual void PollError() = 0;
 
-        virtual void DrawIndexed(uint32_t count, uint32_t offset) = 0;
-        virtual void DrawArrays(uint32_t count, uint32_t offset) = 0;
+        virtual void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) = 0;
+        virtual void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) = 0;
 
         inline static API GetAPI() { return s_API; }
         static RendererAPI* Create();
@@ -56,14 +61,14 @@ namespace Reme
             s_RendererAPI->PollError();
         }
 
-        inline static void DrawIndexed(uint32_t count, uint32_t offset = 0)
+        inline static void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset = 0)
         {
-            s_RendererAPI->DrawIndexed(count, offset);
+            s_RendererAPI->DrawIndexed(mode, count, offset);
         }
 
-        inline static void DrawArrays(uint32_t count, uint32_t offset = 0)
+        inline static void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset = 0)
         {
-            s_RendererAPI->DrawArrays(count, offset);
+            s_RendererAPI->DrawArrays(mode, count, offset);
         }
     private:
         static RendererAPI* s_RendererAPI;

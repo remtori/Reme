@@ -13,8 +13,8 @@ namespace Reme
         void Clear() override;
         void PollError() override;
 
-        void DrawIndexed(uint32_t count, uint32_t offset) override;
-        void DrawArrays(uint32_t count, uint32_t offset) override;
+        void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) override;
+        void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) override;
     private:
         bool m_UsePollError = true;
     };

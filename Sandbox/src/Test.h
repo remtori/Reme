@@ -24,7 +24,7 @@ public:
 
 		cam = Reme::CreateRef<Reme::OrthographicCamera>(0.0f, Width, Height, 0.0f);
 		imgs[0] = Reme::Texture::Create("assets/miku-cutie.jpg");
-		imgs[1] = Reme::Texture::Create("assets/rem-bb.png_");
+		imgs[1] = Reme::Texture::Create("assets/rem-bb.png");
 		imgs[2] = Reme::Texture::Create("assets/rem-sleeping-rose.png");
 		imgs[3] = Reme::Texture::Create("assets/you-waifu-material.jpg");
 		avgFps.fill(0.0f);
@@ -96,26 +96,33 @@ public:
 			}
 		} while (y < Height);
 
-		// for (int x = 0.0f; x < Width; x += rectSize)
-		// {
-		// 	for (int y = 0.0f; y < Height; y += rectSize)
-		// 	{
-		// 		Reme::Renderer2D::DrawRect(
-		// 			Reme::Color(x % 255, y % 255, 255),
-		// 			{ x, y },
-		// 			{ rectSize - 2.0f, rectSize - 2.0f }
-		// 		);
-		// 	}
-		// }
+		for (int x = 0.0f; x < Width; x += rectSize)
+		{
+			for (int y = 0.0f; y < Height; y += rectSize)
+			{
+				Reme::Renderer2D::DrawRect(
+					Reme::Color(x % 255, y % 255, 255),
+					{ x, y },
+					{ rectSize - 2.0f, rectSize - 2.0f }
+				);
+			}
+		}
 
 		Reme::Renderer2D::DrawRect(Reme::Color::Green, {   0.0f, 100.0f }, { 50.0f, 50.0f });
 		Reme::Renderer2D::DrawRect(Reme::Color::Red  , { 100.0f, 100.0f }, { 50.0f, 50.0f });
 		Reme::Renderer2D::DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
+
+		Reme::Renderer2D::PushState();
+		Reme::Renderer2D::Scale({ 2.0f, 2.0f });
+		Reme::Renderer2D::Translate({ 200.0f, 200.0f });
+		Reme::Renderer2D::Rotate(glm::radians(rot));
+		Reme::Renderer2D::Translate({ -200.0f, -200.0f });
 		Reme::Renderer2D::Draw(
 			nullptr, 
-			{ 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 
-			{ 200.0f, 200.0f }, { 50.0f, 50.0f }, glm::radians(rot)
+			{ 0.0f, 0.0f }, { 1.0f, 1.0f },
+			{ 200.0f, 200.0f }, { 50.0f, 50.0f }
 		);
+		Reme::Renderer2D::PopState();
 
 		Reme::Renderer2D::End();
 	}

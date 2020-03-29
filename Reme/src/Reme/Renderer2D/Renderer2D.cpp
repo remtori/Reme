@@ -1,6 +1,11 @@
 #include "pch.h"
-#include "Reme/Renderer/Renderer2D.h"
+#include "Reme/Renderer2D/Renderer2D.h"
 #include "Reme/Renderer/RendererAPI.h"
+
+#include "Reme/Renderer/Camera.h"
+#include "Reme/Renderer/Shader.h"
+#include "Reme/Renderer/Buffers.h"
+#include "Reme/Renderer/VertexArray.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
@@ -31,9 +36,12 @@ namespace Reme
 	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);
 
 	static Renderer2DData s_Data;
+	static std::vector<glm::mat3> s_TransformStack;
 
 	void Renderer2D::Init()
 	{
+		s_TransformStack.push_back(glm::mat3(1.0f));
+
 		s_Data.buffer = new Vertex[MAX_QUAD_COUNT * 4];
 
 		s_Data.flatShader = Shader::Create("Flat Shader",
@@ -138,7 +146,7 @@ namespace Reme
 
 		s_Data.currentTexture->Bind();
 		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexCount * sizeof(Vertex));
-		RenderCommand::DrawIndexed(s_Data.vertexCount / 4 * 6);
+		RenderCommand::DrawIndexed(DrawMode::TRIANGLES, s_Data.vertexCount / 4 * 6);
 
 		s_Data.vertexCount = 0;
 		s_Data.currentTexture = nullptr;
@@ -146,8 +154,8 @@ namespace Reme
 
 	void Renderer2D::Draw(
 		const Ref<Texture>& tex,
-		const glm::vec2& sP, const glm::vec2& sS, float sR,
-		const glm::vec2& dP, const glm::vec2& dS, float dR,
+		const glm::vec2& sP, const glm::vec2& sS,
+		const glm::vec2& dP, const glm::vec2& dS,
 		const Color& color
 	)
 	{
@@ -184,49 +192,23 @@ namespace Reme
 		s_Data.buffer[s_Data.vertexCount].Color    = c;
 		s_Data.vertexCount++;
 
-		if (sR != 0.0f)
+		for (int i = 1; i <= 4; i++)
 		{
-			const glm::vec2 centre = { sP.x + sS.x / 2.0f, sP.y + sS.y / 2.0f };
-			glm::mat3 rotMat = glm::mat3(1.0f);
-			rotMat = glm::translate(rotMat, centre);
-			rotMat = glm::rotate(rotMat, sR);
-			rotMat = glm::translate(rotMat, -centre);
-
-			for (int i = 1; i <= 4; i++)
-			{
-				Vertex& v = s_Data.buffer[s_Data.vertexCount - i];
-				glm::vec3 p = { v.UV.x, v.UV.y, 0.0f };
-				p = p * rotMat;
-				v.UV.x = p.x;
-				v.UV.y = p.y;
-			}
-		}
-
-		if (dR != 0.0f)
-		{
-			const glm::vec2 centre = { dP.x + dS.x / 2.0f, dP.y + dS.y / 2.0f };
-			glm::mat3 rotMat = glm::mat3(1.0f);
-			rotMat = glm::translate(rotMat, centre);
-			rotMat = glm::rotate(rotMat, dR);
-			rotMat = glm::translate(rotMat, -centre);
-
-			for (int i = 1; i <= 4; i++)
-			{
-				Vertex& v = s_Data.buffer[s_Data.vertexCount - i];
-				glm::vec3 p = { v.Position.x, v.Position.y, 1.0f };
-				p = rotMat * p;
-				v.Position.x = p.x;
-				v.Position.y = p.y;
-			}
+			Vertex& v = s_Data.buffer[s_Data.vertexCount - i];
+			const glm::mat3& m = s_TransformStack.back();
+			v.Position = {
+				m[0][0] * v.Position.x + m[0][1] * v.Position.y + m[0][2],
+				m[1][0] * v.Position.x + m[1][1] * v.Position.y + m[1][2]
+			};
 		}
 	}
 
-	void Renderer2D::DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale, float rot)
+	void Renderer2D::DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& scale)
 	{
 		Renderer2D::Draw(
 			Texture::White,
-			{ 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f,
-			position, scale, rot,
+			{ 0.0f, 0.0f }, { 0.0f, 0.0f },
+			position, scale,
 			color
 		);
 	}
@@ -243,8 +225,8 @@ namespace Reme
 
 		Renderer2D::Draw(
 			texture, 
-			{ 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 
-			destPos, dS, 0.0f
+			{ 0.0f, 0.0f }, { 1.0f, 1.0f },
+			destPos, dS
 		);
 	}
 
@@ -258,8 +240,43 @@ namespace Reme
 
 		Renderer2D::Draw(
 			texture, 
-			sP, sS, 0.0f,
-			destPos, destScale, 0.0f
+			sP, sS,
+			destPos, destScale
 		);
 	}
+
+	void Renderer2D::PushState()
+	{
+		s_TransformStack.push_back(glm::mat3(1.0f));
+	}
+
+	void Renderer2D::PopState()
+	{
+		if (s_TransformStack.size() > 1) s_TransformStack.pop_back();
+	}
+
+	const glm::mat3& Renderer2D::GetTransform()
+	{
+		return s_TransformStack.back();
+	}
+
+	void Renderer2D::SetTransform(const glm::mat3& mat)
+	{
+		s_TransformStack.back() = mat;
+	}
+
+	void Renderer2D::Translate(const glm::vec2& vec)
+	{
+		s_TransformStack.back() = glm::translate(s_TransformStack.back(), vec);
+	}
+
+	void Renderer2D::Scale(const glm::vec2& vec)
+	{
+		s_TransformStack.back() = glm::scale(s_TransformStack.back(), vec);
+	}
+
+	void Renderer2D::Rotate(float r)
+	{
+		s_TransformStack.back() = glm::rotate(s_TransformStack.back(), r);
+	}	
 }
