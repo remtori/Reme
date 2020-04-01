@@ -50,20 +50,20 @@ namespace Reme
 
 		TimeStamp currTime;
 		TimeStamp lastTime = std::chrono::high_resolution_clock::now();
-		float ellapsedTime;
+		float elapsedTime;
 
 		while (m_Running)
 		{
 			m_Window->PollEvent();
 
 			currTime = std::chrono::high_resolution_clock::now();
-			ellapsedTime = std::chrono::duration<float>(currTime - lastTime).count();
-			while (ellapsedTime > DeltaTime)
+			elapsedTime = std::chrono::duration<float>(currTime - lastTime).count();
+			while (elapsedTime > DeltaTime)
 			{
 				m_Screen->OnUpdate(DeltaTime);
-				ellapsedTime -= DeltaTime;
+				elapsedTime -= DeltaTime;
 			}
-			m_Screen->OnUpdate(ellapsedTime);
+			m_Screen->OnUpdate(elapsedTime);
 			lastTime = currTime;
 
 			if (!m_Minimized)

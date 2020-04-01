@@ -54,9 +54,9 @@ public:
 
 	}
 
-	void OnUpdate(float ellapsedTime) override
+	void OnUpdate(float elapsedTime) override
 	{
-		float speed = 300 * ellapsedTime;
+		float speed = 300 * elapsedTime;
 		glm::vec3 v = { 0.0f, 0.0f, 0.0f };
 		if (Reme::Input::IsKeyPressed(Reme::KeyCode::W))
 			v.y -= speed;
@@ -80,48 +80,55 @@ public:
 
 		Reme::Renderer2D::Begin(cam);
 
-		float y = 0.0f;
-		do {
-			for (int i = 0; i < imgs.size(); i++)
-			{
-				float ratio = (float)imgs[i]->GetWidth() / (float)imgs[i]->GetHeight();
-				float dHeight = imgWidth / ratio;
+		// float y = 0.0f;
+		// do {
+		// 	for (int i = 0; i < imgs.size(); i++)
+		// 	{
+		// 		float ratio = (float)imgs[i]->GetWidth() / (float)imgs[i]->GetHeight();
+		// 		float dHeight = imgWidth / ratio;
 
-				for (int j = 0; j < Width / imgWidth; j++)
-				{
-					Reme::Renderer2D::DrawTexture(imgs[i], { imgWidth * j, y }, { imgWidth, dHeight });
-				}
+		// 		for (int j = 0; j < Width / imgWidth; j++)
+		// 		{
+		// 			Reme::Renderer2D::DrawTexture(imgs[i], imgWidth * j, y, imgWidth, dHeight);
+		// 		}
 
-				y += dHeight;
-			}
-		} while (y < Height);
+		// 		y += dHeight;
+		// 	}
+		// } while (y < Height);
 
-		for (int x = 0.0f; x < Width; x += rectSize)
-		{
-			for (int y = 0.0f; y < Height; y += rectSize)
-			{
-				Reme::Renderer2D::DrawRect(
-					Reme::Color(x % 255, y % 255, 255),
-					{ x, y },
-					{ rectSize - 2.0f, rectSize - 2.0f }
-				);
-			}
-		}
+		// for (int x = 0.0f; x < Width; x += rectSize)
+		// {
+		// 	for (int y = 0.0f; y < Height; y += rectSize)
+		// 	{
+		// 		Reme::Renderer2D::DrawRect(
+		// 			Reme::Color(x % 255, y % 255, 255),
+		// 			x, y,
+		// 			rectSize - 2.0f, rectSize - 2.0f
+		// 		);
+		// 	}
+		// }
 
-		Reme::Renderer2D::DrawRect(Reme::Color::Green, {   0.0f, 100.0f }, { 50.0f, 50.0f });
-		Reme::Renderer2D::DrawRect(Reme::Color::Red  , { 100.0f, 100.0f }, { 50.0f, 50.0f });
-		Reme::Renderer2D::DrawRect(Reme::Color::Blue , { 100.0f,   0.0f }, { 50.0f, 50.0f });
+		// Reme::Renderer2D::DrawRect(Reme::Color::Green,   0.0f, 100.0f, 50.0f, 50.0f);
+		// Reme::Renderer2D::DrawRect(Reme::Color::Red  , 100.0f, 100.0f, 50.0f, 50.0f);
+		// Reme::Renderer2D::DrawRect(Reme::Color::Blue , 100.0f,   0.0f, 50.0f, 50.0f);
 
-		Reme::Renderer2D::PushState();
-		Reme::Renderer2D::Translate({ 200.0f, 200.0f });
-		Reme::Renderer2D::Rotate(glm::radians(rot));
-		Reme::Renderer2D::Translate({ -200.0f, -200.0f });
-		Reme::Renderer2D::Draw(
-			nullptr,
-			{ 0.0f, 0.0f }, { 1.0f, 1.0f },
-			{ 200.0f, 200.0f }, { 50.0f, 50.0f }
-		);
-		Reme::Renderer2D::PopState();
+		// Reme::Renderer2D::PushState();
+		// Reme::Renderer2D::Translate(200.0f, 200.0f);
+		// Reme::Renderer2D::Rotate(glm::radians(rot));
+		// Reme::Renderer2D::Translate(-200.0f, -200.0f);
+		// Reme::Renderer2D::DrawTexture(Reme::Texture::Default, 200.0f, 200.0f, 50.0f, 50.0f);
+		// Reme::Renderer2D::PopState();
+
+		auto path = Reme::CreateRef<Reme::Path2D>();
+		path->MoveTo(100.0f, 100.0f);
+		path->LineTo(200.0f, 100.0f);
+		path->ArcTo(300.0f, 100.0f, 300.0f, 300.0f, 64.0f);
+		path->BezierCurveTo(400.0f, 200.0f, 500.0f, 400.0f, 600.0f, 300.0f);
+		path->LineTo(600.0f, 600.0f);
+		path->QuadraticCurveTo(400.0f, 700.0f, 200.0f, 600.0f);
+		path->Ellipse(200.0f, 200.0f, 100.0f, 50.0f, 0.0f, 0.0f, 6.28f);
+		// path->Rect(0.0f, 0.0f, 50.0f, 50.0f);
+		Reme::Renderer2D::StrokePath(path, Reme::Color::Cyan);
 
 		Reme::Renderer2D::End();
 	}

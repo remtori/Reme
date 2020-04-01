@@ -4,6 +4,7 @@
 #include "Reme/Renderer/Color.h"
 #include "Reme/Renderer/Texture.h"
 #include "Reme/Renderer/Camera.h"
+#include "Reme/Renderer2D/Path2D.h"
 
 #include <glm/glm.hpp>
 
@@ -19,15 +20,39 @@ namespace Reme
 		static void End();
 
 		// Basic Quad Drawing API
-		static void Draw(
+
+		static void DrawRect(const Color& color, float x, float y, float w, float h)
+		{
+			DrawTexture(Texture::White, 0.0f, 0.0f, 0.0f, 0.0f, x, y, w, h, color);
+		}
+
+		static void DrawTexture(const Ref<Texture>& texture, float dX, float dY)
+		{
+			DrawTexture(
+				texture,
+				0.0f, 0.0f, texture->GetWidth(), texture->GetHeight(),
+				dX, dY, texture->GetWidth(), texture->GetHeight()
+			);
+		}
+
+		static void DrawTexture(const Ref<Texture>& texture, float dX, float dY, float dW, float dH)
+		{
+			DrawTexture(
+				texture,
+				0.0f, 0.0f, texture->GetWidth(), texture->GetHeight(),
+				dX, dY, dW, dH
+			);
+		}
+
+		static void DrawTexture(
 			const Ref<Texture>& texture,
-			const glm::vec2& srcPos, const glm::vec2& srcSize,
-			const glm::vec2& destPos, const glm::vec2& destSize,
+			float sX, float sY, float sW, float sH,
+			float dX, float dY, float dW, float dH,
 			const Color& color = Color::White
 		);
-		static void DrawRect(const Color& color, const glm::vec2& position, const glm::vec2& size);
-		static void DrawTexture(const Ref<Texture>& texture, const glm::vec2& destPos, const glm::vec2& destSize = { 0.0f, 0.0f });
-		static void DrawTexture(const Ref<Texture>& texture, const glm::vec2& srcPos, const glm::vec2& srcSize, const glm::vec2& destPos, const glm::vec2& destScale);
+
+		static void FillPath(const Ref<Path2D>& path, const Color& color);
+		static void StrokePath(const Ref<Path2D>& path, const Color& color);
 
 		// Transformation
 		static void PushState();
@@ -36,8 +61,8 @@ namespace Reme
 		static const glm::mat3& GetTransform();
 		static void SetTransform(const glm::mat3& mat);
 
-		static void Translate(const glm::vec2& vec);
-		static void Scale(const glm::vec2& vec);
+		static void Translate(float x, float y);
+		static void Scale(float x, float y);
 		static void Rotate(float rotRadian);
 	private:
 		static void Flush();

@@ -11,7 +11,7 @@ namespace Reme
 {
 	class Application {
 	public:
-		// Maximum ellapsed time allow between update (in seconds)
+		// Maximum elapsed time allow between update (in seconds)
 		float DeltaTime = 1.0 / 60;
 	public:
 		Application(const WindowProps& props = { "Reme Engine", 1280, 720 });

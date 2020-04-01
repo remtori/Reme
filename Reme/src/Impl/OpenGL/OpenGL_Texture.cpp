@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Impl/OpenGL/OpenGL_Texture.h"
+#include "Reme/Core/Core.h"
 
 #include <glad/glad.h>
 #include <stb_image.h>
@@ -36,7 +37,7 @@ namespace Reme
         if (data == nullptr)
         {
             CORE_LOG_ERROR("Failed to load image \"{}\"", path);
-            throw 1;
+            return;
         }
 
         m_Width = width;

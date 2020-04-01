@@ -48,6 +48,7 @@ namespace Reme
             case GL_DEBUG_SEVERITY_HIGH_ARB:   ss << "Severity: high"; break;
             case GL_DEBUG_SEVERITY_MEDIUM_ARB: ss << "Severity: medium"; break;
             case GL_DEBUG_SEVERITY_LOW_ARB:    ss << "Severity: low"; break;
+            default: ss << "Severity: Notification"; break;
         }
 
         CORE_LOG_ERROR("OpenGL {} - ({})", message, ss.str());
