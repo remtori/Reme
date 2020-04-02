@@ -4,7 +4,6 @@
 #include "Reme/Renderer/Color.h"
 #include "Reme/Renderer/Texture.h"
 #include "Reme/Renderer/Camera.h"
-#include "Reme/Renderer2D/Path2D.h"
 
 #include <glm/glm.hpp>
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Reme.h>
 
 #include <imgui/imgui.h>

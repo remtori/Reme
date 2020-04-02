@@ -92,16 +92,14 @@ namespace Reme
 			{ ShaderDataType::Float4, "Color" },
 		});
 		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
-
-		RenderCommand::SetClearColor(Color(0x696969ff));
 	}
 
 	void Renderer2D::Shutdown()
 	{
-		s_Data.flatShader.reset();
-		s_Data.currentTexture.reset();
-		s_Data.VBO.reset();
-		s_Data.VAO.reset();
+		s_Data.flatShader = nullptr;
+		s_Data.currentTexture = nullptr;
+		s_Data.VBO = nullptr;
+		s_Data.VAO = nullptr;
 		delete s_Data.buffer;
 	}
 
