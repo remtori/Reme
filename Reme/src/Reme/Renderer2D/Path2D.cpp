@@ -72,10 +72,12 @@ namespace Reme
         glm::vec2 p = subPath.back();
         for (double t = 0.0; t <= 1.0; t += 0.0001)
         {
-            subPath.emplace_back(
+            glm::vec2 np(
                 pow(1-t,3)*p.x + 3*t*pow(1-t, 2)*c1X + 3*(1-t)*t*t*c2X + t*t*t*x,
                 pow(1-t,3)*p.y + 3*t*pow(1-t, 2)*c1Y + 3*(1-t)*t*t*c2Y + t*t*t*y
             );
+
+            if (glm::distance(np, subPath.back()) >= 1.0f) subPath.push_back(np);
         }
     }
 
@@ -86,10 +88,12 @@ namespace Reme
         glm::vec2 p = subPath.back();
         for (double t = 0.0; t <= 1.0; t += 0.0001)
         {
-            subPath.emplace_back(
-                pow(1-t,2)*p.x + 2*(1-t)*t*cX + t*t*x,
-                pow(1-t,2)*p.y + 2*(1-t)*t*cY + t*t*y
+            glm::vec2 np(
+                pow(1 - t, 2) * p.x + 2 * (1 - t) * t * cX + t * t * x,
+                pow(1 - t, 2) * p.y + 2 * (1 - t) * t * cY + t * t * y
             );
+
+            if (glm::distance(np, subPath.back()) >= 1.0f) subPath.push_back(np);
         }
     }
 
@@ -173,20 +177,22 @@ namespace Reme
         {
             float cosA = glm::cos(angle);
             float sinA = glm::sin(angle);
-            subPath.emplace_back(
+            glm::vec2 np(
                 x + rX * cosA * cosRot - rY * sinA * sinRot,
                 y + rX * cosA * sinRot + rY * sinA * cosRot
             );
+
+            if (glm::distance(np, subPath.back()) >= 1.0f) subPath.push_back(np);
         };
 
         if (anticlockwise)
         {
-            if (startAngle > endAngle) endAngle += 2 * PI;
+            if (startAngle >= endAngle) endAngle += 2 * PI;
             for(float a = startAngle; a <= endAngle; a += d) loop(a);
         }
         else
         {
-            if (startAngle < endAngle) startAngle += 2 * PI;
+            if (startAngle <= endAngle) startAngle += 2 * PI;
             for(float a = startAngle; a >= endAngle; a -= d) loop(a);
         }
     }
@@ -202,7 +208,7 @@ namespace Reme
 
     const std::vector<SubPath2D>& Path2D::GetPathData()
     {
-        auto it = m_SubPaths.cend();
+        auto it = m_SubPaths.cend() - 1;
         for (; it != m_SubPaths.cbegin(); --it)
         {
             if (it->size() == 1)
