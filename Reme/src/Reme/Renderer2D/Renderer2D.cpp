@@ -153,14 +153,14 @@ namespace Reme
 
 	void Renderer2D::Flush()
 	{
-		// if (s_Data.vertexIndex == 0) return;
+		if (s_Data.vertexIndex == 0) return;
 
-		// s_Data.currentTexture->Bind();
-		// s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexIndex * sizeof(Vertex));
-		// RenderCommand::DrawArrays(DrawMode::TRIANGLES, s_Data.vertexIndex);
+		s_Data.currentTexture->Bind();
+		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexIndex * sizeof(Vertex));
+		RenderCommand::DrawArrays(DrawMode::TRIANGLES, s_Data.vertexIndex);
 
-		// s_Data.vertexIndex = 0;
-		// s_Data.currentTexture = nullptr;
+		s_Data.vertexIndex = 0;
+		s_Data.currentTexture = nullptr;
 	}
 
 	void Renderer2D::DrawTexture(
@@ -219,37 +219,6 @@ namespace Reme
 			Vertex& v = s_Data.buffer[s_Data.vertexIndex - i - 1];
 			v.Position = m * glm::vec3(v.Position, 1.0f);
 		}
-	}
-
-	void Renderer2D::FillPath(const Ref<Path2D>& path, const Color& color)
-	{
-
-	}
-
-	void Renderer2D::StrokePath(const Ref<Path2D>& path, const Color& color)
-	{
-		glm::vec4 c = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f };
-
-		for (const SubPath2D& subpath : path->GetPathData())
-		{
-			for (auto it = subpath.begin(); it != subpath.end(); ++it)
-			{
-				s_Data.buffer[s_Data.vertexIndex].Position = *it;
-				s_Data.buffer[s_Data.vertexIndex].UV = { 0.0f, 0.0f };
-				s_Data.buffer[s_Data.vertexIndex].Color = c;
-				s_Data.vertexIndex++;
-
-				if (it != subpath.begin() && it != subpath.end())
-				{
-					s_Data.buffer[s_Data.vertexIndex] = s_Data.buffer[s_Data.vertexIndex - 1];
-					s_Data.vertexIndex++;
-				}
-			}
-		}
-
-		Texture::White->Bind();
-		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexIndex * sizeof(Vertex));
-		RenderCommand::DrawArrays(DrawMode::TRIANGLE_STRIP, s_Data.vertexIndex, 0);
 	}
 
 	void Renderer2D::PushState()

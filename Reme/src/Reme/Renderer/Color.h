@@ -6,10 +6,9 @@ namespace Reme
 	{
 	public:
 		Color();
+		Color(const Color& c);
 		Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 		explicit Color(uint32_t hexColor);
-
-		uint32_t toInteger() const;
 
 		static const Color Black;
 		static const Color White;
@@ -21,10 +20,10 @@ namespace Reme
 		static const Color Cyan;
 		static const Color Transparent;
 
-		uint8_t r;
-		uint8_t g;
-		uint8_t b;
-		uint8_t a;
+		union {
+			struct { uint8_t r, g, b, a; };
+			uint32_t data;
+		};
 	};
 
 	bool operator ==(const Color& left, const Color& right);

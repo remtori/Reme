@@ -20,6 +20,8 @@ namespace Reme
         glGenTextures(1, &m_TextureID);
         glBindTexture(GL_TEXTURE_2D, m_TextureID);
 
+        glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, nullptr);
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -37,6 +39,9 @@ namespace Reme
         if (data == nullptr)
         {
             CORE_LOG_ERROR("Failed to load image \"{}\"", path);
+            m_InternalFormat = GL_RGBA8;
+            m_DataFormat = GL_RGBA;
+            m_TextureID = 1;
             return;
         }
 
@@ -90,17 +95,17 @@ namespace Reme
         glDeleteTextures(1, &m_TextureID);
     }
 
-    void OpenGL_Texture::SetData(void* data, uint32_t size)
+    void OpenGL_Texture::SetData(const Color* data, uint32_t x, uint32_t y, uint32_t width, uint32_t height)
     {
-        uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
-        REME_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
+        if (width == 0) width = m_Width;
+        if (height == 0) height = m_Height;
 
-        glBindTexture(GL_TEXTURE_2D, m_TextureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, data);
+        glBindTexture(GL_TEXTURE_2D, m_TextureID);        
+        glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, m_DataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 
-    void OpenGL_Texture::Bind(uint32_t slot) const
+    void OpenGL_Texture::Bind(uint32_t slot)
     {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, m_TextureID);

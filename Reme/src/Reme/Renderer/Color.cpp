@@ -18,30 +18,23 @@ namespace Reme
 	{
 	}
 
+	Color::Color(const Color& c) :
+		r(c.r), g(c.g), b(c.b), a(c.a)
+	{
+	}
+
 	Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) :
 		r(red), g(green), b(blue), a(alpha)
 	{
 	}
 
-	Color::Color(uint32_t color) :
-		r((color & 0xff000000) >> 24),
-		g((color & 0x00ff0000) >> 16),
-		b((color & 0x0000ff00) >> 8),
-		a((color & 0x000000ff) >> 0)
+	Color::Color(uint32_t color) : data(color)
 	{
-	}
-
-	uint32_t Color::toInteger() const
-	{
-		return (r << 24) | (g << 16) | (b << 8) | a;
 	}
 
 	bool operator ==(const Color& left, const Color& right)
 	{
-		return (left.r == right.r) &&
-			(left.g == right.g) &&
-			(left.b == right.b) &&
-			(left.a == right.a);
+		return left.data == right.data;
 	}
 
 	bool operator !=(const Color& left, const Color& right)

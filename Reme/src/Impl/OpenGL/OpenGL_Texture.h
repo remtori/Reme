@@ -17,9 +17,9 @@ namespace Reme
         inline uint32_t GetHeight() const override { return m_Height; }
         inline uint32_t GetInternalID() const override { return m_TextureID; }
 
-        void SetData(void* data, uint32_t size) override;
+        void SetData(const Color* data, uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
-        void Bind(uint32_t slot) const override;
+        void Bind(uint32_t slot) override;
     private:
         uint32_t m_Width, m_Height;
         uint32_t m_TextureID;

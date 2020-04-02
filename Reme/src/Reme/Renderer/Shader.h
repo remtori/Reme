@@ -1,7 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "Reme/Core/Core.h"
 
+#include <glm/glm.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -10,8 +11,8 @@ namespace Reme
     class Shader
     {
     public:
-        static Ref<Shader> Create(const std::string& filePath);
-        static Ref<Shader> Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
+        static Scope<Shader> Create(const std::string& filePath);
+        static Scope<Shader> Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
     public:
 
         virtual void Bind() const = 0;

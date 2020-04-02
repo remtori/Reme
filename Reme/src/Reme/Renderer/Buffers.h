@@ -7,7 +7,7 @@ namespace Reme
 	class VertexBuffer
 	{
 	public:
-		static Ref<VertexBuffer> Create(uint32_t byteCount, bool isStatic = true);
+		static Scope<VertexBuffer> Create(uint32_t byteCount, bool isStatic = true);
 	public:
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
@@ -22,7 +22,7 @@ namespace Reme
 	class IndexBuffer
 	{
 	public:
-		static Ref<IndexBuffer> Create(uint32_t byteCount, bool isStatic = true);
+		static Scope<IndexBuffer> Create(uint32_t byteCount, bool isStatic = true);
 	public:
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;

@@ -51,9 +51,6 @@ namespace Reme
 			const Color& color = Color::White
 		);
 
-		static void FillPath(const Ref<Path2D>& path, const Color& color);
-		static void StrokePath(const Ref<Path2D>& path, const Color& color);
-
 		// Transformation
 		static void PushState();
 		static void PopState();

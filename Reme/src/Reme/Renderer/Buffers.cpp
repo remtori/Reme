@@ -6,24 +6,24 @@
 
 namespace Reme
 {
-	Ref<VertexBuffer> VertexBuffer::Create(uint32_t eleCount, bool isStatic)
+	Scope<VertexBuffer> VertexBuffer::Create(uint32_t eleCount, bool isStatic)
 	{
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_VertexBuffer>(eleCount, isStatic);
+			case RendererAPI::OpenGL: return CreateScope<OpenGL_VertexBuffer>(eleCount, isStatic);
 		}
 
 		REME_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t eleCount, bool isStatic)
+	Scope<IndexBuffer> IndexBuffer::Create(uint32_t eleCount, bool isStatic)
 	{
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_IndexBuffer>(eleCount, isStatic);
+			case RendererAPI::OpenGL: return CreateScope<OpenGL_IndexBuffer>(eleCount, isStatic);
 		}
 
 		REME_ASSERT(false, "Unknown RendererAPI!");
