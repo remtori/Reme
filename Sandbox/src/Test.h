@@ -21,6 +21,7 @@ public:
 	void OnAttach() override
 	{
 		m_LayerName = "Tank2D";
+		Reme::Application::Get().GetWindow().SetVSync(false);
 		auto Width = Reme::Application::Get().GetWindow().GetWidth();
 		auto Height = Reme::Application::Get().GetWindow().GetHeight();
 

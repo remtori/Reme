@@ -77,7 +77,7 @@ namespace Reme
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        if (GLAD_GL_ARB_debug_output)
+        if (GLAD_GL_ARB_debug_output && false)
         {
             m_UsePollError = false;
             glEnable(GL_ARB_debug_output);

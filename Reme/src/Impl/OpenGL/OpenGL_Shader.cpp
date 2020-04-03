@@ -133,9 +133,14 @@ namespace Reme
         return location;
     }
 
-    void OpenGL_Shader::SetInt(const std::string& name, int value)
+    void OpenGL_Shader::SetInt(const std::string& name, int32_t value)
     {
         glUniform1i(OpenGL_Shader::GetUniformLocation(name), value);
+    }
+
+    void OpenGL_Shader::SetIntArray(const std::string& name, const int32_t* const values, uint32_t count)
+    {
+        glUniform1iv(OpenGL_Shader::GetUniformLocation(name), count, values);
     }
 
     void OpenGL_Shader::SetFloat(const std::string& name, float value)

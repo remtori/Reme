@@ -12,11 +12,15 @@
 
 namespace Reme
 {
+	static const uint32_t MAX_TEXTURE_COUNT = 6;
+	static const uint32_t MAX_QUAD_COUNT = 100000;
+
 	struct Vertex
 	{
 		glm::vec2 Position;
 		glm::vec2 UV;
 		glm::vec4 Color;
+		float TexIndex;
 	};
 
 	struct Renderer2DData
@@ -28,10 +32,10 @@ namespace Reme
 		// Data for Batch Rendering
 		Vertex* buffer;
 		uint32_t vertexIndex;
-		Ref<Texture> currentTexture;
+		std::array<Ref<Texture>, MAX_TEXTURE_COUNT> textures;
+		uint32_t textureIndex;
 	};
 
-	static const uint32_t MAX_QUAD_COUNT = 100000;
 	static const uint32_t MAX_VERTEX_BUFFER_SIZE = MAX_QUAD_COUNT * 4 * sizeof(Vertex);
 	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);
 
@@ -54,34 +58,49 @@ namespace Reme
 			"layout (location = 0) in vec2 Position;\n"
 			"layout (location = 1) in vec2 UV;\n"
 			"layout (location = 2) in vec4 Color;\n"
+			"layout (location = 3) in float TexIndex;\n"
 
 			"out vec2 Frag_UV;\n"
 			"out vec4 Frag_Color;\n"
+			"out float Frag_TexIndex;\n"
 
 			"void main()\n"
 			"{\n"
-			"	  gl_Position = projMat * viewMat * vec4(Position, 0, 1);\n"
 			"	  Frag_UV = UV;\n"
 			"     Frag_Color = Color;\n"
+			"     Frag_TexIndex = TexIndex;\n"
+			"	  gl_Position = projMat * viewMat * vec4(Position, 0, 1);\n"
 			"}\n",
 			// Fragment shader
 			"#version 330 core\n"
 
-			"uniform sampler2D Texture;\n"
-
 			"in vec2 Frag_UV;\n"
 			"in vec4 Frag_Color;\n"
+			"in float Frag_TexIndex;\n"
 
 			"out vec4 Out_Color;\n"
 
+			"uniform sampler2D Textures[6];\n"
+
 			"void main()\n"
 			"{\n"
-			"    Out_Color = Frag_Color * texture(Texture, Frag_UV);\n"
+			"    vec4 texColor;\n"
+			"    if (Frag_TexIndex < 0.5) texColor = texture(Textures[0], Frag_UV);\n"
+			"    else if (Frag_TexIndex < 1.5) texColor = texture(Textures[1], Frag_UV);\n"
+			"    else if (Frag_TexIndex < 2.5) texColor = texture(Textures[2], Frag_UV);\n"
+			"    else if (Frag_TexIndex < 3.5) texColor = texture(Textures[3], Frag_UV);\n"
+			"    else if (Frag_TexIndex < 4.5) texColor = texture(Textures[4], Frag_UV);\n"
+			"    else texColor = texture(Textures[5], Frag_UV);\n"
+
+			"    Out_Color = Frag_Color * texColor;\n"
 			"}\n"
 		);
 
 		s_Data.flatShader->Bind();
-		s_Data.flatShader->SetInt("Texture", 0);
+
+		int32_t uTexIndexs[MAX_TEXTURE_COUNT];
+		for (int i = 0; i < MAX_TEXTURE_COUNT; i++) uTexIndexs[i] = i;
+		s_Data.flatShader->SetIntArray("Textures", uTexIndexs, MAX_TEXTURE_COUNT);
 
 		s_Data.VAO = VertexArray::Create();
 
@@ -90,14 +109,17 @@ namespace Reme
 			{ ShaderDataType::Float2, "Position" },
 			{ ShaderDataType::Float2, "UV" },
 			{ ShaderDataType::Float4, "Color" },
+			{ ShaderDataType::Float, "TexIndex" },
 		});
 		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
+
+		s_Data.vertexIndex = 0;
+		s_Data.textureIndex = 0;
 	}
 
 	void Renderer2D::Shutdown()
 	{
 		s_Data.flatShader = nullptr;
-		s_Data.currentTexture = nullptr;
 		s_Data.VBO = nullptr;
 		s_Data.VAO = nullptr;
 		delete s_Data.buffer;
@@ -111,9 +133,6 @@ namespace Reme
 		s_Data.flatShader->SetMat4("projMat", cam->GetProjectionMatrix());
 
 		s_Data.VAO->Bind();
-
-		s_Data.vertexIndex = 0;
-		s_Data.currentTexture = nullptr;
 	}
 
 	void Renderer2D::End()
@@ -123,42 +142,18 @@ namespace Reme
 		RenderCommand::PollError();
 	}
 
-	// void Renderer2D::Flush()
-	// {
-	// 	if (s_Data.vertexIndex == 0) return;
-	// 	static uint32_t lastVertexIndex = 0;
-
-	// 	s_Data.currentTexture->Bind();
-	// 	s_Data.VBO->SetData(
-	// 		(float*) &s_Data.buffer[lastVertexIndex],
-	// 		lastVertexIndex * sizeof(Vertex),
-	// 		s_Data.vertexIndex * sizeof(Vertex)
-	// 	);
-	// 	RenderCommand::DrawIndexed(
-	// 		DrawMode::TRIANGLES,
-	// 		(s_Data.vertexIndex - lastVertexIndex) / 4 * 6,
-	// 		lastVertexIndex / 4 * 6 * sizeof(uint32_t)
-	// 	);
-
-	// 	s_Data.currentTexture = nullptr;
-	// 	if (MAX_QUAD_COUNT - s_Data.vertexIndex < 100)
-	// 	{
-	// 		s_Data.vertexIndex = 0;
-	// 	}
-
-	// 	lastVertexIndex = s_Data.vertexIndex;
-	// }
-
 	void Renderer2D::Flush()
 	{
 		if (s_Data.vertexIndex == 0) return;
 
-		s_Data.currentTexture->Bind();
+		for (int i = 0; i < s_Data.textureIndex; i++)
+			s_Data.textures[i]->Bind(i);
+
 		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexIndex * sizeof(Vertex));
 		RenderCommand::DrawArrays(DrawMode::TRIANGLES, s_Data.vertexIndex);
 
 		s_Data.vertexIndex = 0;
-		s_Data.currentTexture = nullptr;
+		s_Data.textureIndex = 0;
 	}
 
 	void Renderer2D::DrawTexture(
@@ -170,16 +165,32 @@ namespace Reme
 	{
 		Ref<Texture> texture = tex == nullptr ? Texture::Default : tex;
 
+		float TexIndex = -1.0f;
+		for (int i = 0; i < s_Data.textureIndex; i++)
+		{
+			if (s_Data.textures[i]->GetInternalID() == texture->GetInternalID())
+			{
+				TexIndex = (float)i;
+				break;
+			}
+		}
+
 		if (
-			(s_Data.currentTexture != nullptr && texture != s_Data.currentTexture) ||
-			s_Data.vertexIndex + 4 > MAX_QUAD_COUNT
+			s_Data.vertexIndex + 4 > MAX_QUAD_COUNT ||
+			(TexIndex == -1.0f && s_Data.textureIndex + 1 == MAX_TEXTURE_COUNT)
 		)
 		{
 			Flush();
 		}
 
-		s_Data.currentTexture = texture;
-		glm::vec4 c = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f };
+		if (TexIndex == -1.0f)
+		{
+			s_Data.textures[s_Data.textureIndex] = texture;
+			TexIndex = (float)s_Data.textureIndex;
+			s_Data.textureIndex++;
+		}
+
+		const glm::vec4 c(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f);
 
 		sX = sX / texture->GetWidth();
 		sY = sY / texture->GetHeight();
@@ -189,16 +200,19 @@ namespace Reme
 		s_Data.buffer[s_Data.vertexIndex].Position = { dX     , dY      };
 		s_Data.buffer[s_Data.vertexIndex].UV       = { sX     , sX      };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
 		s_Data.vertexIndex++;
 
 		s_Data.buffer[s_Data.vertexIndex].Position = { dX + dW, dY      };
 		s_Data.buffer[s_Data.vertexIndex].UV       = { sX + sW, sX      };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
 		s_Data.vertexIndex++;
 
 		s_Data.buffer[s_Data.vertexIndex].Position = { dX     , dY + dH };
 		s_Data.buffer[s_Data.vertexIndex].UV       = { sX     , sX + sH };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
 		s_Data.vertexIndex++;
 
 		s_Data.buffer[s_Data.vertexIndex] = s_Data.buffer[s_Data.vertexIndex - 2];
@@ -209,6 +223,7 @@ namespace Reme
 		s_Data.buffer[s_Data.vertexIndex].Position = { dX + dW, dY + dH };
 		s_Data.buffer[s_Data.vertexIndex].UV       = { sX + sW, sX + sH };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
 		s_Data.vertexIndex++;
 
 		const glm::mat3& m = s_TransformStack.back();
