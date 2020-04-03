@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "reme_pch.h"
 #include "Impl/OpenGL/OpenGL_Texture.h"
 #include "Reme/Core/Core.h"
 
@@ -100,7 +100,7 @@ namespace Reme
         if (width == 0) width = m_Width;
         if (height == 0) height = m_Height;
 
-        glBindTexture(GL_TEXTURE_2D, m_TextureID);        
+        glBindTexture(GL_TEXTURE_2D, m_TextureID);
         glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, m_DataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }

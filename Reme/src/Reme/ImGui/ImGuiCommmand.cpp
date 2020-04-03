@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "reme_pch.h"
 #include "Reme/ImGui/ImGuiCommand.h"
 #include "Reme/Core/Application.h"
 #include "Reme/Core/Core.h"
@@ -6,8 +6,8 @@
 #include <imgui.h>
 
 #if defined(_REME_USE_GLFW) && defined(_REME_USE_OPENGL)
-#include <examples/imgui_impl_glfw.h>
-#include <examples/imgui_impl_opengl3.h>
+#include <imgui_impl/imgui_impl_glfw.h>
+#include <imgui_impl/imgui_impl_opengl3.h>
 #endif
 
 namespace Reme

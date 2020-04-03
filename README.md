@@ -24,7 +24,7 @@ sudo apt-get install libx11-dev mesa-common-dev
 ### Windows
 
 ```
-vendor\premake5.exe vs2019
+third_party\premake5.exe vs2019
 ```
 
 Switch `2019` with your Visual Studio version
@@ -32,7 +32,7 @@ Switch `2019` with your Visual Studio version
 ### Linux
 
 ```
-vendor/premake5 gmake2
+third_party/premake5 gmake2
 ```
 
 ## Configuration

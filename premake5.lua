@@ -18,18 +18,18 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Reme/vendor/GLFW/include"
-IncludeDir["glad"] = "Reme/vendor/glad/include"
-IncludeDir["imgui"] = "Reme/vendor/imgui"
-IncludeDir["glm"] = "Reme/vendor/glm"
-IncludeDir["stb_image"] = "Reme/vendor/stb_image"
-IncludeDir["lua"] = "Reme/vendor/lua/include"
+IncludeDir["GLFW"] = "Reme/third_party/GLFW/include"
+IncludeDir["glad"] = "Reme/third_party/glad/include"
+IncludeDir["imgui"] = "Reme/third_party/imgui"
+IncludeDir["glm"] = "Reme/third_party/glm"
+IncludeDir["stb_image"] = "Reme/third_party/stb_image"
+IncludeDir["lua"] = "Reme/third_party/lua/include"
 
 group "Dependencies"
-	include "Reme/vendor/GLFW"
-	include "Reme/vendor/glad"
-	include "Reme/vendor/imgui"
-	include "Reme/vendor/lua"
+	include "Reme/third_party/GLFW"
+	include "Reme/third_party/glad"
+	include "Reme/third_party/imgui"
+	include "Reme/third_party/lua"
 
 group ""
 
@@ -43,8 +43,8 @@ project "Reme"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "pch.h"
-	pchsource "Reme/src/pch.cpp"
+	pchheader "reme_pch.h"
+	pchsource "Reme/src/reme_pch.cpp"
 
 	defines
 	{
@@ -55,16 +55,16 @@ project "Reme"
 	{
 		"%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "%{prj.name}/vendor/stb_image/**.h",
-		"%{prj.name}/vendor/stb_image/**.cpp",
-		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl",
+        "%{prj.name}/third_party/stb_image/**.h",
+		"%{prj.name}/third_party/stb_image/**.cpp",
+		"%{prj.name}/third_party/glm/glm/**.hpp",
+		"%{prj.name}/third_party/glm/glm/**.inl",
 	}
 
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/third_party/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.imgui}",
@@ -139,13 +139,13 @@ project "Sandbox"
 
 	includedirs
 	{
-		"Reme/vendor/spdlog/include",
+		"Reme/third_party/spdlog/include",
 		"Reme/src",
-		"Reme/vendor",
+		"Reme/third_party",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.lua}",
 	}
-	
+
 	links
 	{
 		"Reme",
