@@ -1,0 +1,91 @@
+<canvas id="cvs" width="1280" height="720"></canvas>
+<script>
+	const ctx = cvs.getContext('2d');
+	const tobeImgs = ([
+		"assets/miku-cutie.jpg",
+		"assets/rem-bb.png",
+		"assets/rem-sleeping-rose.png",
+		"assets/you-waifu-material.jpg",
+	]).map(url => new Promise((resolve) => {
+		const img = new Image();
+		img.onload = _ => resolve(img);
+		img.src = url;
+	}));
+
+	const Width = cvs.width;
+	const Height = cvs.height;
+	ctx.font = "24px Arial";
+
+	window.imgWidth = 50;
+	window.rectSize = 50;
+
+	Promise.all(tobeImgs).then(imgs => {
+		window.imgs = imgs;
+		loop();
+	});
+
+	let lt = 0;
+	function loop(ft)
+	{
+		ctx.clearRect(0, 0, Width, Height);
+		draw();
+		lt = ft;
+		window.requestAnimationFrame(loop);
+	}
+
+	function draw()
+	{
+		// let y = 0;
+		// do {
+		// 	for (let i = 0; i < imgs.length; i++)
+		// 	{
+		// 		const ratio = imgs[i].width / imgs[i].height;
+		// 		const dHeight = imgWidth / ratio;
+
+		// 		for (let j = 0; j < Width / imgWidth; j++)
+		// 		{
+		// 			ctx.drawImage(imgs[i], imgWidth * j, y, imgWidth, dHeight);
+		// 		}
+
+		// 		y += dHeight;
+		// 	}
+		// } while (y < Height);
+
+		// for (let x = 0.0; x < Width; x += rectSize)
+		// {
+		// 	for (let y = 0.0; y < Height; y += rectSize)
+		// 	{
+		// 		ctx.fillStyle = `rgb(${x % 255}, ${y % 255}, 255)`;
+		// 		ctx.fillRect(x, y, rectSize - 2.0, rectSize - 2.0);
+		// 	}
+		// }
+
+		// ctx.fillStyle = 'green';
+		// ctx.fillRect(0.0, 100.0, 50.0, 50.0);
+		// ctx.fillStyle = 'red';
+		// ctx.fillRect(100.0, 100.0, 50.0, 50.0);
+		// ctx.fillStyle = 'blue';
+		// ctx.fillRect(100.0, 0.0, 50.0, 50.0);
+
+		// ctx.save();
+		// ctx.translate(200, 200);
+		// ctx.rotate(Math.PI / 4);
+		// ctx.translate(-200, -200);
+		// ctx.fillRect(200.0, 200.0, 50.0, 50.0);
+		// ctx.restore();
+
+		// ctx.fillStyle = '#000';
+		// ctx.fillText(ft - lt, 100, 100, 80);
+
+		ctx.beginPath();
+		ctx.moveTo(100.0, 100.0);
+		ctx.lineTo(200.0, 100.0);
+		ctx.arcTo(300.0, 100.0, 300.0, 300.0, 64.0);
+		ctx.bezierCurveTo(400.0, 200.0, 500.0, 400.0, 600.0, 300.0);
+		ctx.lineTo(600.0, 600.0);
+		ctx.quadraticCurveTo(400.0, 700.0, 200.0, 600.0);
+		ctx.ellipse(200.0, 200.0, 100.0, 50.0, 0.0, 0.0, 6.28);
+		ctx.strokeStyle = 'cyan';
+		ctx.stroke();
+	}
+</script>
