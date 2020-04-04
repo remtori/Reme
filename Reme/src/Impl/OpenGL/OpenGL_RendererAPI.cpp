@@ -62,22 +62,24 @@ namespace Reme
 			exit(EXIT_FAILURE);
 		}
 
-		GLint temp;
 		CORE_LOG_INFO("OpenGL Version: {}", glGetString(GL_VERSION));
 		CORE_LOG_INFO("GLSL Version  : {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		CORE_LOG_INFO("Renderer      : {}", glGetString(GL_RENDERER));
 
+        GLint temp;
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &temp);
 		CORE_LOG_INFO("Max Texture Units: {}", temp);
+        m_MaxTextureUnit = temp;
 
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
 		CORE_LOG_INFO("Max Texture Size : {0}x{0}", temp);
+        m_MaxTextureSize = temp;
 
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        if (GLAD_GL_ARB_debug_output && false)
+        if (GLAD_GL_ARB_debug_output)
         {
             m_UsePollError = false;
             glEnable(GL_ARB_debug_output);

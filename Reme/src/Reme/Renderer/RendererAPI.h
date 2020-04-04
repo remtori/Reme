@@ -27,6 +27,9 @@ namespace Reme
         virtual void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) = 0;
         virtual void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) = 0;
 
+        virtual uint32_t GetMaxTextureUnit() = 0;
+        virtual uint32_t GetMaxTextureSize() = 0;
+
         inline static API GetAPI() { return s_API; }
         static RendererAPI* Create();
     private:
@@ -70,6 +73,17 @@ namespace Reme
         {
             s_RendererAPI->DrawArrays(mode, count, offset);
         }
+
+        inline static uint32_t GetMaxTextureUnit()
+        {
+            return s_RendererAPI->GetMaxTextureUnit();
+        }
+
+        inline static uint32_t GetMaxTextureSize()
+        {
+            return s_RendererAPI->GetMaxTextureSize();
+        }
+
     private:
         static RendererAPI* s_RendererAPI;
     };

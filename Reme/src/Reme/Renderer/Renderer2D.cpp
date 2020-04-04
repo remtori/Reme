@@ -1,5 +1,5 @@
 #include "reme_pch.h"
-#include "Reme/Renderer2D/Renderer2D.h"
+#include "Reme/Renderer/Renderer2D.h"
 
 #include "Reme/Renderer/RendererAPI.h"
 
@@ -12,7 +12,6 @@
 
 namespace Reme
 {
-	static const uint32_t MAX_TEXTURE_COUNT = 6;
 	static const uint32_t MAX_QUAD_COUNT = 100000;
 
 	struct Vertex
@@ -32,12 +31,14 @@ namespace Reme
 		// Data for Batch Rendering
 		Vertex* buffer;
 		uint32_t vertexIndex;
-		std::array<Ref<Texture>, MAX_TEXTURE_COUNT> textures;
+
+		std::vector<Ref<Texture>> textures;
 		uint32_t textureIndex;
 	};
 
 	static const uint32_t MAX_VERTEX_BUFFER_SIZE = MAX_QUAD_COUNT * 4 * sizeof(Vertex);
 	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);
+	static uint32_t MAX_TEXTURE_UNIT;
 
 	static Renderer2DData s_Data;
 	static std::vector<glm::mat3> s_TransformStack;
@@ -45,8 +46,11 @@ namespace Reme
 	void Renderer2D::Init()
 	{
 		s_TransformStack.push_back(glm::mat3(1.0f));
-
 		s_Data.buffer = new Vertex[MAX_QUAD_COUNT * 4];
+
+		MAX_TEXTURE_UNIT = RenderCommand::GetMaxTextureUnit();
+		for (int i = 0; i < MAX_TEXTURE_UNIT; i++)
+			s_Data.textures.emplace_back(nullptr);
 
 		s_Data.flatShader = Shader::Create("Flat Shader",
 			// Vertex shader
@@ -98,12 +102,12 @@ namespace Reme
 
 		s_Data.flatShader->Bind();
 
-		int32_t uTexIndexs[MAX_TEXTURE_COUNT];
-		for (int i = 0; i < MAX_TEXTURE_COUNT; i++) uTexIndexs[i] = i;
-		s_Data.flatShader->SetIntArray("Textures", uTexIndexs, MAX_TEXTURE_COUNT);
+		int32_t* uTexIndexs = new int32_t[MAX_TEXTURE_UNIT];
+		for (int i = 0; i < MAX_TEXTURE_UNIT; i++) uTexIndexs[i] = i;
+		s_Data.flatShader->SetIntArray("Textures", uTexIndexs, MAX_TEXTURE_UNIT);
+		delete[] uTexIndexs;
 
 		s_Data.VAO = VertexArray::Create();
-
 		s_Data.VBO = VertexBuffer::Create(MAX_VERTEX_BUFFER_SIZE, false);
 		s_Data.VBO->SetLayout({
 			{ ShaderDataType::Float2, "Position" },
@@ -112,6 +116,23 @@ namespace Reme
 			{ ShaderDataType::Float, "TexIndex" },
 		});
 		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
+
+		uint32_t offset = 0;
+		uint32_t* indicies = new uint32_t[MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t)];
+		for (uint32_t i = 0; i < MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t); i += 6)
+		{
+			indicies[i + 0] = offset + 0;
+			indicies[i + 1] = offset + 1;
+			indicies[i + 2] = offset + 2;
+			indicies[i + 3] = offset + 1;
+			indicies[i + 4] = offset + 2;
+			indicies[i + 5] = offset + 3;
+			offset += 4;
+		}
+		Ref<IndexBuffer> IBO = IndexBuffer::Create(MAX_INDEX_BUFFER_SIZE);
+		IBO->SetData(indicies, 0, MAX_INDEX_BUFFER_SIZE);
+		s_Data.VAO->SetIndexBuffer(IBO);
+		delete[] indicies;
 
 		s_Data.vertexIndex = 0;
 		s_Data.textureIndex = 0;
@@ -150,10 +171,11 @@ namespace Reme
 			s_Data.textures[i]->Bind(i);
 
 		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexIndex * sizeof(Vertex));
-		RenderCommand::DrawArrays(DrawMode::TRIANGLES, s_Data.vertexIndex);
+		RenderCommand::DrawIndexed(DrawMode::TRIANGLES, s_Data.vertexIndex / 4 * 6);
 
 		s_Data.vertexIndex = 0;
 		s_Data.textureIndex = 0;
+		for (auto& p : s_Data.textures) p.reset();
 	}
 
 	void Renderer2D::DrawTexture(
@@ -177,7 +199,7 @@ namespace Reme
 
 		if (
 			s_Data.vertexIndex + 4 > MAX_QUAD_COUNT ||
-			(TexIndex == -1.0f && s_Data.textureIndex == MAX_TEXTURE_COUNT)
+			(TexIndex == -1.0f && s_Data.textureIndex == MAX_TEXTURE_UNIT)
 		)
 		{
 			Flush();
@@ -215,11 +237,6 @@ namespace Reme
 		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
 		s_Data.vertexIndex++;
 
-		s_Data.buffer[s_Data.vertexIndex] = s_Data.buffer[s_Data.vertexIndex - 2];
-		s_Data.vertexIndex++;
-		s_Data.buffer[s_Data.vertexIndex] = s_Data.buffer[s_Data.vertexIndex - 2];
-		s_Data.vertexIndex++;
-
 		s_Data.buffer[s_Data.vertexIndex].Position = { dX + dW, dY + dH };
 		s_Data.buffer[s_Data.vertexIndex].UV       = { sX + sW, sX + sH };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
@@ -227,7 +244,7 @@ namespace Reme
 		s_Data.vertexIndex++;
 
 		const glm::mat3& m = s_TransformStack.back();
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			Vertex& v = s_Data.buffer[s_Data.vertexIndex - i - 1];
 			v.Position = m * glm::vec3(v.Position, 1.0f);

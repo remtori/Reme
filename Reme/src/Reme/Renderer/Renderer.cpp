@@ -1,12 +1,13 @@
 #include "reme_pch.h"
 #include "Reme/Renderer/Renderer.h"
 #include "Reme/Renderer/RendererAPI.h"
-#include "Reme/Renderer2D/Renderer2D.h"
+#include "Reme/Renderer/Renderer2D.h"
 
 namespace Reme
 {
     void Renderer::Init()
     {
+        // The order of these is important
         RenderCommand::Init();
         Renderer2D::Init();
         Texture::Init();
