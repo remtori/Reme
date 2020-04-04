@@ -177,7 +177,7 @@ namespace Reme
 
 		if (
 			s_Data.vertexIndex + 4 > MAX_QUAD_COUNT ||
-			(TexIndex == -1.0f && s_Data.textureIndex + 1 == MAX_TEXTURE_COUNT)
+			(TexIndex == -1.0f && s_Data.textureIndex == MAX_TEXTURE_COUNT)
 		)
 		{
 			Flush();
