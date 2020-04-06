@@ -1,5 +1,5 @@
 #include "reme_pch.h"
-#include "Reme/Renderer/PerspectiveCamera.h"
+#include "Reme/Graphics/PerspectiveCamera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

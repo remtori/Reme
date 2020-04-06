@@ -1,6 +1,6 @@
 #include "reme_pch.h"
 #include "Impl/OpenGL/OpenGL_VertexArray.h"
-#include "Reme/Renderer/ShaderDataLayout.h"
+#include "Reme/Graphics/ShaderDataLayout.h"
 
 #include <glad/glad.h>
 

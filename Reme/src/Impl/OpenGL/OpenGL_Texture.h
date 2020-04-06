@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Renderer/Texture.h"
+#include "Reme/Graphics/Texture.h"
 #include <string>
 
 namespace Reme

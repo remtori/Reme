@@ -1,5 +1,5 @@
 #include "reme_pch.h"
-#include "Reme/Renderer/OrthographicCamera.h"
+#include "Reme/Graphics/OrthographicCamera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

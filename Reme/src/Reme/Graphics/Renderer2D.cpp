@@ -1,11 +1,11 @@
 #include "reme_pch.h"
-#include "Reme/Renderer/Renderer2D.h"
+#include "Reme/Graphics/Renderer2D.h"
 
-#include "Reme/Renderer/RendererAPI.h"
+#include "Reme/Graphics/RendererAPI.h"
 
-#include "Reme/Renderer/Shader.h"
-#include "Reme/Renderer/Buffers.h"
-#include "Reme/Renderer/VertexArray.h"
+#include "Reme/Graphics/Shader.h"
+#include "Reme/Graphics/Buffers.h"
+#include "Reme/Graphics/VertexArray.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>

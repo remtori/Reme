@@ -1,5 +1,5 @@
 #include "reme_pch.h"
-#include "Reme/Renderer/Color.h"
+#include "Reme/Graphics/Color.h"
 
 namespace Reme
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Renderer/Color.h"
+#include "Reme/Graphics/Color.h"
 
 #include <string>
 

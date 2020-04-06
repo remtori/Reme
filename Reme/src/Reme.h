@@ -20,8 +20,8 @@
 #include "Reme/Screen/Screen.h"
 
 // Renderer
-#include "Reme/Renderer/RendererAPI.h"
-#include "Reme/Renderer/Renderer2D.h"
+#include "Reme/Graphics/RendererAPI.h"
+#include "Reme/Graphics/Renderer2D.h"
 
-#include "Reme/Renderer/PerspectiveCamera.h"
-#include "Reme/Renderer/OrthographicCamera.h"
+#include "Reme/Graphics/PerspectiveCamera.h"
+#include "Reme/Graphics/OrthographicCamera.h"

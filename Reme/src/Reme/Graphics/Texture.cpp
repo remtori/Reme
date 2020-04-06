@@ -1,6 +1,6 @@
 #include "reme_pch.h"
-#include "Reme/Renderer/Texture.h"
-#include "Reme/Renderer/RendererAPI.h"
+#include "Reme/Graphics/Texture.h"
+#include "Reme/Graphics/RendererAPI.h"
 #include "Reme/Core/Core.h"
 
 #include "Impl/OpenGL/OpenGL_Texture.h"

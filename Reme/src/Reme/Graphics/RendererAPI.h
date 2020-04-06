@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Reme/Renderer/Color.h"
-#include "Reme/Renderer/VertexArray.h"
+#include "Reme/Graphics/Color.h"
+#include "Reme/Graphics/VertexArray.h"
 
 namespace Reme
 {

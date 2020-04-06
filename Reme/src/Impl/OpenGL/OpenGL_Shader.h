@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Renderer/Shader.h"
+#include "Reme/Graphics/Shader.h"
 
 #include <glm/glm.hpp>
 

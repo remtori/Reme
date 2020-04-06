@@ -1,6 +1,6 @@
 #include "reme_pch.h"
-#include "Reme/Renderer/VertexArray.h"
-#include "Reme/Renderer/RendererAPI.h"
+#include "Reme/Graphics/VertexArray.h"
+#include "Reme/Graphics/RendererAPI.h"
 
 #include "Impl/OpenGL/OpenGL_VertexArray.h"
 

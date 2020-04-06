@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Renderer/ShaderDataLayout.h"
+#include "Reme/Graphics/ShaderDataLayout.h"
 
 namespace Reme
 {
