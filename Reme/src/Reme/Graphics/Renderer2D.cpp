@@ -190,7 +190,7 @@ namespace Reme
 		float TexIndex = -1.0f;
 		for (int i = 0; i < s_Data.textureIndex; i++)
 		{
-			if (s_Data.textures[i]->GetInternalID() == texture->GetInternalID())
+			if (Asset::Equals(s_Data.textures[i], texture))
 			{
 				TexIndex = (float)i;
 				break;

@@ -1,6 +1,6 @@
 #include "reme_pch.h"
 #include "Impl/OpenGL/OpenGL_Shader.h"
-#include "Reme/Core/Utils.h"
+#include "Reme/Utility/Utils.h"
 
 #include <glad/glad.h>
 #include <fstream>

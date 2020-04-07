@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Reme/Graphics/Buffers.h"
+#include "Reme/Core/AssetManager.h"
 
 namespace Reme
 {
-	class VertexArray
+	class VertexArray : public Asset
 	{
 	public:
 		static Scope<VertexArray> Create();

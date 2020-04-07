@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Reme/Graphics/ShaderDataLayout.h"
+#include "Reme/Core/AssetManager.h"
 
 namespace Reme
 {
-	class VertexBuffer
+	class VertexBuffer : public Asset
 	{
 	public:
 		static Scope<VertexBuffer> Create(uint32_t byteCount, bool isStatic = true);
@@ -19,7 +20,7 @@ namespace Reme
 		BufferLayout m_Layout;
 	};
 
-	class IndexBuffer
+	class IndexBuffer : public Asset
 	{
 	public:
 		static Scope<IndexBuffer> Create(uint32_t byteCount, bool isStatic = true);

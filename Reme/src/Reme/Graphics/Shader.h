@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Reme/Core/Core.h"
+#include "Reme/Core/AssetManager.h"
 
-#include <glm/glm.hpp>
 #include <string>
 #include <unordered_map>
+#include <glm/glm.hpp>
 
 namespace Reme
 {
-    class Shader
+    class Shader : public Asset
     {
     public:
         static Scope<Shader> Create(const std::string& filePath);

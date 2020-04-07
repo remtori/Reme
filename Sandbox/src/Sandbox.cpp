@@ -9,8 +9,8 @@ class Game : public Reme::Application
 public:
 	Game()
 	{
-		// GetScreen().PushLayer(new Test());
-		GetScreen().PushLayer(new Tank2D());
+		GetScreen().PushLayer(new Test());
+		// GetScreen().PushLayer(new Tank2D());
 	}
 };
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Reme/Graphics/Texture.h"
+#include "Reme/Graphics/Image.h"
+
 #include <string>
 
 namespace Reme
@@ -9,7 +11,7 @@ namespace Reme
     {
     public:
         OpenGL_Texture(uint32_t width, uint32_t height);
-        OpenGL_Texture(const std::string& path);
+        OpenGL_Texture(const Ref<Image>& image);
     public:
         ~OpenGL_Texture();
 
@@ -17,12 +19,12 @@ namespace Reme
         inline uint32_t GetHeight() const override { return m_Height; }
         inline uint32_t GetInternalID() const override { return m_TextureID; }
 
+        void GenerateMipmap() const override;
         void SetData(const Color* data, uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
         void Bind(uint32_t slot) override;
     private:
         uint32_t m_Width, m_Height;
         uint32_t m_TextureID;
-        uint32_t m_InternalFormat, m_DataFormat;
     };
 }
