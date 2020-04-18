@@ -68,7 +68,7 @@ namespace Reme
                 glDeleteShader(shader);
 
                 CORE_LOG_ERROR("{0}", infoLog.data());
-                REME_ASSERT(false, "Shader compilation failure!");
+                CORE_ASSERT(false, "Shader compilation failure!");
                 break;
             }
 
@@ -95,7 +95,7 @@ namespace Reme
                 glDeleteShader(id);
 
             CORE_LOG_ERROR("{0}", infoLog.data());
-            REME_ASSERT(false, "Shader link failure!");
+            CORE_ASSERT(false, "Shader link failure!");
             return;
         }
 

@@ -5,6 +5,8 @@ namespace Reme
 {
 	void Screen::OnEvent(Event& event)
 	{
+		PROFILE_FUNCTION();
+
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
 			(*it)->OnEvent(event);
@@ -14,6 +16,8 @@ namespace Reme
 
 	void Screen::OnUpdate(float elapsedTime)
 	{
+		PROFILE_FUNCTION();
+
 		for (Layer* layer : m_LayerStack)
 		{
 			layer->OnUpdate(elapsedTime);
@@ -22,6 +26,8 @@ namespace Reme
 
 	void Screen::OnRender()
 	{
+		PROFILE_FUNCTION();
+		
 		for (Layer* layer : m_LayerStack)
 		{
 			layer->OnRender();

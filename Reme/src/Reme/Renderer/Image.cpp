@@ -41,6 +41,8 @@ namespace Reme
         bool applyAlpha
     )
     {
+        PROFILE_FUNCTION();
+        
         if (sW  > source->GetWidth()) sW = source->GetWidth();
         if (sH > source->GetHeight()) sH = source->GetHeight();
 

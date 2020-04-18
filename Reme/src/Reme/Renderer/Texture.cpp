@@ -12,6 +12,8 @@ namespace Reme
 
 	void Texture::Init()
 	{
+		PROFILE_FUNCTION();
+
 		Texture::Default = Texture::Create(2, 2);
         Color rgbTextureData[] = { Color::Red, Color::Green, Color::Blue, Color::White };
         Texture::Default->SetData(rgbTextureData);
@@ -24,39 +26,45 @@ namespace Reme
 
     Ref<Texture> Texture::Create(uint32_t width, uint32_t height)
     {
+		PROFILE_FUNCTION();
+
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(width, height);
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return Texture::Default;
     }
 
 	Ref<Texture> Texture::Create(const Ref<Image>& image)
 	{
+		PROFILE_FUNCTION();
+
 		switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(image);
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return Texture::Default;
 	}
 
     Ref<Texture> Texture::Create(const std::string& path)
     {
+		PROFILE_FUNCTION();
+		
 		// Create Texture from a path might fail
 		// TODO: Solve this
 		switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(Image::Create(path));
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return Texture::Default;
     }
 }

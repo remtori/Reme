@@ -60,15 +60,17 @@
 		#define DEBUG_BREAK raise(SIGTRAP)
 	#endif
 
-	#define REME_ASSERT(x, ...) if(!(x)) { CORE_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); DEBUG_BREAK; }
+	#define CORE_ASSERT(x, ...) if(!(x)) { CORE_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); DEBUG_BREAK; }
+	#define ASSERT(x, ...) if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); DEBUG_BREAK; }
 #else
 	#define DEBUG_BREAK
-	#define REME_ASSERT(x, ...) x
+	#define CORE_ASSERT(x, ...) x
+	#define ASSERT(x, ...) x
 #endif
 
 #define BIT(x) (1 << x)
 
-#define REME_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 namespace Reme
 {
@@ -89,4 +91,7 @@ namespace Reme
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
+
+	template<typename T>
+	using WeakRef = std::weak_ptr<T>;
 }

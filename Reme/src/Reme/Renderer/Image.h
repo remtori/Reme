@@ -10,11 +10,15 @@ namespace Reme
     public:
         static Ref<Image> Create(uint32_t width, uint32_t height)
         {
+            PROFILE_FUNCTION();
+
             return CreateRef<Image>(width, height);
         }
 
         static Ref<Image> Create(const std::string& path)
         {
+            PROFILE_FUNCTION();
+
             return CreateRef<Image>(path);
         }
     public:
@@ -31,6 +35,8 @@ namespace Reme
         inline const std::vector<Color>& GetPixelsData() const { return m_Pixels; }
         inline void SetPixelsData(const Color* pixels)
         {
+            PROFILE_FUNCTION();
+            
             memcpy(&m_Pixels[0], pixels, m_Width * m_Height);
         }
 

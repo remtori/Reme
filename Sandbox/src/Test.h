@@ -193,7 +193,7 @@ public:
 	void OnEvent(Reme::Event& e) override
 	{
 		Reme::EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<Reme::WindowResizeEvent>(REME_BIND_EVENT_FN(Test::OnResize));
+		dispatcher.Dispatch<Reme::WindowResizeEvent>(BIND_EVENT_FN(Test::OnResize));
 	}
 
 	bool OnResize(Reme::WindowResizeEvent e)

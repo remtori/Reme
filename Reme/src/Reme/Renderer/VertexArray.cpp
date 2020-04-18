@@ -8,13 +8,15 @@ namespace Reme
 {
 	Ref<VertexArray> VertexArray::Create()
 	{
+		PROFILE_FUNCTION();
+		
 		switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_VertexArray>();
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 }

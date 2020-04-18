@@ -12,11 +12,11 @@ namespace Reme
     {
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			case RendererAPI::OpenGL: return new OpenGL_RendererAPI();
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
     }
 }

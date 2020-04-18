@@ -18,6 +18,8 @@ namespace Reme
 
     void PerspectiveCamera::ReCalc()
     {
+        PROFILE_FUNCTION();
+        
         glm::vec3 front;
         front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
         front.y = sin(glm::radians(m_Pitch));

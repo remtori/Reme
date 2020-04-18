@@ -127,7 +127,7 @@ namespace Reme
             case DrawMode::TRIANGLE_STRIP: return GL_TRIANGLE_STRIP;
             case DrawMode::TRIANGLES: return GL_TRIANGLES;
             default:
-                REME_ASSERT(false, "Unknown draw mode!");
+                CORE_ASSERT(false, "Unknown draw mode!");
                 return 0;
         }
     }

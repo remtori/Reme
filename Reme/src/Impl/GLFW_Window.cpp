@@ -26,7 +26,7 @@ namespace Reme
         if (s_GLFWWindowCount == 0)
 		{
 			int success = glfwInit();
-			REME_ASSERT(success, "Could not intialize GLFW!");
+			CORE_ASSERT(success, "Could not intialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 

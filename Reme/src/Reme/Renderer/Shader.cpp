@@ -10,11 +10,11 @@ namespace Reme
     {
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Shader>(filePath);
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
     }
 
@@ -22,11 +22,11 @@ namespace Reme
     {
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Shader>(name, vertexShader, fragmentShader);
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
     }
 }

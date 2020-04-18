@@ -18,3 +18,4 @@
 
 #include "Reme/Core/Log.h"
 #include "Reme/Core/Core.h"
+#include "Reme/Debug/Instrumentor.h"

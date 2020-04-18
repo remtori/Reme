@@ -32,12 +32,12 @@ namespace Reme
 		Vertex* buffer;
 		uint32_t vertexIndex;
 
-		std::vector<Ref<Texture>> textures;
+		std::vector<WeakRef<Texture>> textures;
 		uint32_t textureIndex;
 	};
 
-	static const uint32_t MAX_VERTEX_BUFFER_SIZE = MAX_QUAD_COUNT * 4 * sizeof(Vertex);
-	static const uint32_t MAX_INDEX_BUFFER_SIZE = MAX_QUAD_COUNT * 6 * sizeof(uint32_t);
+	static const uint32_t MAX_VERTEX_COUNT = MAX_QUAD_COUNT * 4;
+	static const uint32_t MAX_INDEX_COUNT = MAX_QUAD_COUNT * 6;
 	static uint32_t MAX_TEXTURE_UNIT;
 
 	static Renderer2DData s_Data;
@@ -45,12 +45,14 @@ namespace Reme
 
 	void Renderer2D::Init()
 	{
+		PROFILE_FUNCTION();
+
 		s_TransformStack.push_back(glm::mat3(1.0f));
 		s_Data.buffer = new Vertex[MAX_QUAD_COUNT * 4];
 
 		MAX_TEXTURE_UNIT = RenderCommand::GetMaxTextureUnit();
 		for (int i = 0; i < MAX_TEXTURE_UNIT; i++)
-			s_Data.textures.emplace_back(nullptr);
+			s_Data.textures.emplace_back(Texture::Default);
 
 		s_Data.flatShader = Shader::Create("Flat Shader",
 			// Vertex shader
@@ -108,18 +110,18 @@ namespace Reme
 		delete[] uTexIndexs;
 
 		s_Data.VAO = VertexArray::Create();
-		s_Data.VBO = VertexBuffer::Create(MAX_VERTEX_BUFFER_SIZE, false);
+		s_Data.VBO = VertexBuffer::Create(MAX_VERTEX_COUNT * sizeof(Vertex), false);
 		s_Data.VBO->SetLayout({
 			{ ShaderDataType::Float2, "Position" },
 			{ ShaderDataType::Float2, "UV" },
 			{ ShaderDataType::Float4, "Color" },
-			{ ShaderDataType::Float, "TexIndex" },
+			{ ShaderDataType::Float , "TexIndex" },
 		});
 		s_Data.VAO->AddVertexBuffer(s_Data.VBO);
 
 		uint32_t offset = 0;
-		uint32_t* indicies = new uint32_t[MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t)];
-		for (uint32_t i = 0; i < MAX_INDEX_BUFFER_SIZE / sizeof(uint32_t); i += 6)
+		uint32_t* indicies = new uint32_t[MAX_INDEX_COUNT];
+		for (uint32_t i = 0; i < MAX_INDEX_COUNT; i += 6)
 		{
 			indicies[i + 0] = offset + 0;
 			indicies[i + 1] = offset + 1;
@@ -129,8 +131,8 @@ namespace Reme
 			indicies[i + 5] = offset + 3;
 			offset += 4;
 		}
-		Ref<IndexBuffer> IBO = IndexBuffer::Create(MAX_INDEX_BUFFER_SIZE);
-		IBO->SetData(indicies, 0, MAX_INDEX_BUFFER_SIZE);
+		Ref<IndexBuffer> IBO = IndexBuffer::Create(MAX_INDEX_COUNT * sizeof(uint32_t));
+		IBO->SetData(indicies, 0, MAX_INDEX_COUNT * sizeof(uint32_t));
 		s_Data.VAO->SetIndexBuffer(IBO);
 		delete[] indicies;
 
@@ -140,6 +142,8 @@ namespace Reme
 
 	void Renderer2D::Shutdown()
 	{
+		PROFILE_FUNCTION();
+
 		s_Data.flatShader = nullptr;
 		s_Data.VBO = nullptr;
 		s_Data.VAO = nullptr;
@@ -148,6 +152,8 @@ namespace Reme
 
 	void Renderer2D::Begin(const Ref<Camera>& cam)
 	{
+		PROFILE_FUNCTION();
+
 		RenderCommand::Clear();
 		s_Data.flatShader->Bind();
 		s_Data.flatShader->SetMat4("viewMat", cam->GetViewMatrix());
@@ -158,6 +164,8 @@ namespace Reme
 
 	void Renderer2D::End()
 	{
+		PROFILE_FUNCTION();
+
 		Flush();
 		s_Data.VAO->Unbind();
 		RenderCommand::PollError();
@@ -165,10 +173,15 @@ namespace Reme
 
 	void Renderer2D::Flush()
 	{
+		PROFILE_FUNCTION();
+
 		if (s_Data.vertexIndex == 0) return;
 
 		for (int i = 0; i < s_Data.textureIndex; i++)
-			s_Data.textures[i]->Bind(i);
+		{
+			if (!s_Data.textures[i].expired())
+				s_Data.textures[i].lock()->Bind(i);
+		}
 
 		s_Data.VBO->SetData((float*) s_Data.buffer, 0, s_Data.vertexIndex * sizeof(Vertex));
 		RenderCommand::DrawIndexed(DrawMode::TRIANGLES, s_Data.vertexIndex / 4 * 6);
@@ -185,18 +198,25 @@ namespace Reme
 		const Color& color
 	)
 	{
+		PROFILE_FUNCTION();
+
 		float TexIndex = -1.0f;
-		for (int i = 0; i < s_Data.textureIndex; i++)
 		{
-			if (Asset::Equals(s_Data.textures[i], texture))
+			PROFILE_SCOPE("Search Texture");
+
+			for (int i = 0; i < s_Data.textureIndex; i++)
 			{
-				TexIndex = (float)i;
-				break;
+				auto texture$i = s_Data.textures[i].expired() ? Texture::Default : s_Data.textures[i].lock();
+				if (Asset::Equals(texture$i, texture))
+				{
+					TexIndex = (float)i;
+					break;
+				}
 			}
 		}
 
 		if (
-			s_Data.vertexIndex + 4 > MAX_QUAD_COUNT ||
+			s_Data.vertexIndex + 4 >= MAX_QUAD_COUNT ||
 			(TexIndex == -1.0f && s_Data.textureIndex == MAX_TEXTURE_UNIT)
 		)
 		{
@@ -210,6 +230,7 @@ namespace Reme
 			s_Data.textureIndex++;
 		}
 
+		const glm::mat3& transformMat = s_TransformStack.back();
 		const glm::vec4 c(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f);
 
 		sX = sX / texture->GetWidth();
@@ -217,70 +238,70 @@ namespace Reme
 		sW = sW / texture->GetWidth();
 		sH = sH / texture->GetHeight();
 
-		s_Data.buffer[s_Data.vertexIndex].Position = { dX     , dY      };
-		s_Data.buffer[s_Data.vertexIndex].UV       = { sX     , sX      };
+		s_Data.buffer[s_Data.vertexIndex].Position = transformMat * glm::vec3(dX, dY, 1.0f);
+		s_Data.buffer[s_Data.vertexIndex].UV       = { sX, sX };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
-		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex = TexIndex;
 		s_Data.vertexIndex++;
 
-		s_Data.buffer[s_Data.vertexIndex].Position = { dX + dW, dY      };
-		s_Data.buffer[s_Data.vertexIndex].UV       = { sX + sW, sX      };
+		s_Data.buffer[s_Data.vertexIndex].Position = transformMat * glm::vec3(dX + dW, dY, 1.0f);
+		s_Data.buffer[s_Data.vertexIndex].UV       = { sX + sW, sX };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
-		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex = TexIndex;
 		s_Data.vertexIndex++;
 
-		s_Data.buffer[s_Data.vertexIndex].Position = { dX     , dY + dH };
-		s_Data.buffer[s_Data.vertexIndex].UV       = { sX     , sX + sH };
+		s_Data.buffer[s_Data.vertexIndex].Position = transformMat * glm::vec3(dX, dY + dH, 1.0f);
+		s_Data.buffer[s_Data.vertexIndex].UV       = { sX, sX + sH };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
-		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex = TexIndex;
 		s_Data.vertexIndex++;
 
-		s_Data.buffer[s_Data.vertexIndex].Position = { dX + dW, dY + dH };
+		s_Data.buffer[s_Data.vertexIndex].Position = transformMat * glm::vec3(dX + dW, dY + dH, 1.0f);
 		s_Data.buffer[s_Data.vertexIndex].UV       = { sX + sW, sX + sH };
 		s_Data.buffer[s_Data.vertexIndex].Color    = c;
-		s_Data.buffer[s_Data.vertexIndex].TexIndex    = TexIndex;
+		s_Data.buffer[s_Data.vertexIndex].TexIndex = TexIndex;
 		s_Data.vertexIndex++;
-
-		const glm::mat3& m = s_TransformStack.back();
-		for (int i = 0; i < 4; i++)
-		{
-			Vertex& v = s_Data.buffer[s_Data.vertexIndex - i - 1];
-			v.Position = m * glm::vec3(v.Position, 1.0f);
-		}
 	}
 
 	void Renderer2D::PushState()
 	{
+		PROFILE_FUNCTION();
 		s_TransformStack.push_back(glm::mat3(1.0f));
 	}
 
 	void Renderer2D::PopState()
 	{
+		PROFILE_FUNCTION();
 		if (s_TransformStack.size() > 1) s_TransformStack.pop_back();
 	}
 
 	const glm::mat3& Renderer2D::GetTransform()
 	{
+		PROFILE_FUNCTION();
 		return s_TransformStack.back();
 	}
 
 	void Renderer2D::SetTransform(const glm::mat3& mat)
 	{
+		PROFILE_FUNCTION();
 		s_TransformStack.back() = mat;
 	}
 
 	void Renderer2D::Translate(float x, float y)
 	{
+		PROFILE_FUNCTION();
 		s_TransformStack.back() = glm::translate(s_TransformStack.back(), glm::vec2(x, y));
 	}
 
 	void Renderer2D::Scale(float x, float y)
 	{
+		PROFILE_FUNCTION();
 		s_TransformStack.back() = glm::scale(s_TransformStack.back(), glm::vec2(x, y));
 	}
 
 	void Renderer2D::Rotate(float r)
 	{
+		PROFILE_FUNCTION();
 		s_TransformStack.back() = glm::rotate(s_TransformStack.back(), r);
 	}
 }

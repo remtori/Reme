@@ -63,7 +63,7 @@ void Tank2D::OnImGuiRender()
 void Tank2D::OnEvent(Event& e)
 {
 	EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<WindowResizeEvent>(REME_BIND_EVENT_FN(Tank2D::OnResize));
+	dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Tank2D::OnResize));
 }
 
 bool Tank2D::OnResize(WindowResizeEvent e)

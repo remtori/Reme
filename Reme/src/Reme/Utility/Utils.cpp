@@ -7,6 +7,8 @@ namespace Reme
 {
 	std::string ReadFile(const std::string& filepath)
 	{
+		PROFILE_FUNCTION();
+		
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)

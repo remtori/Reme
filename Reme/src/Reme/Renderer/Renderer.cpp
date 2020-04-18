@@ -7,6 +7,8 @@ namespace Reme
 {
     void Renderer::Init()
     {
+        PROFILE_FUNCTION();
+        
         // The order of these is important
         RenderCommand::Init();
         Renderer2D::Init();
@@ -15,11 +17,15 @@ namespace Reme
 
     void Renderer::Shutdown()
     {
+        PROFILE_FUNCTION();
+
         Renderer2D::Shutdown();
     }
 
     void Renderer::OnWindowResize(float width, float height)
     {
+        PROFILE_FUNCTION();
+        
         RenderCommand::SetViewport(0, 0, width, height);
     }
 }

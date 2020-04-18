@@ -13,7 +13,7 @@ namespace Reme
 #ifdef _REME_USE_GLFW
         return CreateRef<GLFW_Window>(props);
 #else
-        REME_ASSERT(false, "Can not create window for current platform");
+        CORE_ASSERT(false, "Can not create window for current platform");
         return nullptr;
 #endif
     }
