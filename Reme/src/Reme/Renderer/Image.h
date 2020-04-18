@@ -8,14 +8,14 @@ namespace Reme
     class Image : public Asset
     {
     public:
-        static Scope<Image> Create(uint32_t width, uint32_t height)
+        static Ref<Image> Create(uint32_t width, uint32_t height)
         {
-            return CreateScope<Image>(width, height);
+            return CreateRef<Image>(width, height);
         }
 
-        static Scope<Image> Create(const std::string& path)
+        static Ref<Image> Create(const std::string& path)
         {
-            return CreateScope<Image>(path);
+            return CreateRef<Image>(path);
         }
     public:
         Image(uint32_t width, uint32_t height);

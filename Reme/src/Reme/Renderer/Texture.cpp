@@ -22,41 +22,41 @@ namespace Reme
 		// Texture::White->GenerateMipmap();
 	}
 
-    Scope<Texture> Texture::Create(uint32_t width, uint32_t height)
+    Ref<Texture> Texture::Create(uint32_t width, uint32_t height)
     {
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateScope<OpenGL_Texture>(width, height);
+			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
+			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(width, height);
 		}
 
 		REME_ASSERT(false, "Unknown RendererAPI!");
-		return nullptr;
+		return Texture::Default;
     }
 
-	Scope<Texture> Texture::Create(const Ref<Image>& image)
+	Ref<Texture> Texture::Create(const Ref<Image>& image)
 	{
 		switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateScope<OpenGL_Texture>(image);
+			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
+			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(image);
 		}
 
 		REME_ASSERT(false, "Unknown RendererAPI!");
-		return nullptr;
+		return Texture::Default;
 	}
 
-    Scope<Texture> Texture::Create(const std::string& path)
+    Ref<Texture> Texture::Create(const std::string& path)
     {
 		// Create Texture from a path might fail
 		// TODO: Solve this
 		switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateScope<OpenGL_Texture>(Image::Create(path));
+			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
+			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(Image::Create(path));
 		}
 
 		REME_ASSERT(false, "Unknown RendererAPI!");
-		return nullptr;
+		return Texture::Default;
     }
 }

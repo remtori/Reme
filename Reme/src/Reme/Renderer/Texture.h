@@ -11,9 +11,9 @@ namespace Reme
     class Texture : public Asset
     {
     public:
-        static Scope<Texture> Create(uint32_t width, uint32_t height);
-        static Scope<Texture> Create(const Ref<Image>& image);
-        static Scope<Texture> Create(const std::string& path);
+        static Ref<Texture> Create(uint32_t width, uint32_t height);
+        static Ref<Texture> Create(const Ref<Image>& image);
+        static Ref<Texture> Create(const std::string& path);
 
         static Ref<Texture> Default;
         static Ref<Texture> White;

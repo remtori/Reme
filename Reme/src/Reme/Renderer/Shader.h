@@ -11,8 +11,8 @@ namespace Reme
     class Shader : public Asset
     {
     public:
-        static Scope<Shader> Create(const std::string& filePath);
-        static Scope<Shader> Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
+        static Ref<Shader> Create(const std::string& filePath);
+        static Ref<Shader> Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
     public:
 
         virtual void Bind() const = 0;

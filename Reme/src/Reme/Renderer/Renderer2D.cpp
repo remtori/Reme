@@ -179,14 +179,12 @@ namespace Reme
 	}
 
 	void Renderer2D::DrawTexture(
-		const Ref<Texture>& tex,
+		const Ref<Texture>& texture,
 		float sX, float sY, float sW, float sH,
 		float dX, float dY, float dW, float dH,
 		const Color& color
 	)
 	{
-		Ref<Texture> texture = tex == nullptr ? Texture::Default : tex;
-
 		float TexIndex = -1.0f;
 		for (int i = 0; i < s_Data.textureIndex; i++)
 		{

@@ -8,7 +8,7 @@ namespace Reme
 	class VertexArray : public Asset
 	{
 	public:
-		static Scope<VertexArray> Create();
+		static Ref<VertexArray> Create();
 	public:
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
