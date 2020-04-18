@@ -43,8 +43,8 @@ project "Reme"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "reme_pch.h"
-	pchsource "Reme/src/reme_pch.cpp"
+	pchheader "RemePCH.h"
+	pchsource "Reme/src/RemePCH.cpp"
 
 	defines
 	{
