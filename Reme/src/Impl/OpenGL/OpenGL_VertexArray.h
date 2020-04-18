@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Graphics/VertexArray.h"
+#include "Reme/Renderer/VertexArray.h"
 
 namespace Reme
 {

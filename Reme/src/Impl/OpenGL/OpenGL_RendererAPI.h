@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Graphics/RendererAPI.h"
+#include "Reme/Renderer/RendererAPI.h"
 
 namespace Reme
 {
@@ -16,10 +16,10 @@ namespace Reme
         void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) override;
         void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) override;
 
-        uint32_t GetMaxTextureUnit() override { 
+        uint32_t GetMaxTextureUnit() override {
             return m_MaxTextureUnit;
         };
-        uint32_t GetMaxTextureSize() override { 
+        uint32_t GetMaxTextureSize() override {
             return m_MaxTextureSize;
         };
     private:

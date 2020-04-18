@@ -1,5 +1,5 @@
 #include "reme_pch.h"
-#include "Reme/Graphics/Image.h"
+#include "Reme/Renderer/Image.h"
 #include "Reme/Core/AssetManager.h"
 
 #include <stb_image.h>
@@ -35,8 +35,8 @@ namespace Reme
     }
 
     void Image::Copy(
-        const Ref<Image>& source, 
-        uint32_t dX, uint32_t dY, 
+        const Ref<Image>& source,
+        uint32_t dX, uint32_t dY,
         uint32_t sX, uint32_t sY, uint32_t sW, uint32_t sH,
         bool applyAlpha
     )

@@ -16,12 +16,12 @@
 #include "Reme/Events/ApplicationEvent.h"
 
 // Screen
-#include "Reme/Screen/Layer.h"
-#include "Reme/Screen/Screen.h"
+#include "Reme/Core/Layer.h"
+#include "Reme/Core/Screen.h"
 
 // Renderer
-#include "Reme/Graphics/RendererAPI.h"
-#include "Reme/Graphics/Renderer2D.h"
+#include "Reme/Renderer/RendererAPI.h"
+#include "Reme/Renderer/Renderer2D.h"
 
-#include "Reme/Graphics/PerspectiveCamera.h"
-#include "Reme/Graphics/OrthographicCamera.h"
+#include "Reme/Renderer/PerspectiveCamera.h"
+#include "Reme/Renderer/OrthographicCamera.h"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Reme/Graphics/Image.h"
-#include "Reme/Graphics/Texture.h"
+#include "Reme/Renderer/Image.h"
+#include "Reme/Renderer/Texture.h"
 
 #include <glm/glm.hpp>
 
@@ -16,7 +16,7 @@ namespace Reme
         }
     public:
         TextureAtlas();
-        ~TextureAtlas();        
+        ~TextureAtlas();
 
         void AddImage(const Ref<Image>& image);
         bool HasImage(const Ref<Image>& image);
@@ -27,12 +27,12 @@ namespace Reme
         void PackImages();
     private:
         struct Rect { uint32_t x, y, w, h; };
-        struct LayoutData 
+        struct LayoutData
         {
             uint32_t Width, Height;
             std::vector<Rect> EmptySpaces;
             std::unordered_map<uint32_t, Rect> AtlasLayout;
-        };        
+        };
         bool TryPackImages(LayoutData* data, uint32_t width, uint32_t height);
         bool PutImage(const Ref<Image>& image, LayoutData* data);
     private:

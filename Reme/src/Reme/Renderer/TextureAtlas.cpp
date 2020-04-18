@@ -1,10 +1,10 @@
 #include "reme_pch.h"
-#include "Reme/Graphics/TextureAtlas.h"
-#include "Reme/Graphics/RendererAPI.h"
+#include "Reme/Renderer/TextureAtlas.h"
+#include "Reme/Renderer/RendererAPI.h"
 
 namespace Reme
-{    
-    TextureAtlas::TextureAtlas()        
+{
+    TextureAtlas::TextureAtlas()
         : m_Dirty(false)
     {
     }
@@ -38,14 +38,14 @@ namespace Reme
 
         x %= image->GetWidth();
         y %= image->GetHeight();
-        return { 
-            (float) (x + o.x) / (float) m_Texture->GetWidth(), 
+        return {
+            (float) (x + o.x) / (float) m_Texture->GetWidth(),
             (float) (y + o.y) / (float) m_Texture->GetHeight(),
         };
     }
 
     void TextureAtlas::PackImages()
-    {   
+    {
         static const uint32_t MAX_ATLAS_DIFF = 64;
         static const uint32_t MAX_TEXTURE_SIZE = RenderCommand::GetMaxTextureSize();
 
@@ -56,10 +56,10 @@ namespace Reme
 
         LayoutData bestLayout;
         REME_ASSERT(
-            TryPackImages(&bestLayout, MAX_TEXTURE_SIZE, MAX_TEXTURE_SIZE), 
+            TryPackImages(&bestLayout, MAX_TEXTURE_SIZE, MAX_TEXTURE_SIZE),
             "Can not pack all the image to one Texture Atlas, consider using 2 or more Atlas"
-        );        
-        
+        );
+
         // Binary searching for the best Atlas size
         auto findBestPack = [&](uint8_t xMul, uint8_t yMul)
         {
@@ -97,7 +97,7 @@ namespace Reme
         {
             try {
                 bestLayout = findBestPack(xMul, yMul);
-            } 
+            }
             catch(int _) {}
         };
 
@@ -119,7 +119,7 @@ namespace Reme
     }
 
     bool TextureAtlas::TryPackImages(LayoutData* data, uint32_t width, uint32_t height)
-    {        
+    {
         data->Width = width;
         data->Height = height;
         // Just In Case
@@ -158,35 +158,35 @@ namespace Reme
         const auto free_w = emptySpace.w - width;
 		const auto free_h = emptySpace.h - height;
 
-        data->AtlasLayout[img->GetAssetID()] = { 
+        data->AtlasLayout[img->GetAssetID()] = {
             emptySpace.x,
             emptySpace.y,
             width,
             height,
         };
-        
+
         if (free_w == 0 && free_h == 0)
         {
             return true;
         }
-        
+
         if (free_w == 0)
         {
-            data->EmptySpaces.push_back({ 
-                emptySpace.x, 
+            data->EmptySpaces.push_back({
+                emptySpace.x,
                 emptySpace.y + height,
-                emptySpace.w, 
+                emptySpace.w,
                 free_h,
             });
             return true;
         }
-        
+
         if (free_h == 0)
         {
-            data->EmptySpaces.push_back({ 
-                emptySpace.x + width, 
+            data->EmptySpaces.push_back({
+                emptySpace.x + width,
                 emptySpace.y,
-                free_w, 
+                free_w,
                 emptySpace.h,
             });
 
@@ -196,16 +196,16 @@ namespace Reme
         if (free_w > free_h)
         {
             data->EmptySpaces.push_back({
-                emptySpace.x + width, 
+                emptySpace.x + width,
                 emptySpace.y,
-                free_w, 
+                free_w,
                 emptySpace.h,
             });
 
             data->EmptySpaces.push_back({
-                emptySpace.x, 
+                emptySpace.x,
                 emptySpace.y + height,
-                width, 
+                width,
                 free_h,
             });
 
@@ -213,16 +213,16 @@ namespace Reme
         }
 
         data->EmptySpaces.push_back({
-            emptySpace.x, 
+            emptySpace.x,
             emptySpace.y + height,
-            emptySpace.w, 
+            emptySpace.w,
             free_h,
         });
 
         data->EmptySpaces.push_back({
-            emptySpace.x + width, 
+            emptySpace.x + width,
             emptySpace.y,
-            free_w, 
+            free_w,
             height,
         });
 

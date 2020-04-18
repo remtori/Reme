@@ -1,6 +1,6 @@
 #include "reme_pch.h"
-#include "Reme/Graphics/Shader.h"
-#include "Reme/Graphics/RendererAPI.h"
+#include "Reme/Renderer/Shader.h"
+#include "Reme/Renderer/RendererAPI.h"
 
 #include "Impl/OpenGL/OpenGL_Shader.h"
 

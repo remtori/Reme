@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Graphics/Camera.h"
+#include "Reme/Renderer/Camera.h"
 
 namespace Reme
 {

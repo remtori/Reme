@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reme/Graphics/Buffers.h"
+#include "Reme/Renderer/Buffers.h"
 #include "Reme/Core/AssetManager.h"
 
 namespace Reme

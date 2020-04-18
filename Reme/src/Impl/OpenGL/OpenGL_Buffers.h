@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Reme/Graphics/Buffers.h"
-#include "Reme/Graphics/ShaderDataLayout.h"
+#include "Reme/Renderer/Buffers.h"
+#include "Reme/Renderer/ShaderDataLayout.h"
 
 namespace Reme
 {

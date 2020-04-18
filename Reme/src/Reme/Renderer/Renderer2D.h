@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Reme/Core/Core.h"
-#include "Reme/Graphics/Color.h"
-#include "Reme/Graphics/Texture.h"
-#include "Reme/Graphics/Camera.h"
+#include "Reme/Renderer/Color.h"
+#include "Reme/Renderer/Texture.h"
+#include "Reme/Renderer/Camera.h"
 
 #include <glm/glm.hpp>
 

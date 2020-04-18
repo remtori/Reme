@@ -1,6 +1,6 @@
 #include "reme_pch.h"
-#include "Reme/Graphics/Buffers.h"
-#include "Reme/Graphics/RendererAPI.h"
+#include "Reme/Renderer/Buffers.h"
+#include "Reme/Renderer/RendererAPI.h"
 
 #include "Impl/OpenGL/OpenGL_Buffers.h"
 

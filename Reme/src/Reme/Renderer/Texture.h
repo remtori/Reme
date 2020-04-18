@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Reme/Graphics/Color.h"
-#include "Reme/Graphics/Image.h"
+#include "Reme/Renderer/Color.h"
+#include "Reme/Renderer/Image.h"
 #include "Reme/Core/AssetManager.h"
 
 #include <string>
