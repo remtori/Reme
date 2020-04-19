@@ -103,7 +103,7 @@ public:
 		{
 			for (int y = 0.0f; y < Height; y += rectSize)
 			{
-				Reme::Renderer2D::DrawRect(
+				Reme::Renderer2D::FillRect(
 					Reme::Color(x % 255, y % 255, 255),
 					x, y,
 					rectSize - 2.0f, rectSize - 2.0f
@@ -111,9 +111,9 @@ public:
 			}
 		}
 
-		Reme::Renderer2D::DrawRect(Reme::Color::Green,   0.0f, 100.0f, 50.0f, 50.0f);
-		Reme::Renderer2D::DrawRect(Reme::Color::Red  , 100.0f, 100.0f, 50.0f, 50.0f);
-		Reme::Renderer2D::DrawRect(Reme::Color::Blue , 100.0f,   0.0f, 50.0f, 50.0f);
+		Reme::Renderer2D::FillRect(Reme::Color::Green,   0.0f, 100.0f, 50.0f, 50.0f);
+		Reme::Renderer2D::FillRect(Reme::Color::Red  , 100.0f, 100.0f, 50.0f, 50.0f);
+		Reme::Renderer2D::FillRect(Reme::Color::Blue , 100.0f,   0.0f, 50.0f, 50.0f);
 
 		Reme::Renderer2D::PushState();
 		Reme::Renderer2D::Translate(200.0f, 200.0f);

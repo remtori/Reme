@@ -191,7 +191,7 @@ namespace Reme
 		for (auto& p : s_Data.textures) p.reset();
 	}
 
-	void Renderer2D::DrawTexture(
+	void Renderer2D::DrawPartialTexture(
 		const Ref<Texture>& texture,
 		float sX, float sY, float sW, float sH,
 		float dX, float dY, float dW, float dH,

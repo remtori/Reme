@@ -20,14 +20,14 @@ namespace Reme
 
 		// Basic Quad Drawing API
 
-		static void DrawRect(const Color& color, float x, float y, float w, float h)
+		static void FillRect(const Color& color, float x, float y, float w, float h)
 		{
-			DrawTexture(Texture::White, 0.0f, 0.0f, 0.0f, 0.0f, x, y, w, h, color);
+			DrawPartialTexture(Texture::White, 0.0f, 0.0f, 0.0f, 0.0f, x, y, w, h, color);
 		}
 
 		static void DrawTexture(const Ref<Texture>& texture, float dX, float dY)
 		{
-			DrawTexture(
+			DrawPartialTexture(
 				texture,
 				0.0f, 0.0f, texture->GetWidth(), texture->GetHeight(),
 				dX, dY, texture->GetWidth(), texture->GetHeight()
@@ -36,14 +36,14 @@ namespace Reme
 
 		static void DrawTexture(const Ref<Texture>& texture, float dX, float dY, float dW, float dH)
 		{
-			DrawTexture(
+			DrawPartialTexture(
 				texture,
 				0.0f, 0.0f, texture->GetWidth(), texture->GetHeight(),
 				dX, dY, dW, dH
 			);
 		}
 
-		static void DrawTexture(
+		static void DrawPartialTexture(
 			const Ref<Texture>& texture,
 			float sX, float sY, float sW, float sH,
 			float dX, float dY, float dW, float dH,

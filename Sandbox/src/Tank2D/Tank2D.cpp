@@ -38,7 +38,7 @@ void Tank2D::OnRender()
 {
 	Renderer2D::Begin(cam);
 
-	Renderer2D::DrawRect(Color::White, 0.0f, 0.0f, 1000.0f, 1000.0f);
+	Renderer2D::FillRect(Color::White, 0.0f, 0.0f, 1000.0f, 1000.0f);
 
 	tank.Render();
 	
