@@ -7,6 +7,7 @@ workspace "Reme"
 		"Debug",
 		"Release",
 		"Dist",
+		"Test",
 	}
 
 	flags
@@ -107,19 +108,44 @@ project "Reme"
 		}
 
 	filter "configurations:Debug"
-		defines "_DEBUG"
+		defines "DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "_RELEASE"
+		defines "RELEASE"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "_DIST"
+		defines "DIST"
 		runtime "Release"
 		optimize "on"
+
+	filter "configurations:Test"
+		defines "TEST"
+		runtime "Debug"
+		symbols "on"
+		kind "ConsoleApp"
+
+		defines
+		{
+			"TEST",
+			"TEST_RENDERAPI",
+		}
+
+		files
+		{
+			"%{prj.name}/src/**.h",
+			"%{prj.name}/src/**.cpp",
+			"%{prj.name}/third_party/Catch2/**.hpp",
+			"%{prj.name}/third_party/Catch2/**.cpp",
+		}
+
+		includedirs
+		{
+			"%{prj.name}/third_party/Catch2",
+		}
 
 project "Sandbox"
 	location "Sandbox"

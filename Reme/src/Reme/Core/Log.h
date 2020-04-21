@@ -18,7 +18,7 @@ namespace Reme
 }
 
 // Log macros
-#ifndef _REME_DISABLE_LOGGING
+#ifndef REME_DISABLE_LOGGING
 
 #define LOG_TRACE(...)    ::Reme::Log::GetLogger()->trace(__VA_ARGS__)
 #define LOG_INFO(...)     ::Reme::Log::GetLogger()->info(__VA_ARGS__)

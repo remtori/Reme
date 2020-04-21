@@ -15,9 +15,9 @@ namespace Reme
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_VertexArray>();
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_VertexArray>();
 #ifdef TEST
-			case RendererAPI::Test: return CreateRef<Test_VertexArray>();
+			case RendererAPI::Test: return AssetManager::Create<Test_VertexArray>();
 #endif
 		}
 

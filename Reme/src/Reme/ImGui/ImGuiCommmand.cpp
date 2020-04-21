@@ -5,8 +5,11 @@
 
 #include <imgui.h>
 
-#if defined(_REME_USE_GLFW) && defined(_REME_USE_OPENGL)
+#ifdef REME_USE_GLFW 
 #include <imgui_impl/imgui_impl_glfw.h>
+#endif
+
+#ifdef REME_USE_OPENGL
 #include <imgui_impl/imgui_impl_opengl3.h>
 #endif
 
@@ -23,16 +26,25 @@ namespace Reme
 		ImGui::StyleColorsDark();
 		ImGui::GetStyle().WindowRounding = 0.0f;
 
-#if defined(_REME_USE_GLFW) && defined(_REME_USE_OPENGL)
+#ifdef REME_USE_GLFW
 		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) Application::Get().GetWindow().GetNativeWindow(), true);
+#endif
+
+#ifdef REME_USE_OPENGL
 		ImGui_ImplOpenGL3_Init("#version 330");
 #endif
     }
 
     void ImGuiCommand::Shutdown()
     {
-		ImGui_ImplOpenGL3_Shutdown();
+#ifdef REME_USE_GLFW
 		ImGui_ImplGlfw_Shutdown();
+#endif
+
+#ifdef REME_USE_OPENGL
+		ImGui_ImplOpenGL3_Shutdown();
+#endif
+
 		ImGui::DestroyContext();
     }
 
