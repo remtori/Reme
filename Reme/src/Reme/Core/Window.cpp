@@ -3,7 +3,7 @@
 #include "Reme/Core/Window.h"
 
 #ifdef _REME_USE_GLFW
-#include "Impl/GLFW_Window.h"
+#include "Impl/Windows/GLFW_Window.h"
 #endif
 
 namespace Reme
