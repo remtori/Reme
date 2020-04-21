@@ -1,65 +1,36 @@
 #include "RemePCH.h"
-#include "Impl/OpenGL/OpenGL_Buffers.h"
-
-#include <glad/glad.h>
+#include "Impl/Test/Test_Buffers.h"
 
 namespace Reme
 {
-	// VERTEX BUFFER
-	OpenGL_VertexBuffer::OpenGL_VertexBuffer(uint32_t byteCount, bool isStatic)
+	uint32_t Test_VertexBuffer::BindedVBO = 0;
+	uint32_t Test_IndexBuffer::BindedIBO = 0;
+
+	Test_VertexBuffer::Test_VertexBuffer(uint32_t byteCount, bool isStatic)
 	{
-		glGenBuffers(1, &m_InternalID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_InternalID);
-		glBufferData(GL_ARRAY_BUFFER, byteCount, nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+		m_Data.resize(byteCount / sizeof(float));
 	}
 
-	OpenGL_VertexBuffer::~OpenGL_VertexBuffer()
+	Test_VertexBuffer::~Test_VertexBuffer()
 	{
-		glDeleteBuffers(1, &m_InternalID);
 	}
 
-	void OpenGL_VertexBuffer::Bind()
+	void Test_VertexBuffer::SetData(float* data, uint32_t byteOffset, uint32_t byteCount)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_InternalID);
+		memcpy(&m_Data[byteOffset / sizeof(float)], data, byteCount);
 	}
 
-	void OpenGL_VertexBuffer::Unbind()
+	Test_IndexBuffer::Test_IndexBuffer(uint32_t byteCount, bool isStatic)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		m_Data.resize(byteCount / sizeof(uint32_t));
 	}
 
-	void OpenGL_VertexBuffer::SetData(float* data, uint32_t byteOffset, uint32_t byteCount)
+	Test_IndexBuffer::~Test_IndexBuffer()
 	{
-		Bind();
-		glBufferSubData(GL_ARRAY_BUFFER, byteOffset, byteCount, data);
 	}
 
-	// INDEX BUFFER
-	OpenGL_IndexBuffer::OpenGL_IndexBuffer(uint32_t byteCount, bool isStatic)
+	void Test_IndexBuffer::SetData(uint32_t* data, uint32_t byteOffset, uint32_t byteCount)
 	{
-		glGenBuffers(1, &m_InternalID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_InternalID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteCount * sizeof(uint32_t), nullptr, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-	}
-
-	OpenGL_IndexBuffer::~OpenGL_IndexBuffer()
-	{
-		glDeleteBuffers(1, &m_InternalID);
-	}
-
-	void OpenGL_IndexBuffer::Bind()
-	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_InternalID);
-	}
-
-	void OpenGL_IndexBuffer::Unbind()
-	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
-	void OpenGL_IndexBuffer::SetData(uint32_t* data, uint32_t byteOffset, uint32_t byteCount)
-	{
-		Bind();
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, byteOffset, byteCount, data);
+		memcpy(&m_Data[byteOffset / sizeof(uint32_t)], data, byteCount);
 	}
 }

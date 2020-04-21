@@ -12,15 +12,14 @@ namespace Reme
         : m_Width(width)
         , m_Height(height)
     {                
-        m_Data.reserve(width * height);
+        m_Data.resize(width * height, Color::Black);
     }
 
     Test_Texture::Test_Texture(const Ref<Image>& img)
         : m_Width(img->GetWidth())
         , m_Height(img->GetHeight())
     {
-        m_Data.reserve(m_Width * m_Height);
-        GenerateMipmap();
+        m_Data.resize(m_Width * m_Height, Color::Black);
     }
 
     Test_Texture::~Test_Texture()

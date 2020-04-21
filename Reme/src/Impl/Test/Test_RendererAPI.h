@@ -10,28 +10,30 @@ namespace Reme
     {
     public:
         void Init() override {}
-        void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override { m_Viewport = { x, y, width, height }; }
-        void SetClearColor(const Color& color) override { m_ClearColor = color; }
         void Clear() override {}
         void PollError() override {}
+        void SetClearColor(const Color& color) override { m_ClearColor = color; }
 
-        void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) override { m_LastDrawCall = { mode, count, offset }; }
-        void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) override { m_LastDrawCall = { mode, count, offset }; }
+        void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override 
+        { 
+            m_Viewport = { x, y, width, height }; 
+        }
 
-        uint32_t GetMaxTextureUnit() override { return m_MaxTextureUnit; }
-        uint32_t GetMaxTextureSize() override { return m_MaxTextureSize; }
+        void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) override 
+        { 
+            m_LastDrawCall = { mode, count, offset, Test_VertexArray::BindedVAO }; 
+        }
 
-        struct DrawCall
-        {
-            DrawMode mode;
-            uint32_t count;
-            uint32_t offset;
-        };
+        void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) override 
+        { 
+            m_LastDrawCall = { mode, count, offset, Test_VertexArray::BindedVAO };
+        }
 
-        DrawCall GetDrawData() { return m_LastDrawCall; }
+        uint32_t GetMaxTextureUnit() override { return 2; }
+        uint32_t GetMaxTextureSize() override { return 1024; }
+
+        DrawCall GetDrawData() override { return m_LastDrawCall; }
     private:
-        uint32_t m_MaxTextureUnit;
-        uint32_t m_MaxTextureSize;
         bool m_UsePollError = true;
 
         DrawCall m_LastDrawCall;

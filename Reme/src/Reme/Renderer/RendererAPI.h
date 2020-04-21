@@ -10,6 +10,14 @@ namespace Reme
         POINTS, LINE_STRIP, LINE_LOOP, LINES, TRIANGLE_STRIP, TRIANGLE_FAN, TRIANGLES
     };
 
+    struct DrawCall
+    {
+        DrawMode mode;
+        uint32_t count;
+        uint32_t offset;
+        uint32_t bindedVAO;
+    };
+
     class RendererAPI
     {
     public:
@@ -32,6 +40,10 @@ namespace Reme
 
         inline static API GetAPI() { return s_API; }
         static RendererAPI* Create();
+
+#ifdef TEST        
+        virtual DrawCall GetDrawData() = 0;
+#endif
     private:
         static API s_API;
     };
@@ -92,6 +104,13 @@ namespace Reme
             PROFILE_FUNCTION();
             return s_RendererAPI->GetMaxTextureSize();
         }
+
+#ifdef TEST
+        inline static DrawCall GetDrawData()
+        {
+            return s_RendererAPI->GetDrawData();
+        }
+#endif
 
     private:
         static RendererAPI* s_RendererAPI;

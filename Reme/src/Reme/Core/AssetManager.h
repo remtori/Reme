@@ -2,10 +2,24 @@
 
 namespace Reme
 {    
+    class Asset;
+
     class AssetManager
     {
     public:
         static uint32_t GenerateAssetID();
+        static WeakRef<Asset> GetAsset(uint32_t id);
+
+        template<class T, typename ... Args>
+        static Ref<T> Create(Args&& ... args)
+        {
+            Ref<T> ptr = std::make_shared<T>(std::forward<Args>(args)...);
+            PutAsset(ptr);
+            return ptr;
+        }
+
+    private:
+        static void PutAsset(const Ref<Asset>& asset);
     };
 
     class Asset

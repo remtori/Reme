@@ -12,7 +12,11 @@
 
 namespace Reme
 {
+#ifdef TEST
+	static const uint32_t MAX_QUAD_COUNT = 100;
+#else
 	static const uint32_t MAX_QUAD_COUNT = 100000;
+#endif
 
 	struct Vertex
 	{

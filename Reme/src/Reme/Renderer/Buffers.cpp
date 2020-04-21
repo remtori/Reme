@@ -14,15 +14,14 @@ namespace Reme
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_VertexBuffer>(eleCount, isStatic);
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_VertexBuffer>(eleCount, isStatic);
 #ifdef TEST
-			case RendererAPI::Test: return CreateRef<Test_VertexBuffer>(eleCount, isStatic);
-#else
+			case RendererAPI::Test: return AssetManager::Create<Test_VertexBuffer>(eleCount, isStatic);
+#endif
 		}
 
 		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
-#endif
 	}
 
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t eleCount, bool isStatic)
@@ -30,9 +29,9 @@ namespace Reme
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_IndexBuffer>(eleCount, isStatic);		
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_IndexBuffer>(eleCount, isStatic);		
 #ifdef TEST
-			case RendererAPI::Test: return CreateRef<Test_IndexBuffer>(eleCount, isStatic);
+			case RendererAPI::Test: return AssetManager::Create<Test_IndexBuffer>(eleCount, isStatic);
 #endif
 		}
 

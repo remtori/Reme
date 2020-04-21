@@ -14,9 +14,9 @@ namespace Reme
         switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_Shader>(filePath);
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_Shader>(filePath);
 #ifdef TEST
-			case RendererAPI::Test: return CreateRef<Test_Shader>(filePath);
+			case RendererAPI::Test: return AssetManager::Create<Test_Shader>(filePath);
 #endif
 		}
 
@@ -29,9 +29,9 @@ namespace Reme
         switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateRef<OpenGL_Shader>(name, vertexShader, fragmentShader);
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_Shader>(name, vertexShader, fragmentShader);
 #ifdef TEST
-			case RendererAPI::Test: return CreateRef<Test_Shader>(name, vertexShader, fragmentShader);
+			case RendererAPI::Test: return AssetManager::Create<Test_Shader>(name, vertexShader, fragmentShader);
 #endif
 		}
 
