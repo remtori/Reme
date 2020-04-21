@@ -1,5 +1,6 @@
 #include "RemePCH.h"
 
+#ifdef TEST
 #include "Reme.h"
 #include "Catch2/catch.hpp"
 
@@ -47,3 +48,4 @@ TEST_CASE("AssetManager can manage asset", "[asset]")
         REQUIRE(strong_a == nullptr);
     }
 }
+#endif // TEST

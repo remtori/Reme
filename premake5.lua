@@ -25,6 +25,7 @@ IncludeDir["imgui"] = "Reme/third_party/imgui"
 IncludeDir["glm"] = "Reme/third_party/glm"
 IncludeDir["stb_image"] = "Reme/third_party/stb_image"
 IncludeDir["lua"] = "Reme/third_party/lua/include"
+IncludeDir["Catch2"] = "Reme/third_party/Catch2"
 
 group "Dependencies"
 	include "Reme/third_party/GLFW"
@@ -59,7 +60,9 @@ project "Reme"
         "%{prj.name}/third_party/stb_image/**.h",
 		"%{prj.name}/third_party/stb_image/**.cpp",
 		"%{prj.name}/third_party/glm/glm/**.hpp",
-		"%{prj.name}/third_party/glm/glm/**.inl",
+		"%{prj.name}/third_party/glm/glm/**.inl",	
+		"%{prj.name}/third_party/Catch2/**.hpp",
+		"%{prj.name}/third_party/Catch2/**.cpp",
 	}
 
 	includedirs
@@ -71,7 +74,8 @@ project "Reme"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.lua}",
+		"%{IncludeDir.lua}",		
+		"%{IncludeDir.Catch2}",
 	}
 
 	links
@@ -132,19 +136,6 @@ project "Reme"
 		{
 			"TEST",
 			"TEST_RENDERAPI",
-		}
-
-		files
-		{
-			"%{prj.name}/src/**.h",
-			"%{prj.name}/src/**.cpp",
-			"%{prj.name}/third_party/Catch2/**.hpp",
-			"%{prj.name}/third_party/Catch2/**.cpp",
-		}
-
-		includedirs
-		{
-			"%{prj.name}/third_party/Catch2",
 		}
 
 project "Sandbox"

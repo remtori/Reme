@@ -1,4 +1,6 @@
 #include "RemePCH.h"
+
+#ifdef TEST
 #include "Catch2/catch.hpp"
 
 #include "Reme.h"
@@ -30,3 +32,4 @@ TEST_CASE("Renderer2D can render", "[renderer2d]")
         const std::vector<float>& verticies = GetVerticies();
     }
 }
+#endif // TEST

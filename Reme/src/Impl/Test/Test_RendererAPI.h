@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Reme/Renderer/RendererAPI.h"
+#include "Impl/Test/Test_VertexArray.h"
 
 #include <glm/glm.hpp>
 
