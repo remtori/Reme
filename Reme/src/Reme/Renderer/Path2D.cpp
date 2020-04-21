@@ -89,10 +89,8 @@ namespace Reme
 
     void Path2D::Stroke(const Color& color, uint32_t lineWidth)
     {
-        if (!m_Dirty){
-            return DrawBitmap();
-
-        
+        if (!m_Dirty)
+            return DrawBitmap();        
     }
 
     void Path2D::Fill(const Color& color)
