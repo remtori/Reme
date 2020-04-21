@@ -3,8 +3,6 @@
 #include "Reme/Renderer/Texture.h"
 #include "Reme/Renderer/Image.h"
 
-#include <string>
-
 namespace Reme
 {
     class OpenGL_Texture : public Texture
@@ -12,7 +10,6 @@ namespace Reme
     public:
         OpenGL_Texture(uint32_t width, uint32_t height);
         OpenGL_Texture(const Ref<Image>& image);
-    public:
         ~OpenGL_Texture();
 
         inline uint32_t GetWidth() const override { return m_Width;  }

@@ -14,7 +14,6 @@ namespace Reme
     public:
         OpenGL_Shader(const std::string& filePath);
         OpenGL_Shader(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
-    public:
         ~OpenGL_Shader();
 
         void Bind() const override;
