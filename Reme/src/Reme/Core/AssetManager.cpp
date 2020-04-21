@@ -3,7 +3,7 @@
 
 namespace Reme
 {
-    static uint32_t GlobalAssetID = 0;
+    static uint32_t GlobalAssetID = 1;
 
     uint32_t AssetManager::GenerateAssetID()
     {
