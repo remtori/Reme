@@ -1,34 +1,34 @@
 #include "RemePCH.h"
-#include "Reme/Renderer/BitmapTexture.h"
+#include "Reme/Renderer/Bitmap.h"
 #include "Reme/Renderer/Texture.h"
 
 namespace Reme
 {
-    BitmapTexture::BitmapTexture(uint32_t width, uint32_t height)
+    Bitmap::Bitmap(uint32_t width, uint32_t height)
     {
         m_Image = Image::Create(width, height);
         m_Texture = Texture::Create(width, height);
     }
 
-    BitmapTexture::BitmapTexture(const Ref<Image>& image)
+    Bitmap::Bitmap(const Ref<Image>& image)
     {
         m_Image = Image::Create(image->GetWidth(), image->GetHeight());
         m_Image->SetPixelsData(image->GetPixelsData().data());
         m_Texture = Texture::Create(image);
     }
 
-    BitmapTexture::BitmapTexture(const std::string& path)
+    Bitmap::Bitmap(const std::string& path)
     {
         m_Image = Image::Create(path);
         m_Texture = Texture::Create(m_Image);
     }
 
-    BitmapTexture::~BitmapTexture()
+    Bitmap::~Bitmap()
     {
 
     }
 
-    void BitmapTexture::SetPixel(uint32_t x, uint32_t y, const Color& color)
+    void Bitmap::SetPixel(uint32_t x, uint32_t y, const Color& color)
     {
         if (GetPixel(x, y) == color) return;
 
@@ -40,7 +40,7 @@ namespace Reme
         m_DirtyArea.w = std::max(y, m_DirtyArea.w);
     }
 
-    void BitmapTexture::SetPixelsData(const Color* pixels)
+    void Bitmap::SetPixelsData(const Color* pixels)
     {
         m_Image->SetPixelsData(pixels);        
         m_Dirty = true;
@@ -50,12 +50,12 @@ namespace Reme
         m_DirtyArea.w = GetHeight();
     }    
 
-    void BitmapTexture::Resize(uint32_t width, uint32_t height)
+    void Bitmap::Resize(uint32_t width, uint32_t height)
     {
 
     }
 
-    void BitmapTexture::Bind(uint32_t slot)
+    void Bitmap::Bind(uint32_t slot)
     {
         PROFILE_FUNCTION();
 
