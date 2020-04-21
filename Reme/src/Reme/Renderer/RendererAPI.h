@@ -15,7 +15,7 @@ namespace Reme
     public:
         enum API
         {
-            None = 0, OpenGL
+            None = 0, OpenGL, Test
         };
     public:
         virtual void Init() = 0;

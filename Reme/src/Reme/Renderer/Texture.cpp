@@ -3,6 +3,7 @@
 #include "Reme/Renderer/RendererAPI.h"
 #include "Reme/Core/Core.h"
 
+#include "Impl/Test/Test_Texture.h"
 #include "Impl/OpenGL/OpenGL_Texture.h"
 
 namespace Reme
@@ -32,6 +33,7 @@ namespace Reme
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(width, height);
+			case RendererAPI::Test: return CreateRef<Test_Texture>(width, height);
 		}
 
 		CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -46,6 +48,7 @@ namespace Reme
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(image);
+			case RendererAPI::Test: return CreateRef<Test_Texture>(image);
 		}
 
 		CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -62,6 +65,7 @@ namespace Reme
 		{
 			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return Texture::Default;
 			case RendererAPI::OpenGL: return CreateRef<OpenGL_Texture>(Image::Create(path));
+			case RendererAPI::Test: return CreateRef<Test_Texture>(Image::Create(path));
 		}
 
 		CORE_ASSERT(false, "Unknown RendererAPI!");
