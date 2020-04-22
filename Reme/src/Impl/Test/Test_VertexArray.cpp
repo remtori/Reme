@@ -15,6 +15,16 @@ namespace Reme
 	{
 	}
 
+	void Test_VertexArray::Bind()
+	{
+		BindedVAO = GetAssetID();
+		for (auto& vbo : m_VertexBuffers)
+			vbo->Bind();
+
+		if (m_IndexBuffer != nullptr)
+			m_IndexBuffer->Bind();		
+	}
+
 	void Test_VertexArray::AddVertexBuffer(Ref<VertexBuffer> buf)
 	{
 		const auto& layout = buf->GetLayout();

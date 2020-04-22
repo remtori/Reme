@@ -26,7 +26,7 @@ namespace Reme
         const std::vector<Color>& GetData() const { return m_Data; }
 
         void Bind(uint32_t slot) override { BindedTexture = GetAssetID(); }
-        bool IsBinded() { BindedTexture == GetAssetID();  }
+        bool IsBinded() { return BindedTexture == GetAssetID();  }
     private:
         uint32_t m_Width, m_Height;
         std::vector<Color> m_Data;

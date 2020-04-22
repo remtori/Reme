@@ -1,11 +1,6 @@
 #include "RemePCH.h"
 #include "Reme/Renderer/Renderer2D.h"
-
 #include "Reme/Renderer/RendererAPI.h"
-
-#include "Reme/Renderer/Shader.h"
-#include "Reme/Renderer/Buffers.h"
-#include "Reme/Renderer/VertexArray.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
@@ -18,33 +13,11 @@ namespace Reme
 	static const uint32_t MAX_QUAD_COUNT = 100000;
 #endif
 
-	struct Vertex
-	{
-		glm::vec2 Position;
-		glm::vec2 UV;
-		glm::vec4 Color;
-		float TexIndex;
-	};
-
-	struct Renderer2DData
-	{
-		Ref<Shader> flatShader;
-		Ref<VertexArray> VAO;
-		Ref<VertexBuffer> VBO;
-
-		// Data for Batch Rendering
-		Vertex* buffer;
-		uint32_t vertexIndex;
-
-		std::vector<WeakRef<Texture>> textures;
-		uint32_t textureIndex;
-	};
-
 	static const uint32_t MAX_VERTEX_COUNT = MAX_QUAD_COUNT * 4;
 	static const uint32_t MAX_INDEX_COUNT = MAX_QUAD_COUNT * 6;
 	static uint32_t MAX_TEXTURE_UNIT;
 
-	static Renderer2DData s_Data;
+	static Renderer2D::Data s_Data;
 	static std::vector<glm::mat3> s_TransformStack;
 
 	void Renderer2D::Init()

@@ -11,7 +11,7 @@ namespace Reme
 
 		Test_VertexArray();
 		~Test_VertexArray();
-		void Bind() override { BindedVAO = GetAssetID(); }
+		void Bind() override;
 		void Unbind() override { BindedVAO = 0; }
 		bool IsBinded() { return BindedVAO == GetAssetID(); }
 

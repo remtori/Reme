@@ -4,6 +4,9 @@
 #include "Reme/Renderer/Color.h"
 #include "Reme/Renderer/Texture.h"
 #include "Reme/Renderer/Camera.h"
+#include "Reme/Renderer/Shader.h"
+#include "Reme/Renderer/Buffers.h"
+#include "Reme/Renderer/VertexArray.h"
 
 #include <glm/glm.hpp>
 
@@ -60,6 +63,28 @@ namespace Reme
 		static void Translate(float x, float y);
 		static void Scale(float x, float y);
 		static void Rotate(float rotRadian);
+			
+		struct Vertex
+		{
+			glm::vec2 Position;
+			glm::vec2 UV;
+			glm::vec4 Color;
+			float TexIndex;
+		};
+
+		struct Data
+		{
+			Ref<Shader> flatShader;
+			Ref<VertexArray> VAO;
+			Ref<VertexBuffer> VBO;
+
+			// Data for Batch Rendering
+			Vertex* buffer;
+			uint32_t vertexIndex;
+
+			std::vector<WeakRef<Texture>> textures;
+			uint32_t textureIndex;
+		};
 	private:
 		static void Flush();
 	};
