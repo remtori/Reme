@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Reme/Renderer/Buffers.h"
+#include "Reme/Core/AssetManager.h"
 
 namespace Reme
 {
-	class VertexArray
+	class VertexArray : public Asset
 	{
 	public:
-		static Scope<VertexArray> Create();
+		static Ref<VertexArray> Create();
 	public:
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;

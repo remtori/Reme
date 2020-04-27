@@ -77,14 +77,21 @@
 		// ctx.fillStyle = '#000';
 		// ctx.fillText(ft - lt, 100, 100, 80);
 
+		// ctx.beginPath();
+		// ctx.moveTo(100.0, 100.0);
+		// ctx.lineTo(200.0, 100.0);
+		// ctx.arcTo(300.0, 100.0, 300.0, 300.0, 64.0);
+		// ctx.bezierCurveTo(400.0, 200.0, 500.0, 400.0, 600.0, 300.0);
+		// ctx.lineTo(600.0, 600.0);
+		// ctx.quadraticCurveTo(400.0, 700.0, 200.0, 600.0);
+		// ctx.ellipse(200.0, 200.0, 100.0, 50.0, 0.0, 0.0, 6.28);
 		ctx.beginPath();
-		ctx.moveTo(100.0, 100.0);
-		ctx.lineTo(200.0, 100.0);
-		ctx.arcTo(300.0, 100.0, 300.0, 300.0, 64.0);
-		ctx.bezierCurveTo(400.0, 200.0, 500.0, 400.0, 600.0, 300.0);
-		ctx.lineTo(600.0, 600.0);
-		ctx.quadraticCurveTo(400.0, 700.0, 200.0, 600.0);
-		ctx.ellipse(200.0, 200.0, 100.0, 50.0, 0.0, 0.0, 6.28);
+		ctx.moveTo(0, 0);
+		ctx.lineTo(100, 100);
+		ctx.rect(200, 100, 200, 100);
+		ctx.closePath();
+		ctx.lineTo(400, 400);
+		ctx.lineTo(500, 500);
 		ctx.strokeStyle = 'cyan';
 		ctx.stroke();
 	}

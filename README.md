@@ -39,8 +39,8 @@ third_party/premake5 gmake2
 
 ### Define flags
 
-- _REME_DISABLE_ASSERT : disable `assert`
+- REME_DISABLE_ASSERT : disable `assert`
 
-- _REME_DISABLE_LOGGING : disable logging
+- REME_DISABLE_LOGGING : disable logging
 
-- _REME_DISABLE_LUA : disable lua scripting
+- REME_DISABLE_LUA : disable lua scripting

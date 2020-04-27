@@ -15,7 +15,16 @@ namespace Reme
 
         void DrawIndexed(DrawMode mode, uint32_t count, uint32_t offset) override;
         void DrawArrays(DrawMode mode, uint32_t count, uint32_t offset) override;
+
+#ifdef TEST
+        DrawCall GetDrawData() override { throw; }
+#endif
+
+        uint32_t GetMaxTextureUnit() override { return m_MaxTextureUnit; }
+        uint32_t GetMaxTextureSize() override { return m_MaxTextureSize; }
     private:
+        uint32_t m_MaxTextureUnit;
+        uint32_t m_MaxTextureSize;
         bool m_UsePollError = true;
     };
 }

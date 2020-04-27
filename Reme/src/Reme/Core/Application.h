@@ -3,7 +3,7 @@
 #include "Reme/Core/Input.h"
 #include "Reme/Core/Window.h"
 #include "Reme/Events/ApplicationEvent.h"
-#include "Reme/Screen/Screen.h"
+#include "Reme/Core/Screen.h"
 
 int main(int argc, char** argv);
 

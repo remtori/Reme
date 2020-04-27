@@ -1,4 +1,4 @@
-#include "reme_pch.h"
+#include "RemePCH.h"
 #include "Impl/OpenGL/OpenGL_RendererAPI.h"
 
 #include <glad/glad.h>
@@ -62,16 +62,18 @@ namespace Reme
 			exit(EXIT_FAILURE);
 		}
 
-		GLint temp;
 		CORE_LOG_INFO("OpenGL Version: {}", glGetString(GL_VERSION));
 		CORE_LOG_INFO("GLSL Version  : {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		CORE_LOG_INFO("Renderer      : {}", glGetString(GL_RENDERER));
 
+        GLint temp;
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &temp);
 		CORE_LOG_INFO("Max Texture Units: {}", temp);
+        m_MaxTextureUnit = temp;
 
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &temp);
 		CORE_LOG_INFO("Max Texture Size : {0}x{0}", temp);
+        m_MaxTextureSize = temp;
 
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
@@ -125,7 +127,7 @@ namespace Reme
             case DrawMode::TRIANGLE_STRIP: return GL_TRIANGLE_STRIP;
             case DrawMode::TRIANGLES: return GL_TRIANGLES;
             default:
-                REME_ASSERT(false, "Unknown draw mode!");
+                CORE_ASSERT(false, "Unknown draw mode!");
                 return 0;
         }
     }

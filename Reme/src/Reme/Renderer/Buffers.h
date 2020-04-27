@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Reme/Renderer/ShaderDataLayout.h"
+#include "Reme/Core/AssetManager.h"
 
 namespace Reme
 {
-	class VertexBuffer
+	class VertexBuffer : public Asset
 	{
 	public:
-		static Scope<VertexBuffer> Create(uint32_t byteCount, bool isStatic = true);
+		static Ref<VertexBuffer> Create(uint32_t byteCount, bool isStatic = true);
 	public:
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
@@ -19,10 +20,10 @@ namespace Reme
 		BufferLayout m_Layout;
 	};
 
-	class IndexBuffer
+	class IndexBuffer : public Asset
 	{
 	public:
-		static Scope<IndexBuffer> Create(uint32_t byteCount, bool isStatic = true);
+		static Ref<IndexBuffer> Create(uint32_t byteCount, bool isStatic = true);
 	public:
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;

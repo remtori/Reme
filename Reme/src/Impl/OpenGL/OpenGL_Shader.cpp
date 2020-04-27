@@ -1,6 +1,6 @@
-#include "reme_pch.h"
+#include "RemePCH.h"
 #include "Impl/OpenGL/OpenGL_Shader.h"
-#include "Reme/Core/Utils.h"
+#include "Reme/Utility/Utils.h"
 
 #include <glad/glad.h>
 #include <fstream>
@@ -68,7 +68,7 @@ namespace Reme
                 glDeleteShader(shader);
 
                 CORE_LOG_ERROR("{0}", infoLog.data());
-                REME_ASSERT(false, "Shader compilation failure!");
+                CORE_ASSERT(false, "Shader compilation failure!");
                 break;
             }
 
@@ -95,7 +95,7 @@ namespace Reme
                 glDeleteShader(id);
 
             CORE_LOG_ERROR("{0}", infoLog.data());
-            REME_ASSERT(false, "Shader link failure!");
+            CORE_ASSERT(false, "Shader link failure!");
             return;
         }
 
@@ -133,9 +133,14 @@ namespace Reme
         return location;
     }
 
-    void OpenGL_Shader::SetInt(const std::string& name, int value)
+    void OpenGL_Shader::SetInt(const std::string& name, int32_t value)
     {
         glUniform1i(OpenGL_Shader::GetUniformLocation(name), value);
+    }
+
+    void OpenGL_Shader::SetIntArray(const std::string& name, const int32_t* const values, uint32_t count)
+    {
+        glUniform1iv(OpenGL_Shader::GetUniformLocation(name), count, values);
     }
 
     void OpenGL_Shader::SetFloat(const std::string& name, float value)

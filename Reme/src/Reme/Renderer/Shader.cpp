@@ -1,32 +1,41 @@
-#include "reme_pch.h"
+#include "RemePCH.h"
 #include "Reme/Renderer/Shader.h"
 #include "Reme/Renderer/RendererAPI.h"
 
+#ifdef TEST
+#include "Impl/Test/Test_Shader.h"
+#endif
 #include "Impl/OpenGL/OpenGL_Shader.h"
 
 namespace Reme
 {
-    Scope<Shader> Shader::Create(const std::string& filePath)
+    Ref<Shader> Shader::Create(const std::string& filePath)
     {
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateScope<OpenGL_Shader>(filePath);
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_Shader>(filePath);
+#ifdef TEST
+			case RendererAPI::Test: return AssetManager::Create<Test_Shader>(filePath);
+#endif
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
     }
 
-    Scope<Shader> Shader::Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader)
+    Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader)
     {
         switch (RendererAPI::GetAPI())
 		{
-			case RendererAPI::None: REME_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::OpenGL: return CreateScope<OpenGL_Shader>(name, vertexShader, fragmentShader);
+			case RendererAPI::None: CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
+			case RendererAPI::OpenGL: return AssetManager::Create<OpenGL_Shader>(name, vertexShader, fragmentShader);
+#ifdef TEST
+			case RendererAPI::Test: return AssetManager::Create<Test_Shader>(name, vertexShader, fragmentShader);
+#endif
 		}
 
-		REME_ASSERT(false, "Unknown RendererAPI!");
+		CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
     }
 }

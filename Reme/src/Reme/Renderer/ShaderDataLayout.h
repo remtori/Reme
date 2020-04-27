@@ -4,7 +4,8 @@ namespace Reme
 {
 	enum class ShaderDataType
 	{
-		Float, Float2, Float3, Float4, Mat2, Mat3, Mat4, Int, Int2, Int3, Int4
+		Float, Float2, Float3, Float4, Mat2, Mat3, Mat4, Int, Int2, Int3, Int4,
+		IntArray,
 	};
 
 	static uint32_t ShaderDataTypeSize(ShaderDataType type)
@@ -30,7 +31,7 @@ namespace Reme
 		case ShaderDataType::Mat4:     return 4 * 4;
 		}
 
-		REME_ASSERT(false, "Unknown ShaderDataType!");
+		CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -68,7 +69,7 @@ namespace Reme
 			case ShaderDataType::Int4:     return 4;
 			}
 
-			REME_ASSERT(false, "Unknown ShaderDataType!");
+			CORE_ASSERT(false, "Unknown ShaderDataType!");
 			return 0;
 		}
 	};

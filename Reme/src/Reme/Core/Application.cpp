@@ -1,4 +1,4 @@
-#include "reme_pch.h"
+#include "RemePCH.h"
 
 #include "Reme/Core/Application.h"
 #include "Reme/ImGui/ImGuiCommand.h"
@@ -12,11 +12,13 @@ namespace Reme
 
 	Application::Application(const WindowProps& props)
 	{
-		REME_ASSERT(!s_Instance, "Application already exist!");
+		PROFILE_FUNCTION();
+
+		CORE_ASSERT(!s_Instance, "Application already exist!");
 		s_Instance = this;
 
 		m_Window = Window::Create(props);
-		m_Window->SetEventCallback(REME_BIND_EVENT_FN(Application::OnEvent));
+		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		m_Window->SetVSync(true);
 
 		m_Screen = CreateRef<Screen>();
@@ -27,15 +29,19 @@ namespace Reme
 
 	Application::~Application()
 	{
+		PROFILE_FUNCTION();
+
 		ImGuiCommand::Shutdown();
 		Renderer::Shutdown();
 	}
 
 	void Application::OnEvent(Event& event)
 	{
+		PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowCloseEvent>(REME_BIND_EVENT_FN(Application::OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(REME_BIND_EVENT_FN(Application::OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
 		if (!ImGuiCommand::ShouldSwallowEvent(event))
 		{
@@ -46,6 +52,7 @@ namespace Reme
 
 	void Application::Run()
 	{
+		PROFILE_FUNCTION();
 		typedef std::chrono::time_point<std::chrono::high_resolution_clock> TimeStamp;
 
 		TimeStamp currTime;
@@ -54,28 +61,39 @@ namespace Reme
 
 		while (m_Running)
 		{
-			m_Window->PollEvent();
-
-			currTime = std::chrono::high_resolution_clock::now();
-			elapsedTime = std::chrono::duration<float>(currTime - lastTime).count();
-			while (elapsedTime > DeltaTime)
+			PROFILE_SCOPE("RunLoop");
+			
 			{
-				m_Screen->OnUpdate(DeltaTime);
-				elapsedTime -= DeltaTime;
+				PROFILE_SCOPE("WindowPollEvent");
+				m_Window->PollEvent();
 			}
-			m_Screen->OnUpdate(elapsedTime);
-			lastTime = currTime;
+
+			{
+				PROFILE_SCOPE("AppUpdate");
+
+				currTime = std::chrono::high_resolution_clock::now();
+				elapsedTime = std::chrono::duration<float>(currTime - lastTime).count();
+				while (elapsedTime >= DeltaTime)
+				{
+					m_Screen->OnUpdate(DeltaTime);
+					elapsedTime -= DeltaTime;
+				}
+				lastTime = currTime;
+			}
 
 			if (!m_Minimized)
 			{
 				m_Screen->OnRender();
-
+				
 				ImGuiCommand::Begin();
 				m_Screen->OnImGuiRender();
 				ImGuiCommand::End();
 			}
 
-			m_Window->SwapBuffers();
+			{
+				PROFILE_SCOPE("WindowSwapBuffer");
+				m_Window->SwapBuffers();
+			}
 		}
 	}
 
@@ -87,6 +105,8 @@ namespace Reme
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		PROFILE_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

@@ -14,13 +14,14 @@ namespace Reme
     public:
         OpenGL_Shader(const std::string& filePath);
         OpenGL_Shader(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
-    public:
         ~OpenGL_Shader();
 
         void Bind() const override;
         void Unbind() const override;
 
-        void SetInt(const std::string& name, int value) override;
+        void SetInt(const std::string& name, int32_t value) override;
+        void SetIntArray(const std::string& name, const int32_t* const values, uint32_t count) override;
+
         void SetFloat(const std::string& name, float value) override;
         void SetFloat2(const std::string& name, const glm::vec2& value) override;
         void SetFloat3(const std::string& name, const glm::vec3& value) override;

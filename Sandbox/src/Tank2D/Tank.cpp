@@ -72,12 +72,12 @@ void Tank::Render()
 	Renderer2D::PushState();
 	Renderer2D::Translate(pos.x, pos.y);
 	Renderer2D::Rotate(rotation);
-	Renderer2D::DrawRect(Color::Red, -25.0f, -15.0f, 50.f, 30.0f);
+	Renderer2D::FillRect(Color::Red, -25.0f, -15.0f, 50.f, 30.0f);
 	Renderer2D::PopState();
 
 	Renderer2D::PushState();
 	Renderer2D::Translate(pos.x, pos.y);
 	Renderer2D::Rotate(barrelRotation);
-	Renderer2D::DrawRect(Color::Blue, 0.0f, -5.0f, 45.0f, 10.0f);
+	Renderer2D::FillRect(Color::Blue, 0.0f, -5.0f, 45.0f, 10.0f);
 	Renderer2D::PopState();
 }

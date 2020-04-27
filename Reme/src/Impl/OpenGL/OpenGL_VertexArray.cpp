@@ -1,4 +1,4 @@
-#include "reme_pch.h"
+#include "RemePCH.h"
 #include "Impl/OpenGL/OpenGL_VertexArray.h"
 #include "Reme/Renderer/ShaderDataLayout.h"
 
@@ -22,7 +22,7 @@ namespace Reme
 		case ShaderDataType::Int4:     return GL_INT;
 		}
 
-		REME_ASSERT(false, "Unknown ShaderDataType!");
+		CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 

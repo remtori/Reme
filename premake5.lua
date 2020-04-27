@@ -7,6 +7,7 @@ workspace "Reme"
 		"Debug",
 		"Release",
 		"Dist",
+		"Test",
 	}
 
 	flags
@@ -24,6 +25,7 @@ IncludeDir["imgui"] = "Reme/third_party/imgui"
 IncludeDir["glm"] = "Reme/third_party/glm"
 IncludeDir["stb_image"] = "Reme/third_party/stb_image"
 IncludeDir["lua"] = "Reme/third_party/lua/include"
+IncludeDir["Catch2"] = "Reme/third_party/Catch2"
 
 group "Dependencies"
 	include "Reme/third_party/GLFW"
@@ -43,8 +45,8 @@ project "Reme"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "reme_pch.h"
-	pchsource "Reme/src/reme_pch.cpp"
+	pchheader "RemePCH.h"
+	pchsource "Reme/src/RemePCH.cpp"
 
 	defines
 	{
@@ -58,7 +60,9 @@ project "Reme"
         "%{prj.name}/third_party/stb_image/**.h",
 		"%{prj.name}/third_party/stb_image/**.cpp",
 		"%{prj.name}/third_party/glm/glm/**.hpp",
-		"%{prj.name}/third_party/glm/glm/**.inl",
+		"%{prj.name}/third_party/glm/glm/**.inl",	
+		"%{prj.name}/third_party/Catch2/**.hpp",
+		"%{prj.name}/third_party/Catch2/**.cpp",
 	}
 
 	includedirs
@@ -70,7 +74,8 @@ project "Reme"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.lua}",
+		"%{IncludeDir.lua}",		
+		"%{IncludeDir.Catch2}",
 	}
 
 	links
@@ -107,19 +112,31 @@ project "Reme"
 		}
 
 	filter "configurations:Debug"
-		defines "_DEBUG"
+		defines "DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "_RELEASE"
+		defines "RELEASE"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "_DIST"
+		defines "DIST"
 		runtime "Release"
 		optimize "on"
+
+	filter "configurations:Test"
+		defines "TEST"
+		runtime "Debug"
+		symbols "on"
+		kind "ConsoleApp"
+
+		defines
+		{
+			"TEST",
+			"TEST_RENDERAPI",
+		}
 
 project "Sandbox"
 	location "Sandbox"
